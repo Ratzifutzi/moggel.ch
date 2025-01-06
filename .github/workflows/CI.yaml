@@ -7,90 +7,21 @@ on:
     branches: [main]
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-      - name: Install dependencies
-        run: npm ci
-      - name: Upload node_modules
-        uses: actions/upload-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
-
-  lint:
-    needs: setup
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '20'
-      - uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
       - run: npm run lint
-
-  test:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
       - run: npm test
-
-  audit:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
       - run: npm audit
-      - name: Upload audit results
-        uses: actions/upload-artifact@v3
+      - run: npm run build
+      - uses: actions/upload-artifact@v3
+        if: failure()
         with:
           name: npm-audit-report
           path: npm-audit.json
-        if: always()
-
-  build:
-    needs: [lint, test, audit]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-      - uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
-      - run: npm run build
