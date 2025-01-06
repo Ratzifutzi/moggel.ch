@@ -4,7 +4,7 @@
 	"description": "Official Moggel Website server code and website",
 	"main": "app.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "exit 0",
 		"lint": "npx eslint ."
 	},
 	"repository": {
@@ -23,16 +23,10 @@
 		"url": "https://github.com/Ratzifutzi/moggel.ch/issues"
 	},
 	"homepage": "https://github.com/Ratzifutzi/moggel.ch#readme",
-	"dependencies": {
+	"dependencies": {},
+	"devDependencies": {
+		"typescript": "^5.7.2",
 		"@types/node": "^22.10.5",
 		"globals": "^15.14.0"
-	},
-	"devDependencies": {
-		"@eslint/js": "^9.17.0",
-		"@typescript-eslint/eslint-plugin": "^8.19.0",
-		"@typescript-eslint/parser": "^8.19.0",
-		"eslint": "^9.17.0",
-		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.19.0"
 	}
 }
