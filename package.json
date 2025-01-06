@@ -5,11 +5,12 @@
 	"main": "app.js",
 	"scripts": {
 		"test": "exit 0",
-		"lint": "npx eslint ."
+		"lint": "npx eslint .",
+		"build": "npx tsc"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Ratzifutzi/moggel.ch.git"
+		"url": "git+https://github.com/Ratzifutzi/moggel.ch.git",
 	},
 	"keywords": [
 		"web",
