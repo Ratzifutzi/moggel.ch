@@ -2,10 +2,12 @@
 	"name": "moggel.ch",
 	"version": "1.0.0",
 	"description": "Official Moggel Website server code and website",
-	"main": "app.js",
+	"main": "dist/app.js",
 	"scripts": {
-		"test": "exit 0",
-		"build": "npx tsc"
+		"clean": "rimraf dist/",
+		"build": "npm run clean && tsc",
+		"watch": "npm run clean && tsc -w",
+		"start": "npm run build && node dist/app.js"
 	},
 	"repository": {
 		"type": "git",
@@ -31,8 +33,9 @@
 		"typescript-eslint": "^8.19.0"
 	},
 	"dependencies": {
+		"dotenv": "^16.4.7",
 		"ejs": "^3.1.10",
 		"express": "^4.21.2",
-		"dotenv": "^16.4.7"
+		"rimraf": "^6.0.1"
 	}
 }
