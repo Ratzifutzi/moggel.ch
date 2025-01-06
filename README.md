@@ -46,9 +46,9 @@ npm start
 ## Deployment on Plesk
 
 1. Create a new Node.js application in Plesk
-2. Set the application root to the project directory
-3. Configure the Node.js version (14 or later)
-4. Set the startup file to `build/index.js`
+2. Set the application & document root to the project directory
+3. Configure the Node.js version (22 or later)
+4. Set the startup file to `dist/index.js`
 5. Install dependencies using the Plesk interface or SSH
 
 ## Contributing
