@@ -7,7 +7,8 @@
 		"clean": "rimraf dist/",
 		"build": "npm run clean && tsc",
 		"watch": "npm run clean && tsc -w",
-		"start": "npm run build && node dist/app.js"
+		"start": "npm run build && node dist/app.js",
+		"test": "exit 0"
 	},
 	"repository": {
 		"type": "git",
