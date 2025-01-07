@@ -1,4 +1,5 @@
 # Moggel Comic Web Server
+![GitHub Actions Workflow Status](https://github.com/ratzifutzi/moggel.ch/actions/workflows/CI.yaml/badge.svg)
 
 A web server for Moggel. This project uses Express.js with server-side rendering in TypeScript, designed to run on Plesk and interact with MongoDB.
 
