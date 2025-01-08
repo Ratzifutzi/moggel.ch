@@ -22,7 +22,7 @@ async function main() {
 
 	// For now, it is only a static page
 	app.get("/", (_req, res) => {
-		res.render('index', { message: 'Hello, Plesk!' });
+		res.render('index', { message: 'Hello, World!' });
 	} )
 
 	// Static Handler
