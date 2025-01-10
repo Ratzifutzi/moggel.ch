@@ -25,7 +25,7 @@ async function main() {
 
 	// For now, it is only a static page
 	app.get("/", (_req, res) => {
-		res.render('pages/base', { pages: PAGES, pageToRender: "home" });
+		res.render('base', { pages: PAGES, pageToRender: "home" });
 	} )
 
 	// Static Handler

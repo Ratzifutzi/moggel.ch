@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head.ejs', {pageData: pages[pageToRender]}) %>
+
+<body>
+	<div id="nav">
+		<%- include('partials/nav', {pages: pages}) %>
+	</div>
+
+	<div id="content">
+		<%- include('pages/' + pageToRender, {pageData: pages[pageToRender]}) %>
+	</div>
+</body>
+
+</html>
