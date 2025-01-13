@@ -23,6 +23,11 @@ async function main() {
 	app.set('view engine', 'ejs');
 	app.set('views', './views');
 
+	// Static Handler
+	app.use(express.static('./static', {
+		maxAge: 60 * 15 * 1000,
+		immutable: true
+	}));
 
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
@@ -32,23 +37,6 @@ async function main() {
 			res.render('base', { pages: PAGES, pageToRender: pageKey });
 		})
 	}
-
-	// Static Handler
-	app.use(express.static('./static', {
-		maxAge: 60 * 15,
-		setHeaders: (res) => {
-			res.setHeader('Cache-Control', `public, max-age=${60 * 15}`);
-		}
-	}));
-
-	/*
-	app.use(express.static('./static', {
-		maxAge: '10m',
-		setHeaders: (res, path) => {
-			res.setHeader('Cache-Control', 'public, max-age=600');
-		}
-	}));
-	*/
 
 
 	/////////////////////////////////////////////////////
