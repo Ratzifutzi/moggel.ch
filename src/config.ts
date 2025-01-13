@@ -37,8 +37,8 @@ export default {
 			description: "What is Deso? Why do I use it?",
 			path: "/deso",
 
-			buttonIcon: "images/Menu_Deso_Icon.png",
-			buttonText: "images/Menu_Deso_Text.png"
+			buttonIcon: "images/Menu_DeSo_Icon.png",
+			buttonText: "images/Menu_DeSo_Text.png"
 		}
 	}
 } satisfies config
