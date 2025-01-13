@@ -2,7 +2,7 @@
 	<ul class="nav-list">
 		<% Object.keys(pages).forEach(pageKey=> { %>
 			<% const page=pages[pageKey]; %>
-				<li class="nav-holder">
+				<li class="nav-holder <%= currentPage === pageKey ? 'active' : '' %>">
 					<a class="nav-button" href="<%= page.path %>">Button</a>
 					<img class="nav-icon" src="<%= page.buttonIcon %>" alt="" srcset="">
 					<img class="nav-text" src="<%= page.buttonText %>" alt="" srcset="">

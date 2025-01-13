@@ -1,3 +1,23 @@
+@keyframes slideDown {
+	from {
+		margin-top: 0;
+	}
+
+	to {
+		margin-top: 2em;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		margin-top: 0;
+	}
+
+	to {
+		margin-top: 2em;
+	}
+}
+
 .nav-list {
 	display: flex;
 	flex-direction: column;
@@ -41,4 +61,28 @@
 
 	object-fit: contain;
 	object-position: left;
+}
+
+@media screen and (max-width: 1200px) {
+	.nav-list {
+		display: flex;
+		flex-direction: row;
+
+		gap: 1em;
+	}
+
+	.nav-text {
+		display: none;
+	}
+
+	.nav-icon,
+	.nav-holder,
+	.nav-button {
+		height: 3em;
+		width: 3em;
+	}
+
+	.active>.nav-icon {
+		animation: slideDown 0.5s ease forwards;
+	}
 }
