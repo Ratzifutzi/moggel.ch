@@ -1,7 +1,16 @@
 <head>
+	<script>
+		document.documentElement.style.visibility = 'hidden';
+		document.addEventListener('DOMContentLoaded', function () {
+			document.documentElement.style.visibility = 'visible';
+		});
+	</script>
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><%= pageData.displayName + " - Moggel" %></title>
+	<title>
+		<%= pageData.displayName + " - Moggel" %>
+	</title>
 
 	<meta property="og:title" content="<%= pageData.displayName + ' - Moggel' %>">
 	<meta property="og:description" content="<%= pageData.description %>">
@@ -9,6 +18,9 @@
 	<meta property="og:url" content="<%= pageData.path %>">
 
 	<meta name="theme-color" content="#ffffff">
+
+	<link rel="preload" href="style/main.css" as="style">
+	<link rel="preload" href="style/nav.css" as="style">
 
 	<link rel="stylesheet" href="style/main.css">
 	<link rel="stylesheet" href="style/nav.css">

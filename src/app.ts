@@ -22,6 +22,8 @@ async function main() {
 
 	app.set('view engine', 'ejs');
 	app.set('views', './views');
+	app.enable('view cache');
+
 
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
