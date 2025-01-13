@@ -22,7 +22,6 @@ async function main() {
 
 	app.set('view engine', 'ejs');
 	app.set('views', './views');
-	app.enable('view cache');
 
 
 	// Prepare all the pages
@@ -35,14 +34,21 @@ async function main() {
 	}
 
 	// Static Handler
-	app.use("/", express.static("./static"))
+	app.use(express.static('./static', {
+		maxAge: 60 * 15,
+		setHeaders: (res) => {
+			res.setHeader('Cache-Control', `public, max-age=${60 * 15}`);
+		}
+	}));
 
+	/*
 	app.use(express.static('./static', {
 		maxAge: '10m',
 		setHeaders: (res, path) => {
 			res.setHeader('Cache-Control', 'public, max-age=600');
 		}
 	}));
+	*/
 
 
 	/////////////////////////////////////////////////////

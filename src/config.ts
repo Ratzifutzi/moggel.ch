@@ -39,6 +39,14 @@ export default {
 
 			buttonIcon: "images/Menu_DeSo_Icon.png",
 			buttonText: "images/Menu_DeSo_Text.png"
+		},
+		"admin": {
+			displayName: "Admin",
+			description: "Only real Moggel allowed!",
+			path: "/admin",
+
+			buttonIcon: "images/Menu_Admin_Icon.png",
+			buttonText: "images/Menu_Admin_Text.png"
 		}
 	}
 } satisfies config
