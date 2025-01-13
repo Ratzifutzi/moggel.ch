@@ -67,6 +67,8 @@
 	.nav-list {
 		display: flex;
 		flex-direction: row;
+		
+		margin-left: 0;
 
 		gap: 1em;
 	}
