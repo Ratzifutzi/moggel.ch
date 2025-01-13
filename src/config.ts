@@ -1,6 +1,6 @@
 export default {
-	pages: {
-		home: {
+	"pages": {
+		"home": {
 			displayName: "Home",
 			description: "Welcome to Moggel! Come and stay for a while, it's nice here!",
 			path: "/",
@@ -8,7 +8,7 @@ export default {
 			buttonIcon: "images/Menu_Applesauce_Icon.png",
 			buttonText: "images/Menu_Applesauce_Text.png"
 		},
-		applesauce: {
+		"applesauce": {
 			displayName: "Applesauce",
 			description: "",
 			path: "/applesauce",
@@ -16,7 +16,7 @@ export default {
 			buttonIcon: "images/Menu_Applesauce_Icon.png",
 			buttonText: "images/Menu_Applesauce_Text.png"
 		},
-		archive: {
+		"archive": {
 			displayName: "Archive",
 			description: "This is the archive of all the Moggel comics!",
 			path: "/archive",
@@ -24,7 +24,7 @@ export default {
 			buttonIcon: "images/Menu_Archive_Icon.png",
 			buttonText: "images/Menu_Archive_Text.png"
 		},
-		about: {
+		"about": {
 			displayName: "About",
 			description: "Who and what is Moggel? This page will tell you!",
 			path: "/about",
@@ -32,7 +32,7 @@ export default {
 			buttonIcon: "images/Menu_About_Icon.png",
 			buttonText: "images/Menu_About_Text.png"
 		},
-		deso: {
+		"deso": {
 			displayName: "Deso",
 			description: "What is Deso? Why do I use it?",
 			path: "/deso",

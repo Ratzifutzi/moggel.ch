@@ -23,10 +23,14 @@ async function main() {
 	app.set('view engine', 'ejs');
 	app.set('views', './views');
 
-	// For now, it is only a static page
-	app.get("/", (_req, res) => {
-		res.render('base', { pages: PAGES, pageToRender: "home" });
-	} )
+	// Prepare all the pages
+	for (let pageKey in PAGES) {
+		let pageValue = PAGES[pageKey as keyof typeof PAGES];
+		
+		app.get(pageValue.path, (_req, res) => {
+			res.render('base', { pages: PAGES, pageToRender: pageKey });
+		})
+	}
 
 	// Static Handler
 	app.use("/", express.static("./static"))
