@@ -1,0 +1,44 @@
+.nav-list {
+	display: flex;
+	flex-direction: column;
+
+	gap: 8px;
+}
+
+.nav-holder {
+	display: flex;
+
+	flex-direction: row;
+	align-items: center;
+	justify-content: left;
+	gap: 10px;
+
+	width: 13em;
+}
+
+.nav-button {
+	display: block;
+	position: absolute;
+
+	opacity: 0;
+
+	width: 13em;
+	height: 3em;
+
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.nav-icon {
+	height: 3em;
+	width: 3em;
+	object-fit: contain;
+}
+
+.nav-text {
+	height: 2em;
+	width: auto;
+
+	object-fit: contain;
+	object-position: left;
+}

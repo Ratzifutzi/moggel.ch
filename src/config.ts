@@ -15,6 +15,30 @@ export default {
 
 			buttonIcon: "images/Menu_Applesauce_Icon.png",
 			buttonText: "images/Menu_Applesauce_Text.png"
+		},
+		archive: {
+			displayName: "Archive",
+			description: "This is the archive of all the Moggel comics!",
+			path: "/archive",
+
+			buttonIcon: "images/Menu_Archive_Icon.png",
+			buttonText: "images/Menu_Archive_Text.png"
+		},
+		about: {
+			displayName: "About",
+			description: "Who and what is Moggel? This page will tell you!",
+			path: "/about",
+
+			buttonIcon: "images/Menu_About_Icon.png",
+			buttonText: "images/Menu_About_Text.png"
+		},
+		deso: {
+			displayName: "Deso",
+			description: "What is Deso? Why do I use it?",
+			path: "/deso",
+
+			buttonIcon: "images/Menu_Deso_Icon.png",
+			buttonText: "images/Menu_Deso_Text.png"
 		}
 	}
 } satisfies config

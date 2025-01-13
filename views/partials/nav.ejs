@@ -1,5 +1,12 @@
 <nav>
-	<ul>
-		<img src="images/Menu_About_Icon.png" alt="" srcset="">
+	<ul class="nav-list">
+		<% Object.keys(pages).forEach(pageKey=> { %>
+			<% const page=pages[pageKey]; %>
+				<li class="nav-holder">
+					<a class="nav-button" href="<%= page.path %>">Button</a>
+					<img class="nav-icon" src="<%= page.buttonIcon %>" alt="" srcset="">
+					<img class="nav-text" src="<%= page.buttonText %>" alt="" srcset="">
+				</li>
+			<% }); %>
 	</ul>
 </nav>
