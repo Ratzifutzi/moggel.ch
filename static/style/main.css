@@ -1,35 +1,48 @@
-html,
 body {
-	height: 100%;
+	display: flex;
 	margin: 0;
-	padding: 0;
-}
-
-
-body {
-	height: 100vh;
-	width: 100vw;
 }
 
 #content {
 	border: solid 5px black;
-
 	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-
 	width: 700px;
 	height: calc(100vh - 10em);
-
-	@media only screen and (max-width: 700px) {
-		width: 100vw;
-	}
 }
 
 #nav {
 	position: fixed;
 	top: 5em;
 	right: calc(50% + 350px + 1em);
-	transform: none;
+}
+
+@media screen and (max-width: 1200px) {
+	body {
+		flex-direction: column;
+
+		width: 100vw;
+		height: 100vh;
+	}
+
+	#nav {
+		position: static;
+		width: 100%;
+
+		display: flex;
+		justify-content: center;
+	}
+
+	#content {
+		position: static;
+		transform: none;
+		margin-top: 2em;
+		width: 100%;
+		max-width: 700px;
+		height: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}	
 }
