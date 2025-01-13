@@ -9,7 +9,7 @@ dotenv.config();
 
 // This looks a bit confusing, but it is just checking if plesk was so kind
 // and gave us a port. if not, we use the fallback port from the .env
-const PORT  = process.env.PORT ? parseInt(process.env.PORT, 10) : process.env.FALLBACK_PORT;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : process.env.FALLBACK_PORT;
 
 const PAGES = config.pages
 
@@ -26,7 +26,7 @@ async function main() {
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
-		
+
 		app.get(pageValue.path, (_req, res) => {
 			res.render('base', { pages: PAGES, pageToRender: pageKey });
 		})
@@ -34,7 +34,17 @@ async function main() {
 
 	// Static Handler
 	app.use("/", express.static("./static"))
-	
+
+	app.use(express.static('./static', {
+		maxAge: '10m',
+		setHeaders: (res, path) => {
+			if (path.endsWith('.png') || path.endsWith('.jpg') || path.endsWith('.gif')) {
+				res.setHeader('Cache-Control', 'public, max-age=600');
+			}
+		}
+	}));
+
+
 	/////////////////////////////////////////////////////
 
 	app.listen(PORT, () => {
