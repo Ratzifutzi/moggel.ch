@@ -38,9 +38,7 @@ async function main() {
 	app.use(express.static('./static', {
 		maxAge: '10m',
 		setHeaders: (res, path) => {
-			if (path.endsWith('.png') || path.endsWith('.jpg') || path.endsWith('.gif')) {
-				res.setHeader('Cache-Control', 'public, max-age=600');
-			}
+			res.setHeader('Cache-Control', 'public, max-age=600');
 		}
 	}));
 
