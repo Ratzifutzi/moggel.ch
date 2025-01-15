@@ -4,23 +4,26 @@
 	}
 
 	to {
-		margin-top: 2em;
+		margin-top: 1em;
 	}
 }
 
-@keyframes slideUp {
+@keyframes slideRight {
 	from {
-		margin-top: 0;
+		margin-left: 0;
 	}
 
 	to {
-		margin-top: 2em;
+		margin-left: 1em;
 	}
 }
+
+/* Mobile And Desktop View */
 
 .nav-list {
 	display: flex;
 	flex-direction: column;
+	justify-content: right;
 
 	gap: 8px;
 }
@@ -63,17 +66,25 @@
 	object-position: left;
 }
 
+/* Desktop View */
+.active>.nav-icon {
+	animation: none;
+}
+
+.active>.nav-icon {
+	animation: slideRight 0.5s ease forwards;
+}
+
+/* Mobile View */
 @media screen and (max-width: 1200px) {
 	.nav-list {
 		display: flex;
 		flex-direction: row;
-		
 		align-items: center;
 		justify-content: center;
+		gap: 1em;
 
 		padding: 0px;
-
-		gap: 1em;
 	}
 
 	.nav-text {
@@ -89,5 +100,8 @@
 
 	.active>.nav-icon {
 		animation: slideDown 0.5s ease forwards;
+	}
+	.active {
+		animation: none;
 	}
 }
