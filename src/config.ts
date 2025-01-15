@@ -40,13 +40,13 @@ export default {
 			buttonIcon: "images/Menu_DeSo_Icon.png",
 			buttonText: "images/Menu_DeSo_Text.png"
 		},
-		"admin": {
-			displayName: "Admin",
-			description: "Only real Moggel allowed!",
-			path: "/admin",
+		"account": {
+			displayName: "Account",
+			description: "Log in with your Deso account to do some things! Currently only for site-admins :p!",
+			path: "/account",
 
-			buttonIcon: "images/Menu_Admin_Icon.png",
-			buttonText: "images/Menu_Admin_Text.png"
+			buttonIcon: "images/Menu_Account_Icon.png",
+			buttonText: "images/Menu_Account_Text.png"
 		}
 	}
 } satisfies config
