@@ -25,8 +25,7 @@ async function main() {
 
 	// Static Handler
 	app.use(express.static('./static', {
-		maxAge: 60 * 15 * 1000,
-		immutable: true
+		maxAge: 60 * 15 * 1000
 	}));
 
 	// Prepare all the pages

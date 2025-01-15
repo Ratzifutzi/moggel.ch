@@ -3,9 +3,12 @@
 		<% Object.keys(pages).forEach(pageKey=> { %>
 			<% const page=pages[pageKey]; %>
 				<li class="nav-holder <%= currentPage === pageKey ? 'active' : '' %>">
-					<a class="nav-button" href="<%= page.path %>">Button</a>
-					<img class="nav-icon" src="<%= page.buttonIcon %>" alt="" srcset="">
-					<img class="nav-text" src="<%= page.buttonText %>" alt="" srcset="">
+					<img class="nav-icon" src="<%= page.buttonIcon %>" alt="<%= page.displayName %> Menu Icon" srcset="">
+					<img class="nav-text" src="<%= page.buttonText %>" alt="<%= page.displayName %> Menu Button" srcset="">
+
+					<% if( currentPage !== pageKey ){ %>
+						<a class="nav-button" href="<%= page.path %>">Button</a>
+					<% } %>
 				</li>
 			<% }); %>
 	</ul>
