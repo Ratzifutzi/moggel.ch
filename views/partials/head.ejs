@@ -4,11 +4,27 @@
 	<title>
 		<%= pageData.displayName + " - Moggel" %>
 	</title>
+	<link rel="canonical" href="https://moggel.ch<%= pageData.path %>">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<meta name="author" content="Moggel">
+	<meta name="author" content="Alexander Schmidt">
 
 	<meta property="og:title" content="<%= pageData.displayName + ' - Moggel' %>">
 	<meta property="og:description" content="<%= pageData.description %>">
 	<meta property="og:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
 	<meta property="og:url" content="<%= pageData.path %>">
+
+	<meta name="description" content="<%= pageData.description %>">
+	<meta name="keywords"
+		content="Moggel Comics, Moggel, Deso, webcomics, funny comics, Apfelmus, Applesauce comics, <%= pageData.displayName %>">
+	<meta http-equiv="content-language" content="en">
+
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="<%= pageData.displayName + ' - Moggel' %>">
+	<meta name="twitter:description" content="<%= pageData.description %>">
+	<meta name="twitter:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
 
 	<meta name="theme-color" content="#ffffff">
 
@@ -19,4 +35,15 @@
 	<link rel="stylesheet" href="style/nav.css">
 
 	<link rel="stylesheet" href="style/pages/<%= pageToRender %>.css">
+
+	<script type="application/ld+json">
+		{
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"name": "<%= pageData.displayName + ' - Moggel' %>",
+		"description": "<%= pageData.description %>",
+		"url": "https://moggel.ch<%= pageData.path %>",
+		"image": "https://moggel.ch/images/Moggel_waving_rounded.png"
+		}
+	</script>
 </head>
