@@ -20,12 +20,12 @@ A web server for Moggel. This project uses Express.js with server-side rendering
 
 1. Clone the repository:
 ```
-git clone https://github.com/yourusername/moggel-comic-server.git
+git clone https://github.com/Ratzifutzi/moggel.ch.git
 ```
 
 2. Install dependencies:
 ```
-cd moggel-comic-server
+cd moggel.ch
 npm install
 ```
 
