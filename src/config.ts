@@ -10,7 +10,7 @@ export default {
 		},
 		"applesauce": {
 			displayName: "Applesauce",
-			description: "",
+			description: "Applesauce is good!",
 			path: "/applesauce",
 
 			buttonIcon: "images/Menu_Applesauce_Icon.png",
