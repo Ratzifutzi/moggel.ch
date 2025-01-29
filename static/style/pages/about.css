@@ -1,0 +1,15 @@
+#content {
+	display: flex;
+	flex-direction: row;
+}
+
+#content > div {
+	width: 50%;
+	height: 100%;
+	padding-inline: 2.5%;
+}
+
+#content h1 {
+	width: 100%;
+	text-align: center;
+}

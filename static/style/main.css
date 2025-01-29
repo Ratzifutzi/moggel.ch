@@ -12,6 +12,13 @@
 	letter-spacing: 1px;
 }
 
+.readable-font {
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	background-color: rgb(236, 236, 236);
+	border-radius: 5px;
+	padding-inline: 4px;
+}
+
 body {
 	display: flex;
 	margin: 0;
