@@ -1,3 +1,5 @@
+# CONTENT OF THIS REPOSITORY & MOGGEL CARTOONS MUST __**NOT**__ BE USED  FOR AI/ML/LLM, OR ANYTHING SIMILAR, TRAINING.
+
 # Moggel Comic Web Server
 ![GitHub Actions Workflow Status](https://github.com/ratzifutzi/moggel.ch/actions/workflows/CI.yaml/badge.svg)
 
