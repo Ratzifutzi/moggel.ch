@@ -30,8 +30,8 @@ async function main() {
 	}));
 
 	// Environment Variables
-	const latestCommit = execSync('git rev-parse HEAD').toString().trim();
-	const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+	//const latestCommit = execSync('git rev-parse HEAD').toString().trim();
+	//const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
@@ -42,8 +42,8 @@ async function main() {
 				pages: PAGES,
 				pageToRender: pageKey,
 				env: {
-					latestCommit: latestCommit,
-					currentBranch: currentBranch
+					latestCommit: "latestCommit",
+					currentBranch: "currentBranch"
 				}
 			});
 		})
