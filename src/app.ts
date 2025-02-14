@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { Application } from "express";
 import express from 'express';
 import config from './config';
+import { execSync } from 'child_process';
 
 dotenv.config();
 
@@ -28,12 +29,23 @@ async function main() {
 		maxAge: 60 * 15 * 1000
 	}));
 
+	// Environment Variables
+	const latestCommit = execSync('git rev-parse HEAD').toString().trim();
+	const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
 		app.get(pageValue.path, (_req, res) => {
-			res.render('base', { pages: PAGES, pageToRender: pageKey });
+			res.render('base', {
+				pages: PAGES,
+				pageToRender: pageKey,
+				env: {
+					latestCommit: latestCommit,
+					currentBranch: currentBranch
+				}
+			});
 		})
 	}
 
