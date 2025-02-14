@@ -12,5 +12,7 @@
 }
 
 .top-image {
+	height: 125px;
+	min-height: 125px;
 	max-height: 125px;
 }
