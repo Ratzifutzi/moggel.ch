@@ -43,8 +43,8 @@ async function main() {
 				pages: PAGES,
 				pageToRender: pageKey,
 				env: {
-					latestCommit: git.short(),
-					currentBranch: git.branch()
+					latestCommit: git.short(process.env.GIT_PATH || './'),
+					currentBranch: git.branch(process.env.GIT_PATH || './')
 				}
 			});
 		})

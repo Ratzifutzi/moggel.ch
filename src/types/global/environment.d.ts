@@ -11,6 +11,8 @@ declare global {
 			MONGODB_URI: string,
 			FALLBACK_PORT: number,
 			OWNER_PUBLIC_KEY: string,
+
+			GIT_PATH: string,
 		}
 	}
 }
