@@ -8,10 +8,18 @@
 	text-align: center;
 }
 
-#content > div {
-	width: 50%;
+#content > .person-holder {
+	display: flex;
+	flex-direction: row;
+
+	width: 100%;
 	height: 100%;
 	padding-inline: 2.5%;
+}
+
+.person {
+	width: 50%;
+	height: 100%;
 }
 
 #content h1 {
@@ -25,8 +33,16 @@
 		flex-direction: column;
 	}
 	
-	#content > div {
-		width: 100%;
+	#content > .person-holder {
+		display: flex;
+		flex-direction: column;
+
+		width: 95%;
 		padding-inline: 2.5%;
+	}
+
+	.person {
+		width: 100%;
+		height: 100%;
 	}
 }
