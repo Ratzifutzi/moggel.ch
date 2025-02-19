@@ -26,7 +26,7 @@ async function main() {
 	app.set('views', './views');
 
 	// Static Handler
-	app.use(express.static(path.join(__dirname, 'static'), {
+	app.use(express.static(path.join(__dirname, '../static'), {
 		maxAge: 60 * 15 * 1000
 	}));
 
