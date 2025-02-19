@@ -3,6 +3,7 @@ import { Application } from "express";
 import express from 'express';
 import config from './config';
 import { execSync } from 'child_process';
+import path from 'path';
 
 dotenv.config();
 
@@ -25,7 +26,7 @@ async function main() {
 	app.set('views', './views');
 
 	// Static Handler
-	app.use(express.static('./static', {
+	app.use(express.static(path.join(__dirname, 'static'), {
 		maxAge: 60 * 15 * 1000
 	}));
 
