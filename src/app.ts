@@ -30,8 +30,8 @@ async function main() {
 	}));
 
 	// Environment Variables
-	//const latestCommit = execSync('git rev-parse HEAD').toString().trim();
-	//const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+	const latestCommit = execSync('cd ~/git/moggel.ch && git rev-parse HEAD').toString().trim() || "unknown";
+	const currentBranch = execSync('cd ~/git/moggel.ch && git rev-parse --abbrev-ref HEAD').toString().trim() || "unknown";
 
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
