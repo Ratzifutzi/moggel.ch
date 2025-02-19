@@ -33,6 +33,7 @@ async function main() {
 	// Environment Variables
 	const latestCommit = execSync(`cd ${process.env.GIT_PATH} && git rev-parse HEAD`).toString().trim() || "unknown";
 	const currentBranch = execSync(`cd ${process.env.GIT_PATH} && git rev-parse --abbrev-ref HEAD`).toString().trim() || "unknown";
+	const prettyCommit = `${latestCommit.substring(0, 7)}..${latestCommit.substring(latestCommit.length - 7, latestCommit.length)}`
 
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
@@ -43,7 +44,7 @@ async function main() {
 				pages: PAGES,
 				pageToRender: pageKey,
 				env: {
-					latestCommit: latestCommit.substring(0, 7), //git.short(process.env.GIT_PATH || './'),
+					latestCommit: prettyCommit, //git.short(process.env.GIT_PATH || './'),
 					currentBranch: currentBranch //git.branch(process.env.GIT_PATH || './')
 				}
 			});
