@@ -3,6 +3,7 @@ import { Application } from "express";
 import express from 'express';
 import config from './config';
 import { execSync } from 'child_process';
+import * as git from 'git-rev-sync';
 
 dotenv.config();
 
@@ -42,8 +43,8 @@ async function main() {
 				pages: PAGES,
 				pageToRender: pageKey,
 				env: {
-					latestCommit: "latestCommit",
-					currentBranch: "currentBranch"
+					latestCommit: process.env.GIT_PATH, //git.short(process.env.GIT_PATH || './'),
+					currentBranch: "nil" //git.branch(process.env.GIT_PATH || './')
 				}
 			});
 		})
