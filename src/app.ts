@@ -3,7 +3,6 @@ import { Application } from "express";
 import express from 'express';
 import config from './config';
 import { execSync } from 'child_process';
-import * as git from 'git-rev-sync';
 
 dotenv.config();
 
@@ -34,6 +33,11 @@ async function main() {
 	const latestCommit = execSync(`cd ${process.env.GIT_PATH} && git rev-parse HEAD`).toString().trim() || "unknown";
 	const currentBranch = execSync(`cd ${process.env.GIT_PATH} && git rev-parse --abbrev-ref HEAD`).toString().trim() || "unknown";
 	const prettyCommit = `${latestCommit.substring(0, 7)}..${latestCommit.substring(latestCommit.length - 7, latestCommit.length)}`
+
+	// Logs to make debugging easier
+	console.log(`   ├ 📅 Date: ${new Date().toLocaleString()}`);
+	console.log(`   ├ 📌 Current branch: ${currentBranch}`);
+	console.log(`   └ 📝 Latest commit:  ${latestCommit}`);
 
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
