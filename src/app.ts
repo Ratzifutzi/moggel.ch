@@ -31,7 +31,7 @@ async function main() {
 	}));
 
 	// Environment Variables
-	const latestCommit = execSync('cd ~/git/moggel.ch && git rev-parse HEAD').toString().trim().substring(0, 7) || "unknown";
+	const latestCommit = execSync('cd ~/git/moggel.ch && git rev-parse HEAD').toString().trim() || "unknown";
 	const currentBranch = execSync('cd ~/git/moggel.ch && git rev-parse --abbrev-ref HEAD').toString().trim() || "unknown";
 
 	// Prepare all the pages
@@ -43,7 +43,7 @@ async function main() {
 				pages: PAGES,
 				pageToRender: pageKey,
 				env: {
-					latestCommit: latestCommit, //git.short(process.env.GIT_PATH || './'),
+					latestCommit: latestCommit.substring(0, 7), //git.short(process.env.GIT_PATH || './'),
 					currentBranch: currentBranch //git.branch(process.env.GIT_PATH || './')
 				}
 			});
