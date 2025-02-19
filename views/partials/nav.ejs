@@ -2,6 +2,7 @@
 	<ul class="nav-list">
 		<% Object.keys(pages).forEach(pageKey=> { %>
 			<% const page=pages[pageKey]; %>
+			<% if(page.noButton) return; %>
 				<li class="nav-holder <%= currentPage === pageKey ? 'active' : '' %>">
 					<img class="nav-icon" src="<%= page.buttonIcon %>" alt="<%= page.displayName %> Menu Icon" srcset="">
 					<img class="nav-text" src="<%= page.buttonText %>" alt="<%= page.displayName %> Menu Button" srcset="">

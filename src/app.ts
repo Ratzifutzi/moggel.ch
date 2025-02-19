@@ -56,6 +56,17 @@ async function main() {
 		})
 	}
 
+	// 404 Handler
+	app.use((req, res) => {
+		res.statusCode = 404
+
+		res.render('base', {
+			pages: PAGES,
+			pageToRender: "errors/404",
+			env: {}
+		});
+	})
+
 
 	/////////////////////////////////////////////////////
 
