@@ -5,8 +5,8 @@ export default {
 			description: "Welcome to Moggel! Come and stay for a while, it's nice here!",
 			path: "/",
 
-			buttonIcon: "images/Menu_Applesauce_Icon.png",
-			buttonText: "images/Menu_Applesauce_Text.png"
+			buttonIcon: "images/Moggel_waving.PNG",
+			buttonText: "images/Menu_Home_Text.jpeg"
 		},
 		"applesauce": {
 			displayName: "Applesauce",
