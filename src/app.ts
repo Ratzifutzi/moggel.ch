@@ -44,8 +44,8 @@ async function main() {
 				pages: PAGES,
 				pageToRender: pageKey,
 				env: {
-					latestCommit: prettyCommit, //git.short(process.env.GIT_PATH || './'),
-					currentBranch: currentBranch //git.branch(process.env.GIT_PATH || './')
+					latestCommit: prettyCommit,
+					currentBranch: currentBranch,
 				}
 			});
 		})
