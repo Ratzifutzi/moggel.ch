@@ -50,8 +50,8 @@ export default {
 		},
 
 		"errors/404": {
-			displayName: "404",
-			description: "This page does not exist!",
+			displayName: "Page not found",
+			description: "Where are you trying to go?",
 			path: "/404",
 
 			buttonIcon: "",
