@@ -32,7 +32,7 @@ h2 {
 .person > .name-holder {
 	display: flex;
 	flex-direction: row;
-	gap: 1em;
+	gap: 5px;
 
 	width: 100%;
 	height: 32px;
@@ -40,6 +40,8 @@ h2 {
 
 .person > .name-holder > .person-image {
 	height: 32px;
+	width: 32px;
+	object-fit: contain;
 }
 
 @media screen and (max-width: 1200px) {

@@ -1,9 +1,10 @@
 import dotenv from 'dotenv';
-import { Application } from "express";
+import { Application, Response } from "express";
 import express from 'express';
 import config from './config';
 import { execSync } from 'child_process';
 import path from 'path';
+import { hostname } from "os";
 
 dotenv.config();
 
@@ -15,7 +16,26 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : process.env.FAL
 
 const PAGES = config.pages
 
+// Environment Variables
+const latestCommit = execSync(`cd ${process.env.GIT_PATH} && git rev-parse HEAD`).toString().trim() || "unknown";
+const currentBranch = execSync(`cd ${process.env.GIT_PATH} && git rev-parse --abbrev-ref HEAD`).toString().trim() || "unknown";
+const prettyCommit = `${latestCommit.substring(0, 7)}..${latestCommit.substring(latestCommit.length - 7, latestCommit.length)}`
+const serverHostname = hostname();
+
 /////////////////////////////////////////////////////
+
+async function renderPage(res: Response, pageKey: keyof typeof PAGES) {
+	res.render('base', {
+		pages: PAGES,
+		pageToRender: pageKey,
+		env: {
+			latestCommit: prettyCommit,
+			latestLongCommit: latestCommit,
+			currentBranch: currentBranch,
+			hostname: serverHostname,
+		}
+	});
+}
 
 async function main() {
 	console.log("⚙️  Preparing to start express.js server...");
@@ -30,11 +50,6 @@ async function main() {
 		maxAge: 60 * 15 * 1000
 	}));
 
-	// Environment Variables
-	const latestCommit = execSync(`cd ${process.env.GIT_PATH} && git rev-parse HEAD`).toString().trim() || "unknown";
-	const currentBranch = execSync(`cd ${process.env.GIT_PATH} && git rev-parse --abbrev-ref HEAD`).toString().trim() || "unknown";
-	const prettyCommit = `${latestCommit.substring(0, 7)}..${latestCommit.substring(latestCommit.length - 7, latestCommit.length)}`
-
 	// Logs to make debugging easier
 	console.log(`   ├ 📅 Date: ${new Date().toLocaleString()}`);
 	console.log(`   ├ 📌 Current branch: ${currentBranch}`);
@@ -45,14 +60,7 @@ async function main() {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
 		app.get(pageValue.path, (_req, res) => {
-			res.render('base', {
-				pages: PAGES,
-				pageToRender: pageKey,
-				env: {
-					latestCommit: prettyCommit,
-					currentBranch: currentBranch,
-				}
-			});
+			renderPage(res, pageKey as keyof typeof PAGES);
 		})
 	}
 
@@ -60,11 +68,7 @@ async function main() {
 	app.use((req, res) => {
 		res.statusCode = 404
 
-		res.render('base', {
-			pages: PAGES,
-			pageToRender: "errors/404",
-			env: {}
-		});
+		renderPage(res, 'errors/404');
 	})
 
 
