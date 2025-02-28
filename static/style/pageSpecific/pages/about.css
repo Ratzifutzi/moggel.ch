@@ -39,20 +39,22 @@ h2 {
 	object-fit: contain;
 	object-position: top;
 
-	margin-right: 1em;
+	margin-right: 0;
 
-	float: left;
+	float: right;
 
 	width: 40%;
 }
+
+/****************************************************/
 
 @media screen and (max-width: 1200px) {
 	#content {
 		display: flex;
 		flex-direction: column;
 	}
-	
-	#content > .person-holder {
+
+	#content>.person-holder {
 		display: flex;
 		flex-direction: column;
 
