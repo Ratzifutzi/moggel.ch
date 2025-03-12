@@ -1,0 +1,9 @@
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+h1, p {
+	width: 100%;
+	text-align: center;
+}

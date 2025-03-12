@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Application, Response } from "express";
+import { Application, Request, Response } from "express";
 import express from 'express';
 import config from './config';
 import { execSync } from 'child_process';
@@ -23,6 +23,15 @@ const prettyCommit = `${latestCommit.substring(0, 7)}..${latestCommit.substring(
 const serverHostname = hostname();
 
 /////////////////////////////////////////////////////
+
+const generateRandomString = (length: number): string => {
+	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+{}[]|:;<>,.?/~`';
+	return Array.from(
+		{ length },
+		() => chars[Math.floor(Math.random() * chars.length)]
+	).join('');
+};
+
 
 async function renderPage(res: Response, pageKey: keyof typeof PAGES) {
 	res.render('base', {
@@ -63,6 +72,23 @@ async function main() {
 			renderPage(res, pageKey as keyof typeof PAGES);
 		})
 	}
+
+	// Deso Auth Handler
+	app.get("/auth/callback", (req: Request, res: Response) => {
+		const authData = req.query;
+		console.log('Auth callback data:', authData);
+
+		const cookie = generateRandomString(64);
+
+		res.cookie('auth', cookie, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'strict'
+		})
+		res.redirect('/auth/success');
+	});
+
+	/////////////////////////////////////////////////////
 
 	// 404 Handler
 	app.use((req, res) => {
