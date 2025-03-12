@@ -8,7 +8,7 @@ function showLoginFrame() {
 
 	const accessLevelRequest = 2; // For basic authentication
 	const callback = encodeURIComponent(`${window.location.origin}/auth/callback`);
-	const appName = encodeURIComponent("moggel.ch");
+	const appName = encodeURIComponent("Moggel Comics");
 
 	button.innerHTML = "In progress...";
 
