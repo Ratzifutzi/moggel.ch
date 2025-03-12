@@ -1,2 +1,15 @@
 <h1>Success!</h1>
-<p>You can close this window now.</p>
+<p id="countdown">This window closes in 5 seconds.</p>
+
+<script>
+	var seconds = 0;
+	var countdown = document.getElementById("countdown");
+	var interval = setInterval(function() {
+		seconds++;
+		countdown.innerHTML = "This window closes in " + (5 - seconds) + " seconds.";
+		if (seconds >= 5) {
+			clearInterval(interval);
+			window.close();
+		}
+	}, 1000);
+</script>

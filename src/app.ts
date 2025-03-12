@@ -78,7 +78,7 @@ async function main() {
 		const authData = req.query;
 		console.log('Auth callback data:', authData);
 
-		const cookie = generateRandomString(64);
+		const cookie = generateRandomString(128);
 
 		res.cookie('auth', cookie, {
 			httpOnly: true,
