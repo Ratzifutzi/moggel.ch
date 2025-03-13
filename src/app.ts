@@ -74,7 +74,7 @@ async function main() {
 	// Database
 	console.log("🔌 Connecting to MongoDB...");
 
-	const client  = new mongoDB.MongoClient("mongodb://127.0.0.1:27017/");
+	const client  = new mongoDB.MongoClient(process.env.MONGODB_URI);
 	await client.connect();
 	const db: mongoDB.Db = client.db(process.env.MONGODB_NAME);
 
