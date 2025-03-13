@@ -1,1 +1,21 @@
+#account-info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 
+	margin-bottom: 20px;
+}
+
+#profile-pic {
+	width: 64px;
+	height: 64px;
+
+	border-radius: 100%;
+}
+
+#username {
+	margin: 0;
+	margin-inline: 10px;
+
+	font-size: 30px;
+}

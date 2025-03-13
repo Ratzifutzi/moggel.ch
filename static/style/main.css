@@ -28,6 +28,14 @@ ul {
 	padding: 0;
 }
 
+.primary-button {
+	padding: 10px;
+	background: none;
+
+	border-radius: 10px;
+	border: dotted 2px black;
+}
+
 #content {
 	position: absolute;
 	top: 50%;

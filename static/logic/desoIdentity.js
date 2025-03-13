@@ -4,7 +4,7 @@ function showLoginFrame() {
 	if (InAuthFlow) return;
 	InAuthFlow = true;
 
-	let button = document.querySelector("#login-button");
+	let button = document.querySelector("#action-button");
 
 	const accessLevelRequest = 2; // For basic authentication
 	const callback = encodeURIComponent(`${window.location.origin}/auth/callback`);
@@ -41,7 +41,7 @@ function handleMessage(event) {
 		return;
 	}
 
-	let button = document.querySelector("#login-button");
+	let button = document.querySelector("#action-button");
 
 	// Process the authentication data
 	const authData = event.data;

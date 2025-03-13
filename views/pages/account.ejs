@@ -1,19 +1,31 @@
 <script src="/logic/desoIdentity.js"></script>
 
-<h1>Developer Only</h1>
-<p>If you are not the site owner, logging in will do nothing. (yet)</p>
-
 <script>
 	const account = "<%= loggedInAccount %>";
 	console.log(account);
 </script>
 
 <% if(loggedInAccount===null) { %>
-	<button onclick="showLoginFrame()" id="login-button">
-		Log in with DeSo Seed
-	</button>
+	<h1>Developer Only</h1>
+	<p>If you are not the site owner, logging in will do nothing. (yet)</p>
+
+	<div class="button-row">
+		<button onclick="showLoginFrame()" id="action-button" class="primary-button">
+			Log in with DeSo Seed
+		</button>
+	</div>
 <% } else { %>
-	<button onclick="showLogoutFrame(account)" id="logout-button">
-		Log Out
-	</button>
+	<script src="/logic/account.js"></script>
+
+	<h3>Welcome!</h3>
+	<div id="account-info">
+		<img id="profile-pic" src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" alt="">
+		<p id="username">Cannot show username with JS disabled</p>
+	</div>
+
+	<div class="button-row">
+		<button onclick="showLogoutFrame(account)" id="action-button" class="primary-button">
+			Log Out
+		</button>
+	</div>
 <% } %>
