@@ -52,7 +52,7 @@ async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAG
 		pageToRender: pageKey,
 		loggedInAccount: loggedInAccount,
 		env: {
-			latestCommit: process.env.MONGODB_URI,
+			latestCommit: prettyCommit,
 			latestLongCommit: latestCommit,
 			currentBranch: currentBranch,
 			hostname: serverHostname,
