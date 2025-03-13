@@ -9,6 +9,7 @@ declare global {
 
 			// .env file provided
 			MONGODB_URI: string,
+			MONGODB_NAME: string,
 			FALLBACK_PORT: number,
 			OWNER_PUBLIC_KEY: string,
 

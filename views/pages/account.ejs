@@ -3,6 +3,17 @@
 <h1>Developer Only</h1>
 <p>If you are not the site owner, logging in will do nothing. (yet)</p>
 
-<button onclick="showLoginFrame()" id="login-button">
-Log in with DeSo Seed
-</button>
+<script>
+	const account = "<%= loggedInAccount %>";
+	console.log(account);
+</script>
+
+<% if(loggedInAccount===null) { %>
+	<button onclick="showLoginFrame()" id="login-button">
+		Log in with DeSo Seed
+	</button>
+<% } else { %>
+	<button onclick="showLogoutFrame(account)" id="logout-button">
+		Log Out
+	</button>
+<% } %>

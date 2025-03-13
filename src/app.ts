@@ -5,6 +5,8 @@ import config from './config';
 import { execSync } from 'child_process';
 import path from 'path';
 import { hostname } from "os";
+import * as mongoDB from "mongodb";
+import cookieparser from 'cookie-parser';
 
 dotenv.config();
 
@@ -25,7 +27,7 @@ const serverHostname = hostname();
 /////////////////////////////////////////////////////
 
 const generateRandomString = (length: number): string => {
-	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+{}[]|:;<>,.?/~`';
+	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	return Array.from(
 		{ length },
 		() => chars[Math.floor(Math.random() * chars.length)]
@@ -33,10 +35,22 @@ const generateRandomString = (length: number): string => {
 };
 
 
-async function renderPage(res: Response, pageKey: keyof typeof PAGES) {
+async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, cookiesCollection: mongoDB.Collection) {
+	let loggedInAccount = null;
+
+	if(req.cookies.auth) {
+		const document = await cookiesCollection.findOne({ cookieSecret: req.cookies.auth });
+		if(document) {
+			loggedInAccount = document.userPublicKey;
+		}
+	}
+
+	console.log(loggedInAccount);
+
 	res.render('base', {
 		pages: PAGES,
 		pageToRender: pageKey,
+		loggedInAccount: loggedInAccount,
 		env: {
 			latestCommit: prettyCommit,
 			latestLongCommit: latestCommit,
@@ -48,43 +62,73 @@ async function renderPage(res: Response, pageKey: keyof typeof PAGES) {
 
 async function main() {
 	console.log("⚙️  Preparing to start express.js server...");
+	console.log(`   ├ 📅 Date: ${new Date().toLocaleString()}`);
+	console.log(`   ├ 📌 Current branch: ${currentBranch}`);
+	console.log(`   └ 📝 Latest commit:  ${latestCommit}`);
 
 	const app: Application = express();
 
 	app.set('view engine', 'ejs');
 	app.set('views', './views');
 
+	// Database
+	console.log("🔌 Connecting to MongoDB...");
+
+	const client  = new mongoDB.MongoClient("mongodb://127.0.0.1:27017/");
+	await client.connect();
+	const db: mongoDB.Db = client.db(process.env.MONGODB_NAME);
+
+	// Collections
+	const cookiesCollection = db.collection('cookies');
+	console.log("✅ Connected to MongoDB!");
+
+	// Middleware
+	app.use(cookieparser());
+
 	// Static Handler
 	app.use(express.static(path.join(__dirname, '../static'), {
 		maxAge: 60 * 15 * 1000
 	}));
 
-	// Logs to make debugging easier
-	console.log(`   ├ 📅 Date: ${new Date().toLocaleString()}`);
-	console.log(`   ├ 📌 Current branch: ${currentBranch}`);
-	console.log(`   └ 📝 Latest commit:  ${latestCommit}`);
-
 	// Prepare all the pages
 	for (let pageKey in PAGES) {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
-		app.get(pageValue.path, (_req, res) => {
-			renderPage(res, pageKey as keyof typeof PAGES);
+		app.get(pageValue.path, (req, res) => {
+			renderPage(req, res, pageKey as keyof typeof PAGES, cookiesCollection);
 		})
 	}
 
 	// Deso Auth Handler
-	app.get("/auth/callback", (req: Request, res: Response) => {
+	app.get("/auth/callback", async (req: Request, res: Response) => {
 		const authData = req.query;
-		console.log('Auth callback data:', authData);
+		const userPublicKey = authData.publicKeyAdded
 
-		const cookie = generateRandomString(128);
+		const cookie = ".MOGGELSECURITY_" + generateRandomString(512);
+
+		await cookiesCollection.insertOne({
+			cookieSecret: cookie,
+			userPublicKey: userPublicKey
+		});
 
 		res.cookie('auth', cookie, {
 			httpOnly: true,
 			secure: true,
-			sameSite: 'strict'
+			sameSite: 'strict',
+			maxAge: 1000 * 60 * 60 * 24 * 7
 		})
+		res.redirect('/auth/success');
+	});
+
+	// Logout Handler
+	app.get("/auth/logout", async (req: Request, res: Response) => {
+		const oldCookie = req.cookies.auth
+
+		if(oldCookie !== undefined) {
+			await cookiesCollection.deleteOne({ cookieSecret: oldCookie });
+		}
+
+		res.clearCookie('auth');
 		res.redirect('/auth/success');
 	});
 
@@ -94,7 +138,7 @@ async function main() {
 	app.use((req, res) => {
 		res.statusCode = 404
 
-		renderPage(res, 'errors/404');
+		renderPage(req, res, 'errors/404', cookiesCollection);
 	})
 
 

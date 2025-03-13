@@ -1,7 +1,7 @@
 let InAuthFlow = false;
 
 function showLoginFrame() {
-	if(InAuthFlow) return;
+	if (InAuthFlow) return;
 	InAuthFlow = true;
 
 	let button = document.querySelector("#login-button");
@@ -23,6 +23,18 @@ function showLoginFrame() {
 	const authWindow = window.open(url, null, `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`);
 }
 
+function showLogoutFrame(loggedInAccount) {
+	if (InAuthFlow) return;
+	InAuthFlow = true;
+
+	const url = `/auth/logout`;
+	const h = 650;
+	const w = 500;
+	const y = window.outerHeight / 2 + window.screenY - h / 2;
+	const x = window.outerWidth / 2 + window.screenX - w / 2;
+	const authWindow = window.open(url, null, `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+}
+
 function handleMessage(event) {
 	// Verify the origin of the message
 	if (event.origin !== "https://identity.deso.org") {
@@ -34,8 +46,8 @@ function handleMessage(event) {
 	// Process the authentication data
 	const authData = event.data;
 	console.log(authData);
-	if(authData.category == "interaction-event") {
-		if(authData.payload.event == "close") {
+	if (authData.category == "interaction-event") {
+		if (authData.payload.event == "close") {
 			button.innerHTML = "Redirecting...";
 
 			setTimeout(() => {
@@ -45,4 +57,11 @@ function handleMessage(event) {
 	}
 }
 
+function onPageFocus() {
+	if(InAuthFlow) {
+		window.location.reload();
+	}
+}
+
+window.addEventListener("focus", () => onPageFocus());
 window.addEventListener("message", (event) => this.handleMessage(event));
