@@ -52,7 +52,7 @@ async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAG
 		pageToRender: pageKey,
 		loggedInAccount: loggedInAccount,
 		env: {
-			latestCommit: prettyCommit,
+			latestCommit: process.env.MONGODB_URI,
 			latestLongCommit: latestCommit,
 			currentBranch: currentBranch,
 			hostname: serverHostname,
@@ -75,15 +75,7 @@ async function main() {
 	console.log("🔌 Connecting to MongoDB...");
 
 	const client  = new mongoDB.MongoClient("mongodb://127.0.0.1:27017/");
-	try {
-		await client.connect();
-		console.log("✅ Connected to MongoDB!");
-	} catch (error) {
-		console.log("❌ Failed to connect to MongoDB!");
-		app.use((req, res) => {
-			res.status(500).send("Failed to connect to the database!");
-		});
-	}
+	await client.connect();
 	const db: mongoDB.Db = client.db(process.env.MONGODB_NAME);
 
 	// Collections
