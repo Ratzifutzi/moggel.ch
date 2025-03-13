@@ -101,23 +101,27 @@ async function main() {
 
 	// Deso Auth Handler
 	app.get("/auth/callback", async (req: Request, res: Response) => {
-		const authData = req.query;
-		const userPublicKey = authData.publicKeyAdded
+		try {
+			const authData = req.query;
+			const userPublicKey = authData.publicKeyAdded
 
-		const cookie = ".MOGGELSECURITY_" + generateRandomString(512);
+			const cookie = ".MOGGELSECURITY_" + generateRandomString(512);
 
-		await cookiesCollection.insertOne({
-			cookieSecret: cookie,
-			userPublicKey: userPublicKey
-		});
+			await cookiesCollection.insertOne({
+				cookieSecret: cookie,
+				userPublicKey: userPublicKey
+			});
 
-		res.cookie('auth', cookie, {
-			httpOnly: true,
-			secure: true,
-			sameSite: 'strict',
-			maxAge: 1000 * 60 * 60 * 24 * 7
-		})
-		res.redirect('/auth/success');
+			res.cookie('auth', cookie, {
+				httpOnly: true,
+				secure: true,
+				sameSite: 'strict',
+				maxAge: 1000 * 60 * 60 * 24 * 7
+			})
+			res.redirect('/auth/success');
+		} catch (err) {
+			res.status(500).send(err);
+		}
 	});
 
 	// Logout Handler
