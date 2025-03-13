@@ -75,12 +75,20 @@ async function main() {
 	console.log("🔌 Connecting to MongoDB...");
 
 	const client  = new mongoDB.MongoClient("mongodb://127.0.0.1:27017/");
-	await client.connect();
+	try {
+		await client.connect();
+		console.log("✅ Connected to MongoDB!");
+	} catch (error) {
+		console.log("❌ Failed to connect to MongoDB!");
+		app.use((req, res) => {
+			res.status(500).send("Failed to connect to the database!");
+		});
+	}
 	const db: mongoDB.Db = client.db(process.env.MONGODB_NAME);
 
 	// Collections
 	const cookiesCollection = db.collection('cookies');
-	console.log("✅ Connected to MongoDB!");
+	console.log("✅ Prepared MongoDB!");
 
 	// Middleware
 	app.use(cookieparser());
