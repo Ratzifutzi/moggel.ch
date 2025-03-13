@@ -34,6 +34,8 @@ ul {
 
 	border-radius: 10px;
 	border: dotted 2px black;
+
+	cursor: pointer;
 }
 
 #content {
