@@ -27,5 +27,11 @@
 		<button onclick="showLogoutFrame(account)" id="action-button" class="primary-button">
 			Log Out
 		</button>
+
+		<% if(hasAdminPerms===true) { %>
+			<button onclick="window.location.pathname = `/admin`" class="primary-button">
+				Admin Page
+			</button>
+		<% } %>
 	</div>
 <% } %>

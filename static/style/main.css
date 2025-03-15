@@ -36,6 +36,10 @@ ul {
 	border: dotted 2px black;
 
 	cursor: pointer;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 #content {

@@ -27,12 +27,10 @@ function showLogoutFrame(loggedInAccount) {
 	if (InAuthFlow) return;
 	InAuthFlow = true;
 
-	const url = `/auth/logout`;
-	const h = 650;
-	const w = 500;
-	const y = window.outerHeight / 2 + window.screenY - h / 2;
-	const x = window.outerWidth / 2 + window.screenX - w / 2;
-	const authWindow = window.open(url, null, `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+	let button = document.querySelector("#action-button");
+	button.innerHTML = "Logging out...";
+
+	window.location.pathname = "/auth/logout";
 }
 
 function handleMessage(event) {

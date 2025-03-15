@@ -7,6 +7,8 @@ import path from 'path';
 import { hostname } from "os";
 import * as mongoDB from "mongodb";
 import cookieparser from 'cookie-parser';
+import { generateRandomString } from './helpers/generateRandomString';
+import { verifyAdminRightsForPublicKey } from './helpers/verifyAdminRightsForPublicKey';
 
 dotenv.config();
 
@@ -26,17 +28,10 @@ const serverHostname = hostname();
 
 /////////////////////////////////////////////////////
 
-const generateRandomString = (length: number): string => {
-	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	return Array.from(
-		{ length },
-		() => chars[Math.floor(Math.random() * chars.length)]
-	).join('');
-};
-
 
 async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, cookiesCollection: mongoDB.Collection) {
 	let loggedInAccount = null;
+	let hasAdminPerms = false;
 
 	if(req.cookies.auth) {
 		const document = await cookiesCollection.findOne({ cookieSecret: req.cookies.auth });
@@ -45,12 +40,15 @@ async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAG
 		}
 	}
 
-	console.log(loggedInAccount);
+	if(loggedInAccount) {
+		hasAdminPerms = await verifyAdminRightsForPublicKey(loggedInAccount);
+	}
 
 	res.render('base', {
 		pages: PAGES,
 		pageToRender: pageKey,
 		loggedInAccount: loggedInAccount,
+		hasAdminPerms: hasAdminPerms,
 		env: {
 			latestCommit: prettyCommit,
 			latestLongCommit: latestCommit,
@@ -133,7 +131,7 @@ async function main() {
 		}
 
 		res.clearCookie('auth');
-		res.redirect('/auth/success');
+		res.redirect('/account');
 	});
 
 	/////////////////////////////////////////////////////

@@ -1,10 +1,16 @@
-<h1>Success!</h1>
-<p id="countdown">This window closes in 5 seconds.</p>
+<div id="text-wrapper">
+	<h1>Success!</h1>
+	<p id="countdown">This window closes in 5 seconds.</p>
+
+	<button onclick="window.close();" id="close-button" class="primary-button">
+		Close now
+	</button>
+</div>
 
 <script>
-	var seconds = 0;
-	var countdown = document.getElementById("countdown");
-	var interval = setInterval(function() {
+	let seconds = 0;
+	let countdown = document.getElementById("countdown");
+	let interval = setInterval(function() {
 		seconds++;
 		countdown.innerHTML = "This window closes in " + (5 - seconds) + " seconds.";
 		if (seconds >= 5) {
