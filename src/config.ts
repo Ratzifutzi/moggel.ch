@@ -49,10 +49,32 @@ export default {
 			buttonText: "/images/Menu_Account_Text.png"
 		},
 
+		"pages/admin": {
+			displayName: "Admin",
+			description: "No one will ever read this because this page cannot be embedded anywhere!",
+			path: "/admin",
+
+			buttonIcon: "",
+			buttonText: "",
+
+			noButton: true,
+			adminOnly: true,
+		},
+
 		"errors/404": {
 			displayName: "Page not found",
 			description: "Where are you trying to go?",
 			path: "/404",
+
+			buttonIcon: "",
+			buttonText: "",
+
+			noButton: true,
+		},
+		"errors/403": {
+			displayName: "Forbidden",
+			description: "Where are you trying to go?",
+			path: "/403",
 
 			buttonIcon: "",
 			buttonText: "",
@@ -85,6 +107,7 @@ type config = {
 
 			// Optional tags:
 			noButton?: boolean;
+			adminOnly?: boolean;
 		}
 	}
 }

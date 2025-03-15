@@ -32,16 +32,22 @@ const serverHostname = hostname();
 async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, cookiesCollection: mongoDB.Collection) {
 	let loggedInAccount = null;
 	let hasAdminPerms = false;
+	const page = PAGES[pageKey];
 
-	if(req.cookies.auth) {
+	if (req.cookies.auth) {
 		const document = await cookiesCollection.findOne({ cookieSecret: req.cookies.auth });
-		if(document) {
+		if (document) {
 			loggedInAccount = document.userPublicKey;
 		}
 	}
 
-	if(loggedInAccount) {
+	if (loggedInAccount) {
 		hasAdminPerms = await verifyAdminRightsForPublicKey(loggedInAccount);
+	}
+
+	if ('adminOnly' in page && page.adminOnly && !hasAdminPerms) {
+		renderPage(req, res, 'errors/403', cookiesCollection);
+		return;
 	}
 
 	res.render('base', {
@@ -72,7 +78,7 @@ async function main() {
 	// Database
 	console.log("🔌 Connecting to MongoDB...");
 
-	const client  = new mongoDB.MongoClient(process.env.MONGODB_URI);
+	const client = new mongoDB.MongoClient(process.env.MONGODB_URI);
 	await client.connect();
 	const db: mongoDB.Db = client.db(process.env.MONGODB_NAME);
 
@@ -126,7 +132,7 @@ async function main() {
 	app.get("/auth/logout", async (req: Request, res: Response) => {
 		const oldCookie = req.cookies.auth
 
-		if(oldCookie !== undefined) {
+		if (oldCookie !== undefined) {
 			await cookiesCollection.deleteOne({ cookieSecret: oldCookie });
 		}
 
