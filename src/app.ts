@@ -109,7 +109,7 @@ async function main() {
 			const authData = req.query;
 			const userPublicKey = authData.publicKeyAdded
 
-			const cookie = ".MOGGELSECURITY_" + await generateRandomString(512);
+			const cookie = ".MOGGELSECURITY_" + await generateRandomString(1024);
 
 			await cookiesCollection.insertOne({
 				cookieSecret: cookie,
