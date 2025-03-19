@@ -91,7 +91,6 @@ async function main() {
 
 	// Middleware
 	app.use(cookieparser());
-	app.use(helmet());
 
 	// Static Handler
 	app.use(express.static(path.join(__dirname, '../static'), {
