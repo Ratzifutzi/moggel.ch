@@ -9,6 +9,7 @@ import * as mongoDB from "mongodb";
 import cookieparser from 'cookie-parser';
 import { generateRandomString } from './helpers/generateRandomString';
 import { verifyAdminRightsForPublicKey } from './helpers/verifyAdminRightsForPublicKey';
+import helmet from "helmet";
 
 dotenv.config();
 
@@ -31,7 +32,7 @@ const serverHostname = hostname();
 
 async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, cookiesCollection: mongoDB.Collection) {
 	let loggedInAccount = null;
-	let hasAdminPerms = false;
+	let [hasAdminPerms, userRole] = [false, "Error"];
 	const page = PAGES[pageKey];
 
 	if (req.cookies.auth) {
@@ -42,10 +43,11 @@ async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAG
 	}
 
 	if (loggedInAccount) {
-		hasAdminPerms = await verifyAdminRightsForPublicKey(loggedInAccount);
+		[hasAdminPerms, userRole] = await verifyAdminRightsForPublicKey(loggedInAccount);
 	}
 
 	if ('adminOnly' in page && page.adminOnly && !hasAdminPerms) {
+		res.statusCode = 403;
 		renderPage(req, res, 'errors/403', cookiesCollection);
 		return;
 	}
@@ -55,6 +57,7 @@ async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAG
 		pageToRender: pageKey,
 		loggedInAccount: loggedInAccount,
 		hasAdminPerms: hasAdminPerms,
+		userRoleName: userRole,
 		env: {
 			latestCommit: prettyCommit,
 			latestLongCommit: latestCommit,
@@ -88,6 +91,7 @@ async function main() {
 
 	// Middleware
 	app.use(cookieparser());
+	app.use(helmet());
 
 	// Static Handler
 	app.use(express.static(path.join(__dirname, '../static'), {

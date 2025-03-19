@@ -5,33 +5,38 @@
 	console.log(account);
 </script>
 
-<% if(loggedInAccount===null) { %>
-	<h1>Developer Only</h1>
-	<p>If you are not the site owner, logging in will do nothing. (yet)</p>
-
-	<div class="button-row">
-		<button onclick="showLoginFrame()" id="action-button" class="primary-button">
-			Log in with DeSo Seed
-		</button>
-	</div>
-<% } else { %>
-	<script src="/logic/account.js"></script>
-
-	<h3>Welcome!</h3>
-	<div id="account-info">
-		<img id="profile-pic" src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" alt="">
-		<p id="username">Cannot show username with JS disabled</p>
-	</div>
-
-	<div class="button-row">
-		<button onclick="showLogoutFrame(account)" id="action-button" class="primary-button">
-			Log Out
-		</button>
-
-		<% if(hasAdminPerms===true) { %>
-			<button onclick="window.location.pathname = `/admin`" class="primary-button">
-				Admin Page
+<div class="content-wrapper">
+	<% if(loggedInAccount===null) { %>
+		<h1>Developer Only</h1>
+		<p>If you are not the site owner, logging in will do nothing. (yet)</p>
+	
+		<div class="button-row">
+			<button onclick="showLoginFrame()" id="action-button" class="primary-button">
+				Log in with DeSo Seed
 			</button>
-		<% } %>
-	</div>
-<% } %>
+		</div>
+	<% } else { %>
+		<script src="/logic/account.js"></script>
+	
+		<h3>Welcome!</h3>
+		<div id="account-info">
+			<img id="profile-pic" src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" alt="">
+			<div class="user-texts">
+				<p id="username">Cannot show username with JS disabled</p>
+				<p id="permission-level"> <%= userRoleName %> </p>
+			</div>
+		</div>
+	
+		<div class="button-row">
+			<button onclick="showLogoutFrame(account)" id="action-button" class="primary-button">
+				Log Out
+			</button>
+	
+			<% if(hasAdminPerms===true) { %>
+				<button onclick="window.location.pathname = `/admin`" class="primary-button">
+					Admin Page
+				</button>
+			<% } %>
+		</div>
+	<% } %>
+</div>
