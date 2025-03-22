@@ -6,7 +6,6 @@ Official website: https://moggel.ch/
 A web server for Moggel. This project uses Express.js with server-side rendering in TypeScript, designed to run on Plesk and interact with MongoDB.
 
 ## Features
-
 - Express.js server with TypeScript
 - Server-side rendering for optimal performance
 - MongoDB integration for data storage
