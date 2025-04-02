@@ -44,8 +44,8 @@ function handleMessage(event) {
 	// Process the authentication data
 	const authData = event.data;
 	console.log(authData);
-	if (authData.category == "interaction-event") {
-		if (authData.payload.event == "close") {
+	if (authData.category === "interaction-event") {
+		if (authData.payload.event === "close") {
 			button.innerHTML = "Redirecting...";
 
 			setTimeout(() => {

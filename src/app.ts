@@ -9,7 +9,6 @@ import * as mongoDB from "mongodb";
 import cookieparser from 'cookie-parser';
 import { generateRandomString } from './helpers/generateRandomString';
 import { verifyAdminRightsForPublicKey } from './helpers/verifyAdminRightsForPublicKey';
-import helmet from "helmet";
 
 dotenv.config();
 
@@ -30,10 +29,12 @@ const serverHostname = hostname();
 /////////////////////////////////////////////////////
 
 
-async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, cookiesCollection: mongoDB.Collection) {
+async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, db: mongoDB.Db) {
 	let loggedInAccount = null;
 	let [hasAdminPerms, userRole] = [false, "Error"];
 	const page = PAGES[pageKey];
+
+	const cookiesCollection = db.collection('cookies');
 
 	if (req.cookies.auth) {
 		const document = await cookiesCollection.findOne({ cookieSecret: req.cookies.auth });
@@ -48,7 +49,8 @@ async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAG
 
 	if ('adminOnly' in page && page.adminOnly && !hasAdminPerms) {
 		res.statusCode = 403;
-		renderPage(req, res, 'errors/403', cookiesCollection);
+		await renderPage(req, res, 'errors/403', db);
+
 		return;
 	}
 
@@ -87,6 +89,7 @@ async function main() {
 
 	// Collections
 	const cookiesCollection = db.collection('cookies');
+
 	console.log("✅ Prepared MongoDB!");
 
 	// Middleware
@@ -102,7 +105,7 @@ async function main() {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
 		app.get(pageValue.path, (req, res) => {
-			renderPage(req, res, pageKey as keyof typeof PAGES, cookiesCollection);
+			renderPage(req, res, pageKey as keyof typeof PAGES, db);
 		})
 	}
 
@@ -149,7 +152,7 @@ async function main() {
 	app.use((req, res) => {
 		res.statusCode = 404
 
-		renderPage(req, res, 'errors/404', cookiesCollection);
+		renderPage(req, res, 'errors/404', db);
 	})
 
 
@@ -160,4 +163,5 @@ async function main() {
 	});
 }
 
+// noinspection JSIgnoredPromiseFromCall
 main();
