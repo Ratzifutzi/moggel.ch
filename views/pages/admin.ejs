@@ -1,1 +1,26 @@
-<h1>Admin</h1>
+<div>
+	<h2>Add Admin user</h2>
+	<form action="/admin/add-admin" method="post">
+		<input type="text" name="deso-pub" id="deso-pub" placeholder="Enter Deso Public Key" required>
+		<input type="submit" value="Submit">
+	</form>
+</div>
+
+<div>
+	<h2>Remove Admin user</h2>
+	<form action="/admin/remove-admin" method="post">
+		<input type="text" name="deso-pub" id="deso-pub" placeholder="Enter Deso Public Key" required>
+		<input type="submit" value="Submit">
+	</form>
+</div>
+
+<div>
+	<h2>Upload Comic</h2>
+	<form action="/admin/add-comic" method="post">
+		<input type="text" name="Titel" id="title">
+		<input type="text" name="Subtitle" id="subtitle">
+		<input type="file" name="PreviewImage" id="preview-image">
+		<input type="file" name="FadeoutImage" id="fadeout-image">
+		<input type="text" name="DesoLink" id="deso-link">
+	</form>
+</div>
