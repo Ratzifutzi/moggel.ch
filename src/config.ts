@@ -71,6 +71,16 @@ export default {
 
 			noButton: true,
 		},
+		"errors/429": {
+			displayName: "Too many requests",
+			description: "Are you a real human?",
+			path: "/429",
+
+			buttonIcon: "",
+			buttonText: "",
+
+			noButton: true,
+		},
 		"errors/403": {
 			displayName: "Forbidden",
 			description: "Where are you trying to go?",
