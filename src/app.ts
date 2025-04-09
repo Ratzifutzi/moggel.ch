@@ -96,7 +96,7 @@ async function main() {
 	// Middleware
 	app.use(cookieparser());
 
-	// Rate Limiter
+	/* // Rate Limiter
 	const rateLimitTime = 5 * 60 * 1000; // 5 minutes
 	const limiterAction = (req: Request, res: Response) => {
 		res.status(429)
@@ -112,7 +112,7 @@ async function main() {
 		windowMs: rateLimitTime,
 		max: 5,
 		handler: (req, res) => limiterAction(req, res),
-	});
+	}); */
 
 	// Static Handler
 	app.use(express.static(path.join(__dirname, '../static'), {
@@ -123,13 +123,13 @@ async function main() {
 	for (let pageKey in PAGES) {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
-		app.get(pageValue.path, pageLimiter, (req, res) => {
+		app.get(pageValue.path, (req, res) => {
 			renderPage(req, res, pageKey as keyof typeof PAGES, db);
 		})
 	}
 
 	// Deso Auth Handler
-	app.get("/auth/callback", authRateLimiter, async (req: Request, res: Response) => {
+	app.get("/auth/callback", async (req: Request, res: Response) => {
 		try {
 			const authData = req.query;
 			const userPublicKey = authData.publicKeyAdded
@@ -154,7 +154,7 @@ async function main() {
 	});
 
 	// Logout Handler
-	app.get("/auth/logout", authRateLimiter, async (req: Request, res: Response) => {
+	app.get("/auth/logout", async (req: Request, res: Response) => {
 		const oldCookie = req.cookies.auth
 
 		if (oldCookie !== undefined) {
