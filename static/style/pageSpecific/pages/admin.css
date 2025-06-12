@@ -1,12 +1,85 @@
-#content {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: flex-start;
-	flex-wrap: wrap;
+/* SSR Message Box */
+#ssr-message-box {
+	width: 80%;
+	height: 65px;
+
+	border-radius: 7px;
+	background-color: rgb(57, 107, 206);
+
+	padding: 7px;
+
+	margin-inline: 10%;
+	margin-bottom: 15px;
 }
 
-#content > div {
-	width: 40%;
+#ssr-message-box > img {
+	padding: 5px;
+
+	aspect-ratio: 1;
+	min-height: calc(100% - 10px);
+	height: calc(100% - 10px);
+	width: auto;
+}
+
+#ssr-message-box > title {
+	position: absolute;
+}
+
+#ssr-message-box {
+	display: none;
+}
+
+/* Admin Form */
+.form-list {
 	margin: 0;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 20px;
+}
+
+.form-container {
+	border: 2px dotted black;
+	border-radius: 10px;
+
+	width: 45%;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.form-container > form {
+	padding-bottom: 10px;
+
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.form-title {
+	margin: 0;
+	margin-top: 10px;
+}
+
+.form-subtitle {
+	font-size: 13px;
+
+	text-align: center;
+	margin: 0;
+	margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+label {
+	text-align: center;
+}
+
+label {
+	margin-top: 5px;
 }
