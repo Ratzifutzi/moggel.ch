@@ -4,11 +4,18 @@
 <%- include('partials/head.ejs', {pageData: pages[pageToRender], pageToRender: pageToRender}) %>
 
 <body>
-	<% if (env.showDevBanner === true) { %>
+	<% if (env.banners.showDevBanner === true) { %>
 		<div id="local-env-banner" class="top-banner">
 			<img src="/images/svg/hammer.svg" alt="">
 			<p>Local Environment</p>
 			<img src="/images/svg/hammer.svg" alt="">
+		</div>
+	<% } %>
+	<% if (env.banners.showProdBanner === true) { %>
+		<div id="prod-banner" class="top-banner">
+			<img src="/images/svg/triangle-alert.svg" alt="">
+			<p>PRODUCTION ENVIRONMENT</p>
+			<img src="/images/svg/triangle-alert.svg" alt="">
 		</div>
 	<% } %>
 

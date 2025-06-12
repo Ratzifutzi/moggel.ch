@@ -1,0 +1,33 @@
+.top-banner {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 35px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+
+	z-index: 1000;
+}
+
+.top-banner > p {
+	color: inherit;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+
+/************************************/
+
+#local-env-banner {
+	background-color: rgb(57, 107, 206);
+	color: white;
+}
+
+#prod-banner {
+	background-color: rgb(255, 187, 0);
+	color: black;
+}

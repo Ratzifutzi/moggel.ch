@@ -66,7 +66,10 @@ async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAG
 			latestLongCommit: latestCommit,
 			currentBranch: currentBranch,
 			hostname: serverHostname,
-			showDevBanner: process.env.LOCAL_ENV === "1",
+			banners: {
+				showDevBanner: process.env.LOCAL_ENV === "1",
+				showProdBanner: process.env.LOCAL_ENV !== "1" && hasAdminPerms,
+			}
 		}
 	});
 }
