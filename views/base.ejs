@@ -4,6 +4,14 @@
 <%- include('partials/head.ejs', {pageData: pages[pageToRender], pageToRender: pageToRender}) %>
 
 <body>
+	<% if (env.showDevBanner === true) { %>
+		<div id="local-env-banner" class="top-banner">
+			<img src="/images/svg/hammer.svg" alt="">
+			<p>Local Environment</p>
+			<img src="/images/svg/hammer.svg" alt="">
+		</div>
+	<% } %>
+
 	<div id="nav">
 		<%- include('partials/nav', {pages: pages, currentPage: pageToRender}) %>
 	</div>

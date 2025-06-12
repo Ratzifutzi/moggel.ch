@@ -83,3 +83,19 @@ label {
 label {
 	margin-top: 5px;
 }
+
+/* Form Mobile View */
+@media screen and (max-width: 650px) {
+	.form-list {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.form-container {
+		width: 90%;
+	}
+
+	.form-container > form {
+		width: 80%;
+	}
+}

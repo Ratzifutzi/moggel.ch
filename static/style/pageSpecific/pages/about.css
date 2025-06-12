@@ -75,6 +75,7 @@ h2 {
 	}
 
 	#content>.person-holder {
+		height: auto;
 		display: flex;
 		flex-direction: column;
 
