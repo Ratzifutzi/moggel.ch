@@ -12,7 +12,7 @@
 	margin-bottom: 15px;
 }
 
-#ssr-message-box > img {
+#ssr-message-box>img {
 	padding: 5px;
 
 	aspect-ratio: 1;
@@ -21,7 +21,7 @@
 	width: auto;
 }
 
-#ssr-message-box > title {
+#ssr-message-box>title {
 	position: absolute;
 }
 
@@ -52,11 +52,12 @@
 	align-items: center;
 }
 
-.form-container > form {
+.form-container>form {
 	padding-bottom: 10px;
 
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	gap: 5px;
 }
 
@@ -80,6 +81,11 @@ label {
 	text-align: center;
 }
 
+input[type="file"] {
+	width: 70%;
+	max-width: 70%;
+}
+
 label {
 	margin-top: 5px;
 }
@@ -95,7 +101,7 @@ label {
 		width: 90%;
 	}
 
-	.form-container > form {
+	.form-container>form {
 		width: 80%;
 	}
 }

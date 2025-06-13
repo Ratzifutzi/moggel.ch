@@ -25,7 +25,7 @@ async function getDeSoUsername(publicKey) {
 		}
 	} catch (error) {
 		console.error('Error fetching DeSo username:', error);
-		return 'Error fetching username';
+		return 'A Moggel fan';
 	}
 }
 
