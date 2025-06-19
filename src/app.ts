@@ -14,7 +14,10 @@ import { RouteHandler } from './types/route';
 import { readDirRecursive } from './helpers/readDirRecursive';
 import { exit } from 'process';
 import database from './modules/database';
-import 'module-alias/register';
+import 'fs';
+import { mkdirSync } from 'fs';
+import uploads from './modules/uploads';
+import renderPage from './modules/renderPage';
 
 dotenv.config();
 
@@ -34,51 +37,6 @@ const serverHostname = hostname();
 
 /////////////////////////////////////////////////////
 
-
-async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, db: mongoDB.Db) {
-	let loggedInAccount = null;
-	let [hasAdminPerms, userRole] = [false, "Error"];
-	const page = PAGES[pageKey];
-
-	const cookiesCollection = db.collection('cookies');
-
-	if (req.cookies.auth) {
-		const document = await cookiesCollection.findOne({ cookieSecret: req.cookies.auth });
-		if (document) {
-			loggedInAccount = document.userPublicKey;
-		}
-	}
-
-	if (loggedInAccount) {
-		[hasAdminPerms, userRole] = await verifyAdminRightsForPublicKey(loggedInAccount);
-	}
-
-	if ('adminOnly' in page && page.adminOnly && !hasAdminPerms) {
-		res.statusCode = 403;
-		await renderPage(req, res, 'errors/403', db);
-
-		return;
-	}
-
-	res.render('base', {
-		pages: PAGES,
-		pageToRender: pageKey,
-		loggedInAccount: loggedInAccount,
-		hasAdminPerms: hasAdminPerms,
-		userRoleName: userRole,
-		env: {
-			latestCommit: prettyCommit,
-			latestLongCommit: latestCommit,
-			currentBranch: currentBranch,
-			hostname: serverHostname,
-			banners: {
-				showDevBanner: process.env.LOCAL_ENV === "1",
-				showProdBanner: process.env.LOCAL_ENV !== "1" && hasAdminPerms,
-			}
-		}
-	});
-}
-
 async function main() {
 	console.log("⚙️  Preparing to start express.js server...");
 	console.log(`   ├ 📅 Date: ${new Date().toLocaleString()}`);
@@ -90,14 +48,18 @@ async function main() {
 
 	app.set('view engine', 'ejs');
 	app.set('views', './views');
+	app.use(express.urlencoded({ extended: true }));
 
+	// Env
+	dotenv.config();
+	
 	// Database
 	console.log("🔌 Connecting to MongoDB...");
 
 	const db = await database.connect();
 
-	// Collections
-	const cookiesCollection = db.collection('cookies');
+	// Uploads
+	uploads.init();
 
 	console.log("✅ Prepared MongoDB!");
 
@@ -114,7 +76,7 @@ async function main() {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
 		app.get(pageValue.path, (req, res) => {
-			renderPage(req, res, pageKey as keyof typeof PAGES, db);
+			renderPage(req, res, pageKey as keyof typeof PAGES);
 		})
 	}
 
@@ -165,12 +127,8 @@ async function main() {
 	app.use((req, res) => {
 		res.statusCode = 404
 
-		renderPage(req, res, 'errors/404', db);
+		renderPage(req, res, 'errors/404');
 	})
-
-
-	/////////////////////////////////////////////////////
-
 
 	app.listen(PORT, () => {
 		console.log(`✅ Server now running on port ${PORT}!`);

@@ -1,4 +1,7 @@
 export default {
+	"URLs": {
+		"staticServeURL": "/uploads/static/"
+	},
 	"pages": {
 		"pages/home": {
 			displayName: "Home",
@@ -91,6 +94,16 @@ export default {
 
 			noButton: true,
 		},
+		"errors/500": {
+			displayName: "Internal Server Error",
+			description: "Something went wrong on the server!",
+			path: "/500",
+
+			buttonIcon: "",
+			buttonText: "",
+
+			noButton: true,
+		},
 
 		"events/auth_success": {
 			displayName: "Auth Success",
@@ -106,6 +119,9 @@ export default {
 } satisfies config
 
 type config = {
+	URLs: {
+		staticServeURL: string;
+	},
 	pages: {
 		[key: string]: {
 			displayName: string;

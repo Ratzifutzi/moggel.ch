@@ -27,9 +27,9 @@
 	<div class="form-container">
 		<h2 class="form-title">Upload Comic</h2>
 		<p class="form-subtitle">All fields are required</p>
-		<form action="/admin/add-comic" method="post">
+		<form action="/admin/add-comic" method="post" enctype="multipart/form-data">
 			<label for="Title">Comic Info</label>
-			<input type="text" name="Internal ID" id="internal-id" placeholder="Enter Internal ID" required
+			<input type="text" name="InternalID" id="internal-id" placeholder="Enter Internal ID" required
 				pattern="^[a-z](?:[a-z]|-(?=[a-z]))*[a-z]$"
 				data-human-pattern="Value must start with a letter, can contain lowercase letters and hyphens, and must end with a letter.">
 			<input type="text" name="Title" id="title" placeholder="Enter Comic Title" required>
@@ -53,7 +53,7 @@
 		<p class="form-subtitle">Fill out what you want to change</p>
 		<form action="/admin/modify-comic" method="post">
 			<label for="Title">Comic Info</label>
-			<input type="text" name="Internal ID" id="internal-id" placeholder="Enter Internal ID" required
+			<input type="text" name="InternalID" id="internal-id" placeholder="Enter Internal ID" required
 				pattern="^[a-z](?:[a-z]|-(?=[a-z]))*[a-z]$"
 				data-human-pattern="Value must start with a letter, can contain lowercase letters and hyphens, and must end with a letter.">
 			<input type="text" name="Title" id="title" placeholder="Enter Comic Title">
