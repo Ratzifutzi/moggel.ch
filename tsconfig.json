@@ -3,7 +3,7 @@
 		"target": "ESNext",
 		"module": "NodeNext",
 		"rootDir": "./src",
-		"baseUrl": "./",
+		//"baseUrl": "./",
 		"types": [
 			"node"
 		],
@@ -11,11 +11,11 @@
 			"./src/types",
 			"./node_modules/@types"
 		],
-		"paths": {
-			"@/*": [
-				"src/*"
-			]
-		},
+		//"paths": {
+			//"@/*": [
+			//	"src/*"
+			//]
+		//},
 		"outDir": "./dist",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,

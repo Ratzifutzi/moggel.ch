@@ -10,6 +10,11 @@ import cookieparser from 'cookie-parser';
 import { generateRandomString } from './helpers/generateRandomString';
 import { verifyAdminRightsForPublicKey } from './helpers/verifyAdminRightsForPublicKey';
 import rateLimit from 'express-rate-limit';
+import { RouteHandler } from './types/route';
+import { readDirRecursive } from './helpers/readDirRecursive';
+import { exit } from 'process';
+import database from './modules/database';
+import 'module-alias/register';
 
 dotenv.config();
 
@@ -81,6 +86,7 @@ async function main() {
 	console.log(`   └ 📝 Latest commit:  ${latestCommit}`);
 
 	const app: Application = express();
+	let routes: RouteHandler[] = []
 
 	app.set('view engine', 'ejs');
 	app.set('views', './views');
@@ -88,9 +94,7 @@ async function main() {
 	// Database
 	console.log("🔌 Connecting to MongoDB...");
 
-	const client = new mongoDB.MongoClient(process.env.MONGODB_URI);
-	await client.connect();
-	const db: mongoDB.Db = client.db(process.env.MONGODB_NAME);
+	const db = await database.connect();
 
 	// Collections
 	const cookiesCollection = db.collection('cookies');
@@ -114,44 +118,48 @@ async function main() {
 		})
 	}
 
-	// Deso Auth Handler
-	app.get("/auth/callback", async (req: Request, res: Response) => {
-		try {
-			const authData = req.query;
-			const userPublicKey = authData.publicKeyAdded
-
-			const cookie = ".MOGGELSECURITY_" + await generateRandomString(1024);
-
-			await cookiesCollection.insertOne({
-				cookieSecret: cookie,
-				userPublicKey: userPublicKey
-			});
-
-			res.cookie('auth', cookie, {
-				httpOnly: true,
-				secure: true,
-				sameSite: 'strict',
-				maxAge: 1000 * 60 * 60 * 24 * 7
-			})
-			res.redirect('/auth/success');
-		} catch (err) {
-			res.status(500).send(err);
-		}
-	});
-
-	// Logout Handler
-	app.get("/auth/logout", async (req: Request, res: Response) => {
-		const oldCookie = req.cookies.auth
-
-		if (oldCookie !== undefined) {
-			await cookiesCollection.deleteOne({ cookieSecret: oldCookie });
-		}
-
-		res.clearCookie('auth');
-		res.redirect('/account');
-	});
-
 	/////////////////////////////////////////////////////
+	// Route Manager
+	console.log("⌛ Gathering routes...\n");
+	try {
+		const files: string[] = await readDirRecursive('./dist/routes');
+
+		for (const filePath of files) {
+			console.log("🔗 " + filePath);
+
+			const absolutePath = path.resolve(process.cwd(), filePath);
+			const routeModule = await import(`file://${absolutePath}`);
+
+			if (path.dirname(absolutePath).endsWith("examples")) continue;
+
+			if (routeModule.default && typeof routeModule.default === 'object') {
+				routes.push(routeModule.default.default as RouteHandler);
+			}
+		}
+	} catch (error) {
+		console.log('🛑 Error reading directory:', error);
+		exit(1);
+	}
+
+	console.log("✅ Routes gathered\n");
+
+	console.log("⌛ Sorting routes...");
+	routes.sort((a, b) => a.Priority - b.Priority);
+
+	console.log("✅ Routes sorted by priority.\n");
+
+
+	// Register Routes in app
+	routes.forEach(route => {
+		if (!route.Middleware) {
+			app[route.Method](route.Path, route.OnRequest);
+			console.log(`🚀 Registered ${route.Method.toUpperCase()} route: ${route.Path}`);
+		} else {
+			app[route.Method](route.Path, route.Middleware, route.OnRequest);
+			console.log(`🚀 Registered ${route.Method.toUpperCase()} route: ${route.Path}`);
+			console.log(`└  Registered some middleware for this route.`);
+		}
+	})
 
 	// 404 Handler
 	app.use((req, res) => {
@@ -162,6 +170,7 @@ async function main() {
 
 
 	/////////////////////////////////////////////////////
+
 
 	app.listen(PORT, () => {
 		console.log(`✅ Server now running on port ${PORT}!`);
