@@ -27,6 +27,8 @@ export default {
 			return renderPage(req, res, "errors/404");
 		}
 
-		res.redirect(config.URLs.staticServeURL + comicDocument.fadeoutImageName);
+		let extraData = { ...comicDocument, uploadPath: config.URLs.staticServeURL };
+
+		renderPage(req, res, "comic", extraData);
 	}
 } satisfies RouteHandler;

@@ -105,6 +105,18 @@ export default {
 			noButton: true,
 		},
 
+		"comic": {
+			displayName: "",
+			description: "",
+			path: "/",
+
+			buttonIcon: "",
+			buttonText: "",
+
+			noButton: true,
+			dontIndex: true,
+		},
+
 		"events/auth_success": {
 			displayName: "Auth Success",
 			description: "You have successfully authenticated with Deso!",
@@ -134,6 +146,7 @@ type config = {
 			// Optional tags:
 			noButton?: boolean;
 			adminOnly?: boolean;
+			dontIndex?: boolean;
 		}
 	}
 }

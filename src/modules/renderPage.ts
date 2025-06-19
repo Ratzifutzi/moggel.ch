@@ -16,7 +16,7 @@ const currentBranch = execSync(`cd ${process.env.GIT_PATH} && git rev-parse --ab
 const prettyCommit = `${latestCommit.substring(0, 7)}..${latestCommit.substring(latestCommit.length - 7, latestCommit.length)}`
 const serverHostname = hostname();
 
-export default async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES) {
+export default async function renderPage(req: Request, res: Response, pageKey: keyof typeof PAGES, extraData?: any) {
 	let loggedInAccount = null;
 	let [hasAdminPerms, userRole] = [false, "Error"];
 	const page = PAGES[pageKey];
@@ -57,6 +57,7 @@ export default async function renderPage(req: Request, res: Response, pageKey: k
 				showDevBanner: process.env.LOCAL_ENV === "1",
 				showProdBanner: process.env.LOCAL_ENV !== "1" && hasAdminPerms,
 			}
-		}
+		},
+		extraData: extraData || {},
 	});
 }

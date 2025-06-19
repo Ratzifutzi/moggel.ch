@@ -76,6 +76,6 @@ export default {
 
 		await comicsCollection.insertOne(newComic);
 
-		res.send(newComic);
+		res.redirect("/comic/" + newComic.internalId);
 	}
 } satisfies RouteHandler;

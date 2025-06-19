@@ -35,6 +35,8 @@ ul {
 	border-radius: 10px;
 	border: dotted 2px black;
 
+	background-color: white;
+
 	cursor: pointer;
 
 	-webkit-appearance: none;

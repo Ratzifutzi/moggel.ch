@@ -1,0 +1,16 @@
+<div id="content-wrapper">
+	<h1 id="title"><%= extraData.title %></h1>
+	<h2 id="subtitle"><%= extraData.subtitle %></h2>
+
+	<img id="first-frame" src="<%= extraData.uploadPath + extraData.previewImageName %>" alt="" srcset="">
+	<div id="slide-seperator"></div>
+	<div id="second-frame-container">
+		<img id="second-frame" src="<%= extraData.uploadPath + extraData.fadeoutImageName %>" alt="" srcset="">
+	</div>
+	<div id="continue-on-deso">
+		<a href="<%= extraData.desoLink %>" target="_blank" rel="noopener">
+			<button class="primary-button" type="button">Continue reading on DeSo</button>
+		</a>
+		<p>Free, No Ads, No Account required. <a href="/deso">More Info</a></p>
+	</div>
+</div>

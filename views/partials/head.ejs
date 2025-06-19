@@ -2,39 +2,82 @@
 	<!-- Basic Page Needs –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 	<meta charset="UTF-8">
 	<title>
-		<%= pageData.displayName + " - Moggel" %>
+		<% if (pageToRender !== "comic") { %>
+			<%= pageData.displayName + " - Moggel" %>
+		<% } else { %>
+			<%= extraData.title + " - Moggel" %>
+		<% } %>
 	</title>
-	<link rel="canonical" href="https://moggel.ch<%= pageData.path %>">
+
+	<% if (pageToRender !== "comic") { %>
+		<link rel="canonical" href="https://moggel.ch<%= pageData.path %>">
+	<% } else { %>
+		<link rel="canonical" href="https://moggel.ch/comic/<%= extraData.internalId %>">
+	<% } %>
+	
 
 	<!-- Embeds –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 	<meta name="theme-color" content="#ffffff">
 
-	<meta property="og:title" content="<%= pageData.displayName + ' - Moggel' %>">
-	<meta property="og:description" content="<%= pageData.description %>">
-	<meta property="og:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
-	<meta property="og:url" content="<%= pageData.path %>"> 
+	<!-- Changes if this is a comic-->
+	<% if (pageToRender !== "comic") { %>
+		<meta property="og:title" content="<%= pageData.displayName + ' - Moggel' %>">
+		<meta property="og:description" content="<%= pageData.description %>">
+		<meta property="og:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
+		<meta property="og:url" content="<%= pageData.path %>">
 
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:title" content="<%= pageData.displayName + ' - Moggel' %>">
-	<meta name="twitter:description" content="<%= pageData.description %>">
-	<meta name="twitter:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="<%= pageData.displayName + ' - Moggel' %>">
+		<meta name="twitter:description" content="<%= pageData.description %>">
+		<meta name="twitter:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
+	<% } else { %>
+		<meta property="og:title" content="<%= extraData.title + ' - Moggel' %>">
+		<meta property="og:description" content="<%= extraData.subtitle %>">
+		<meta property="og:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
+		<meta property="og:url" content="https://moggel.ch/comic/<%= extraData.internalId %>">
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="<%= extraData.title + ' - Moggel' %>">
+		<meta name="twitter:description" content="<%= extraData.subtitle %>">
+		<meta name="twitter:image" content="https://moggel.ch/images/Moggel_waving_rounded.png">
+	<% } %>
 
 	<!-- SEO –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<meta name="description" content="<%= pageData.description %>">
-	<meta name="keywords"
+	<% if (pageToRender !== "comic") { %>
+		<meta name="description" content="<%= pageData.description %>">
+		<meta name="keywords"
 		content="Moggel Comics, Moggel, Deso, webcomics, funny comics, Apfelmus, Applesauce comics, <%= pageData.displayName %>">
+	<% } else { %>
+		<meta name="description" content="<%= extraData.subtitle %>">
+		<meta name="keywords"
+		content="Moggel Comics, Moggel, Deso, webcomics, funny comics, Apfelmus, Applesauce comics, <%= extraData.title %>">
+	<% } %>
+	
 	<meta http-equiv="content-language" content="en">
 
-	<script type="application/ld+json">
-		{
-		"@context": "https://schema.org",
-		"@type": "WebPage",
-		"name": "<%= pageData.displayName + ' - Moggel' %>",
-		"description": "<%= pageData.description %>",
-		"url": "https://moggel.ch<%= pageData.path %>",
-		"image": "https://moggel.ch/images/Moggel_waving_rounded.png"
-		}
-	</script>
+	<% if (pageToRender !== "comic") { %>
+		<script type="application/ld+json">
+			{
+			"@context": "https://schema.org",
+			"@type": "WebPage",
+			"name": "<%= pageData.displayName + ' - Moggel' %>",
+			"description": "<%= pageData.description %>",
+			"url": "https://moggel.ch<%= pageData.path %>",
+			"image": "https://moggel.ch/images/Moggel_waving_rounded.png"
+			}
+		</script>
+	<% } else { %>
+		<script type="application/ld+json">
+			{
+			"@context": "https://schema.org",
+			"@type": "WebPage",
+			"name": "<%= extraData.title + ' - Moggel' %>",
+			"description": "<%= extraData.subtitle %>",
+			"url": "https://moggel.ch/comic/<%= extraData.internalId %>",
+			"image": "https://moggel.ch/images/Moggel_waving_rounded.png"
+			}
+		</script>
+	<% } %>
 
 	<!-- Mobile Specific Metas –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">

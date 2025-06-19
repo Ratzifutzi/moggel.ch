@@ -75,6 +75,7 @@ async function main() {
 	for (let pageKey in PAGES) {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
+		if('dontIndex' in pageValue && pageValue.dontIndex) continue;
 		app.get(pageValue.path, (req, res) => {
 			renderPage(req, res, pageKey as keyof typeof PAGES);
 		})
