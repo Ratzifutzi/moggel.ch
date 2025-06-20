@@ -36,12 +36,26 @@ ul {
 	border: dotted 2px black;
 
 	background-color: white;
+	color: black;
+	text-decoration: none;
 
 	cursor: pointer;
 
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+}
+
+.image-button {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	gap: 10px;
+}
+
+.image-button > img {
+	height: 30px;
 }
 
 #content {
