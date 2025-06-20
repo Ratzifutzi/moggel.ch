@@ -1,1 +1,38 @@
-<h1>Archive</h1>
+<div id="archive-container">
+	<div id="archive-list">
+		<div class="archive-item">
+			<img src="http://localhost/uploads/static/1750399859435-191318009.JPG" alt="" class="archive-item-image">
+			<div class="archive-item-texts">
+				<h3 class="archive-item-title">Comic Name here</h3>
+				<p class="archive-item-desc">Description here</p>
+			</div>
+		</div>
+	</div>
+	
+	<div id="slide-seperator"></div>
+
+	<div id="page-container">
+		<button class="primary-button"><</button>
+
+		<p>1/1</p>
+
+		<button class="primary-button">></button>
+	</div>
+</div>
+
+<script>
+	const archiveList = document.getElementById('archive-list');
+
+	function addArchiveItem(title, date, description) {
+		const item = document.createElement('div');
+		item.className = 'archive-item';
+		item.innerHTML = `
+			<h3>${title}</h3>
+			<p>${date}</p>
+			<p>${description}</p>
+		`;
+		archiveList.appendChild(item);
+	}
+
+	addArchiveItem('Archive Title 1', '2023-10-01', 'This is a description for archive item 1.');
+</script>
