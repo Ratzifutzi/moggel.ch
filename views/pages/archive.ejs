@@ -53,8 +53,19 @@
 	}
 
 	function loadArchive() {
-		
+		axios.get("/api/v1/comics")
+			.then(response => {
+				const comics = response.data.comics;
+				console.log(comics)
+				comics.forEach(comic => {
+					addArchiveItem(comic.title, comic.subtitle, `/uploads/static/${comic.previewImageName}`, `/comic/${comic.internalId}`);
+				});
+			})
+			.catch(error => {
+				console.error("Error loading comics:", error);
+			});
 	}
 
-	addArchiveItem("Punchroot", "This is a description for archive item 1.", "https://moggel.ch/uploads/static/1750433084052-994774183.jpeg", "#");
+	loadArchive();
+	//addArchiveItem("Punchroot", "This is a description for archive item 1.", "https://moggel.ch/uploads/static/1750433084052-994774183.jpeg", "#");
 </script>
