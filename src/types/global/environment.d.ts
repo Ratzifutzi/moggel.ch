@@ -14,6 +14,10 @@ declare global {
 			OWNER_PUBLIC_KEY: string,
 
 			GIT_PATH: string,
+
+			// Optional flags
+			LOCAL_ENV: string?;
+			REVERSE_PROXY: string?;
 		}
 	}
 }
