@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { RouteHandler } from "../../../types/route";
-import database from "../../../modules/database";
+import { RouteHandler } from "../../../../types/route";
+import database from "../../../../modules/database";
 
 function clamp(number: number, min: number, max: number): number {
 	return Math.max(min, Math.min(number, max));
