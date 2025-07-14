@@ -39,6 +39,10 @@
 <script>
 	const archiveList = document.getElementById("archive-list");
 
+	function showErrorBox(message) {
+		alert(message);
+	}
+
 	function updateURLandButtons() {}
 
 	function addArchiveItem(title, description, imageURL, comicURL) {
@@ -65,6 +69,12 @@
 			})
 			.catch(error => {
 				console.error("Error loading comics:", error);
+				
+				if(error.message) {
+					showErrorBox(`Could not load comics. \n${error.message}`);
+				} else {
+					showErrorBox(`Could not load comics. Error code: ${error.status}`)
+				}
 			});
 	}
 

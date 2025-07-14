@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { RouteHandler } from "../../../../types/route";
 import database from "../../../../modules/database";
+import ratelimits from "../../../../modules/ratelimits";
 
 function clamp(number: number, min: number, max: number): number {
 	return Math.max(min, Math.min(number, max));
@@ -10,6 +11,10 @@ export default {
 	Method: "get",
 	Path: "/api/v1/comics",
 	Priority: 0,
+
+	Middleware: [
+		ratelimits["api_comics"]
+	],
 
 	OnRequest: async function (req: Request, res: Response, next: NextFunction) {
 		const db = database.getCurrentDb();
