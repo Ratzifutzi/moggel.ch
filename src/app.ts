@@ -131,6 +131,12 @@ async function main() {
 		renderPage(req, res, 'errors/404');
 	})
 
+	// Reverse Proxy Handler
+	if(process.env.REVERSE_PROXY === "1") {
+		app.set('trust proxy', true);
+		console.log("⚠️ Reverse proxy enabled. Trusting the first proxy.");
+	}
+
 	app.listen(PORT, () => {
 		console.log(`✅ Server now running on port ${PORT}!`);
 	});
