@@ -56,6 +56,7 @@ export default async function renderPage(req: Request, res: Response, pageKey: k
 			banners: {
 				showDevBanner: process.env.LOCAL_ENV === "1",
 				showProdBanner: process.env.LOCAL_ENV !== "1" && hasAdminPerms,
+				isTestEnv: ["development", "test"].includes(process.env.NODE_ENV || ""),
 			}
 		},
 		extraData: extraData || {},
