@@ -14,7 +14,14 @@
 	<% if (env.banners.showProdBanner === true) { %>
 		<div id="prod-banner" class="top-banner">
 			<img src="/images/svg/triangle-alert.svg" alt="">
-			<p>PRODUCTION ENVIRONMENT</p>
+			<p>
+				<% if (env.banners.isTestEnv) { %>
+					TESTING
+				<% } else { %>
+					PRODUCTION
+				<% } %>
+				 ENVIRONMENT
+			</p>
 			<img src="/images/svg/triangle-alert.svg" alt="">
 		</div>
 	<% } %>
