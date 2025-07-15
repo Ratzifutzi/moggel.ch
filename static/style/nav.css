@@ -66,6 +66,14 @@
 	object-position: left;
 }
 
+.nav-username {
+	width: auto;
+	margin: 0;
+
+	font-size: 1.35em;
+	overflow: hidden;
+}
+
 /* Desktop View */
 .active>.nav-icon {
 	animation: none;
@@ -103,5 +111,9 @@
 	}
 	.active {
 		animation: none;
+	}
+
+	#account-chip {
+		display: none;
 	}
 }
