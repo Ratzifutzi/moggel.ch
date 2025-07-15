@@ -1,10 +1,5 @@
 <script src="/logic/desoIdentity.js"></script>
 
-<script>
-	const account = "<%= loggedInAccount %>";
-	console.log(account);
-</script>
-
 <div class="content-wrapper">
 	<% if(loggedInAccount===null) { %>
 		<h1>Developer Only</h1>
@@ -17,13 +12,11 @@
 			</button>
 		</div>
 	<% } else { %>
-		<script src="/logic/account.js"></script>
-	
 		<h3>Welcome!</h3>
 		<div id="account-info">
-			<img id="profile-pic" src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" alt="">
+			<img id="profile-pic" class="load-profile-pic" src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" alt="">
 			<div class="user-texts">
-				<p id="username">Cannot show username with JS disabled</p>
+				<p class="username" id="username">Cannot show username with JS disabled</p>
 				<p id="permission-level"> <%= userRoleName %> </p>
 			</div>
 		</div>
