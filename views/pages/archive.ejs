@@ -5,6 +5,7 @@
 			<div class="archive-item-texts">
 				<h3 class="archive-item-title">Comic Name here</h3>
 				<p class="archive-item-desc">Description here, can also be longer i think</p>
+				<a href="" class="hidden-button" tabindex="-1"></a>
 			</div>
 		</div>
 	</div>
@@ -53,6 +54,7 @@
 		clone.querySelector(".archive-item-title").textContent = title;
 		clone.querySelector(".archive-item-desc").textContent = description;
 		clone.querySelector(".archive-item-image").src = imageURL;
+		clone.querySelector(".hidden-button").href = comicURL;
 		//clone.style.display = "flex";
 
 		archiveList.appendChild(clone);
