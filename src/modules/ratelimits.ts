@@ -22,5 +22,12 @@ export default {
 		max: 5,
 		keyGenerator: (req) => req.ip || 'unknown',
 		handler: sendRateLimitPageJson,
+	}),
+	
+	pages: rateLimit({
+		windowMs: 60 * 1000, // 1 minute
+		max: 90,
+		keyGenerator: (req) => req.ip || 'unknown',
+		handler: renderRateLimitPage,
 	})
 };

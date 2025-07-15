@@ -18,6 +18,7 @@ import 'fs';
 import { mkdirSync } from 'fs';
 import uploads from './modules/uploads';
 import renderPage from './modules/renderPage';
+import ratelimits from './modules/ratelimits';
 
 dotenv.config();
 
@@ -76,7 +77,7 @@ async function main() {
 		let pageValue = PAGES[pageKey as keyof typeof PAGES];
 
 		if('dontIndex' in pageValue && pageValue.dontIndex) continue;
-		app.get(pageValue.path, (req, res) => {
+		app.get(pageValue.path, ratelimits.pages, (req, res) => {
 			renderPage(req, res, pageKey as keyof typeof PAGES);
 		})
 	}
