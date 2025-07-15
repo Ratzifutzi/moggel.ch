@@ -14,7 +14,7 @@
 			<% }); %>
 		
 		<% // If user is logged in, load a little box for their username %>
-		<% if (env.loggedInAccount !== null) { %>
+		<% if (loggedInAccount !== null) { %>
 			<li class="nav-holder" id="account-chip">
 				<img class="nav-icon load-profile-pic" src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" srcset="" style="border-radius: 100%;">
 				<p class="nav-username username"></p>
