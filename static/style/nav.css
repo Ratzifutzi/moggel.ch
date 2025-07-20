@@ -114,8 +114,4 @@
 	.active {
 		animation: none;
 	}
-
-	#account-chip {
-		display: none;
-	}
 }

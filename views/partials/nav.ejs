@@ -3,6 +3,8 @@
 		<% Object.keys(pages).forEach(pageKey=> { %>
 			<% const page=pages[pageKey]; %>
 			<% if(page.noButton) return; %>
+			<% if(loggedInAccount !== null && pageKey === "pages/account") return; %>
+			
 				<li class="nav-holder <%= currentPage === pageKey ? 'active' : '' %>">
 					<img class="nav-icon" src="<%= page.buttonIcon %>" alt="<%= page.displayName %> Menu Icon" srcset="">
 					<img class="nav-text" src="<%= page.buttonText %>" alt="<%= page.displayName %> Menu Button" srcset="">
@@ -15,7 +17,7 @@
 		
 		<% // If user is logged in, load a little box for their username %>
 		<% if (loggedInAccount !== null) { %>
-			<li class="nav-holder" id="account-chip">
+			<li class="nav-holder <%= currentPage === "pages/account" ? 'active' : '' %>" id="account-chip">
 				<img class="nav-icon load-profile-pic" src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" data-src="https://node.deso.org/api/v0/get-single-profile-picture/<%= loggedInAccount %>" srcset="" style="border-radius: 100%;">
 				<p class="nav-username username"></p>
 
