@@ -7,9 +7,16 @@ export default function Home() {
 				className="mb-8 h-100"
 			/>
 			<div className="flex flex-col items-center">
-				<h1 className="text-center text-7xl font-bold">Maintenance</h1>
-				<p className="mt-6 max-w-prose text-center">
-					The website is currently under maintenance. Please check back later.
+				<p className="mt-6 max-w-prose text-center text-lg">
+					The server didn't want to serve, and then Moggel broke something.
+					Check back later please, and visit Moggel on{' '}
+					<a
+						href="https://desocialworld.com/u/Moggel"
+						className="text-blue-500 underline"
+					>
+						DeSo
+					</a>{' '}
+					meanwhile.
 				</p>
 			</div>
 		</main>
