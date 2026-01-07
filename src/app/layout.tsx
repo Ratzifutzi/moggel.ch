@@ -16,8 +16,8 @@ export default function RootLayout({
 		<html lang="en">
 			<body>
 				<main className="flex h-screen w-screen items-center justify-center overflow-hidden">
-					<div className="flex h-screen w-screen flex-row gap-5 md:aspect-3/4 md:h-auto md:max-h-[80vh] md:w-[55%] md:max-w-225">
-						<div className="hidden h-full w-65 md:flex" id="navbar">
+					<div className="flex h-screen w-screen flex-row gap-5 sm:max-h-[80vh] sm:w-[85%] md:aspect-3/4 md:h-auto md:w-[55%] md:max-w-225">
+						<div className="hidden h-full w-65 sm:flex" id="navbar">
 							<Navbar />
 						</div>
 
