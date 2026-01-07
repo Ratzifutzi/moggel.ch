@@ -1,10 +1,15 @@
 const Navbar = ({ children }: React.PropsWithChildren<{}>) => {
 	return (
-		<div className="flex h-full w-full flex-col gap-2">
-			<Item />
-			<Item />
-			<Item />
-			<Item />
+		<div className="flex h-full w-full flex-col justify-between gap-2 overflow-scroll">
+			<div className="flex flex-col gap-2">
+				<Item />
+				<Item />
+				<Item />
+				<Item />
+			</div>
+			<div>
+				<Item />
+			</div>
 		</div>
 	);
 };
