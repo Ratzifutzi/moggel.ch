@@ -1,10 +1,10 @@
 export default function Home() {
 	return (
-		<main className="flex h-screen w-screen flex-col items-center justify-center">
+		<main className="flex h-screen w-screen flex-col items-center justify-center overflow-hidden">
 			<img
 				src="/assets/images/maintenance.png"
 				alt="Maintenance Illustration"
-				className="mb-4 h-auto w-full max-w-md min-w-md object-contain"
+				className="mb-4 h-auto w-full max-w-md object-contain"
 			/>
 			<div className="flex flex-col items-center">
 				<p className="mt-6 max-w-prose text-center text-lg">
