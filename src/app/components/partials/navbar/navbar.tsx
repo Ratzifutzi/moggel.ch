@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 type SidebarTab = {
 	IconPath: string;
 	TextPath: string;
@@ -54,10 +56,10 @@ const Navbar = ({ children }: React.PropsWithChildren<{}>) => {
 
 const Item = ({ tab }: { tab: SidebarTab }) => {
 	return (
-		<a href={tab.TargetPath} className="flex w-full items-center gap-2 p-2">
+		<Link href={tab.TargetPath} className="flex w-full items-center gap-2 p-2">
 			<img src={tab.IconPath} alt="icon" className="h-10 w-10 object-contain" />
 			<img src={tab.TextPath} alt="label" className="h-6 object-contain" />
-		</a>
+		</Link>
 	);
 };
 

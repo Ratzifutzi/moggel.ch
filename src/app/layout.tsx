@@ -20,7 +20,7 @@ export default function RootLayout({
 						<Navbar />
 					</div>
 
-					<div className="h-full w-full bg-black" id="content">
+					<div className="h-full w-full bg-gray-300" id="content">
 						{children}
 					</div>
 				</div>
