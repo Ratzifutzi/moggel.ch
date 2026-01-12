@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import Navbar from './components/partials/navbar/navbar';
+import Navbar from '../components/partials/navbar/navbar';
 
 export const metadata: Metadata = {
 	title: 'Moggel',
@@ -18,8 +18,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="flex h-screen w-screen items-center justify-center overflow-hidden">
-				<div className="flex h-screen w-screen flex-row gap-5 md:max-h-[80vh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225">
+			<body className="flex h-dvh w-screen items-center justify-center overflow-hidden">
+				<div className="flex h-dvh w-screen flex-row gap-5 md:max-h-[80dvh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225">
 					<div className="hidden h-full w-65 md:flex" id="navbar">
 						<Navbar />
 					</div>
