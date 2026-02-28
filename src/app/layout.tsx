@@ -18,13 +18,13 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="flex h-dvh w-screen items-center justify-center overflow-hidden">
-				<div className="flex h-dvh w-screen flex-row gap-5 md:max-h-[80dvh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225">
+			<body className="flex h-dvh w-dvw items-center justify-center overflow-hidden">
+				<div className="flex h-dvh w-dvw flex-row gap-5 md:max-h-[80dvh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225">
 					<div className="hidden h-full w-65 md:flex" id="navbar">
 						<Navbar />
 					</div>
 
-					<div className="h-full w-full bg-pink-300" id="content">
+					<div className="h-full w-full" id="content">
 						{children}
 					</div>
 				</div>
