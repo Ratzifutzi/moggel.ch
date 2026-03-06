@@ -6,8 +6,9 @@ export default function Home() {
 			<Image
 				src="/assets/images/maintenance.png"
 				alt="Maintenance Illustration"
-				className="mb-4 h-auto w-full max-w-md object-contain"
-				placeholder="blur"
+				className="mb-4 h-auto min-h-[448px] max-w-md object-contain"
+				height={448}
+				width={336}
 			/>
 			<div className="flex flex-col items-center">
 				<p className="mt-6 max-w-prose text-center text-lg">
