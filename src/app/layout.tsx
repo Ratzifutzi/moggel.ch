@@ -9,23 +9,23 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
 	width: 'device-width',
 	initialScale: 1,
+	viewportFit: 'cover',
 };
 
 export default function RootLayout({
 	children,
-}: Readonly<{
-	children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang="en">
-			<body className="flex h-dvh w-dvw items-center justify-center overflow-hidden">
-				<div className="flex h-dvh w-dvw flex-row gap-5 md:max-h-[80dvh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225">
-					<div className="hidden h-full w-65 md:flex" id="navbar">
-						<Navbar />
-					</div>
-
-					<div className="h-full w-full" id="content">
-						{children}
+			<body>
+				<div className="fixed inset-0 flex items-center justify-center overflow-hidden">
+					<div className="flex h-full w-full flex-row gap-5 md:max-h-[80svh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225">
+						<div className="hidden h-full w-65 md:flex" id="navbar">
+							<Navbar />
+						</div>
+						<div className="h-full w-full" id="content">
+							{children}
+						</div>
 					</div>
 				</div>
 			</body>
