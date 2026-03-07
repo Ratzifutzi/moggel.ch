@@ -1,3 +1,6 @@
+'use client';
+
+import { User, useUser } from '@/contexts/UserContext';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -7,7 +10,9 @@ type SidebarTab = {
 	TargetPath: string;
 };
 
-const Navbar = ({ children }: React.PropsWithChildren<{}>) => {
+const Navbar = ({}: React.PropsWithChildren) => {
+	const user = useUser();
+
 	const tabs: SidebarTab[] = [
 		{
 			IconPath: '/assets/images/navbar/Menu_Home_Icon.jpeg',
@@ -48,33 +53,55 @@ const Navbar = ({ children }: React.PropsWithChildren<{}>) => {
 					<Item key={tab.TargetPath} tab={tab} />
 				))}
 			</div>
-			<div>
-				<Item tab={tabs[0]} />
-			</div>
+			{user.loggedIn && (
+				<>
+					<div>
+						<Item tab={tabs[5]} user={user} />
+					</div>
+				</>
+			)}
 		</div>
 	);
 };
 
-const Item = ({ tab }: { tab: SidebarTab }) => {
+const Item = ({ tab, user }: { tab: SidebarTab; user?: User | undefined }) => {
 	return (
 		<Link
 			href={tab.TargetPath}
-			className={'flex w-10 items-center gap-2 p-0 lg:w-full lg:p-2'}
+			className={'flex w-10 items-center gap-4 p-0 lg:w-full lg:p-2'}
 		>
-			<Image
-				src={tab.IconPath}
-				alt="icon"
-				width={40}
-				height={40}
-				className="h-10 w-10 object-contain"
-			/>
-			<Image
-				src={tab.TextPath}
-				alt="label"
-				width={96}
-				height={24}
-				className="hidden h-6 object-contain lg:block"
-			/>
+			{!user && (
+				<>
+					<Image
+						src={tab.IconPath}
+						alt="icon"
+						width={40}
+						height={40}
+						className="h-10 w-10 object-contain"
+					/>
+					<Image
+						src={tab.TextPath}
+						alt="label"
+						width={96}
+						height={24}
+						className="hidden h-6 object-contain object-left lg:block"
+					/>
+				</>
+			)}
+			{user && (
+				<>
+					<Image
+						src={user.profilePictureURL}
+						alt="icon"
+						width={40}
+						height={40}
+						className="h-10 w-10 rounded-full object-contain"
+					/>
+					<span className="ml-0 hidden text-2xl font-medium lg:block">
+						{user.displayName}
+					</span>
+				</>
+			)}
 		</Link>
 	);
 };

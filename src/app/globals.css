@@ -1,1 +1,12 @@
 @import 'tailwindcss';
+
+@font-face {
+	font-family: "Chewy";
+	src: url("fonts/Chewy-Regular.ttf") format("truetype");
+}
+
+@layer base {
+	body {
+		font-family: 'Chewy', sans-serif;
+	}
+}
