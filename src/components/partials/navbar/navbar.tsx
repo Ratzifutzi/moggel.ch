@@ -97,7 +97,7 @@ const Item = ({ tab, user }: { tab: SidebarTab; user?: User | undefined }) => {
 						height={40}
 						className="h-10 w-10 rounded-full object-contain"
 					/>
-					<span className="ml-0 hidden text-2xl font-medium lg:block">
+					<span className="ml-0 hidden overflow-hidden text-2xl font-medium text-ellipsis whitespace-nowrap lg:block">
 						{user.displayName}
 					</span>
 				</>
