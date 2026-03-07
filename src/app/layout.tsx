@@ -18,12 +18,12 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<div className="fixed inset-0 flex items-center justify-center">
-					<div className="w-100% h-100% flex flex-row gap-5 md:max-h-[80svh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225">
-						<div className="w-65 md:flex" id="navbar">
+				<div className="fixed inset-0 flex items-start justify-center lg:items-center">
+					<div className="h-100% flex w-full flex-col gap-5 md:max-h-[80svh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225 lg:flex-row">
+						<div className="mt-5 lg:mt-0 lg:flex lg:w-65" id="navbar">
 							<Navbar />
 						</div>
-						<div className="w-full" id="content">
+						<div className="mr-2 ml-2 w-full" id="content">
 							{children}
 						</div>
 					</div>

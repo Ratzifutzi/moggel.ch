@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 type SidebarTab = {
@@ -41,8 +42,8 @@ const Navbar = ({ children }: React.PropsWithChildren<{}>) => {
 	];
 
 	return (
-		<div className="flex h-full w-full flex-col justify-between gap-2 overflow-scroll">
-			<div className="flex flex-col gap-2">
+		<div className="flex h-full w-full flex-row justify-center gap-2 overflow-scroll lg:flex-col lg:justify-between">
+			<div className="flex flex-row gap-2 lg:flex-col">
 				{tabs.map((tab) => (
 					<Item key={tab.TargetPath} tab={tab} />
 				))}
@@ -56,9 +57,24 @@ const Navbar = ({ children }: React.PropsWithChildren<{}>) => {
 
 const Item = ({ tab }: { tab: SidebarTab }) => {
 	return (
-		<Link href={tab.TargetPath} className={"flex w-full items-center gap-2 p-2" }>
-			<img src={tab.IconPath} alt="icon" className="h-10 w-10 object-contain" />
-			<img src={tab.TextPath} alt="label" className="h-6 object-contain" />
+		<Link
+			href={tab.TargetPath}
+			className={'flex w-10 items-center gap-2 p-0 lg:w-full lg:p-2'}
+		>
+			<Image
+				src={tab.IconPath}
+				alt="icon"
+				width={40}
+				height={40}
+				className="h-10 w-10 object-contain"
+			/>
+			<Image
+				src={tab.TextPath}
+				alt="label"
+				width={96}
+				height={24}
+				className="hidden h-6 object-contain lg:block"
+			/>
 		</Link>
 	);
 };
