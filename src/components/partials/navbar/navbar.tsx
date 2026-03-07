@@ -47,7 +47,7 @@ const Navbar = ({}: React.PropsWithChildren) => {
 	];
 
 	return (
-		<div className="flex h-full w-full flex-row justify-center gap-2 overflow-scroll lg:flex-col lg:justify-between">
+		<div className="flex h-full w-full flex-row justify-center gap-2 overflow-auto lg:flex-col lg:justify-between">
 			<div className="flex flex-row gap-2 lg:flex-col">
 				{tabs.map((tab) => (
 					<Item key={tab.TargetPath} tab={tab} />
