@@ -1,3 +1,5 @@
+import DesoIdentityButton from '@/components/desoIdentityButton';
+
 export default function Home() {
 	return (
 		<>
@@ -7,6 +9,9 @@ export default function Home() {
 				certain content. Currently, this is only used for page administration
 				and has no use if you are a normal page visitor.
 			</p>
+			<div className="mt-5 flex w-full justify-center">
+				<DesoIdentityButton />
+			</div>
 		</>
 	);
 }

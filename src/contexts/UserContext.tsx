@@ -23,7 +23,7 @@ export function useUser() {
 
 export function UserProvider({ children }: React.PropsWithChildren) {
 	const user: User = {
-		loggedIn: true,
+		loggedIn: false,
 		publicKey: 'BC1YLgYj5Zs8n9h7vV2z5X9m8n6f4e3d2c1b0a9',
 		displayName: 'Ratzifutzi',
 		profilePictureURL: '/assets/images/profile-picture.webp',
