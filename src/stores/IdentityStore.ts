@@ -165,7 +165,7 @@ const useIdentityStore = create<IdentityState>((set, get) => ({
 
 	login: () => {
 		if (identityWindow && !identityWindow.closed) return;
-		openIdentityWindow(`${IDENTITY_URL}/log-in?accessLevelRequest=4`);
+		openIdentityWindow(`${IDENTITY_URL}/log-in?accessLevelRequest=2`);
 	},
 
 	logout: () => {
