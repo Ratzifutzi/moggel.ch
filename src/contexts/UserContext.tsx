@@ -1,33 +1,60 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import { useEffect, useState } from 'react';
+import useIdentityStore from '@/stores/IdentityStore';
+
+const DESO_NODE = 'https://node.deso.org/api/v0';
 
 export interface User {
 	loggedIn: boolean;
-	publicKey: string;
+	publicKey: string | null;
 	displayName: string;
 	profilePictureURL: string;
 }
 
-export const UserContext = createContext<User | undefined>(undefined);
+async function fetchDisplayName(publicKey: string): Promise<string> {
+	const res = await fetch(`${DESO_NODE}/get-single-profile`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ PublicKeyBase58Check: publicKey }),
+	});
 
-export function useUser() {
-	const user = useContext(UserContext);
+	if (!res.ok) return `${publicKey.slice(0, 12)}...`;
 
-	if (user === undefined) {
-		throw new Error('useUser must be used within a UserContextProvider');
+	const data = await res.json();
+	return data?.Profile?.Username || `${publicKey.slice(0, 12)}...`;
+}
+
+export function useUser(): User {
+	const currentPublicKey = useIdentityStore((s) => s.currentPublicKey);
+	const initialized = useIdentityStore((s) => s.initialized);
+	const [displayName, setDisplayName] = useState('');
+
+	useEffect(() => {
+		if (!currentPublicKey) return;
+
+		fetchDisplayName(currentPublicKey).then(setDisplayName);
+
+		return () => setDisplayName('');
+	}, [currentPublicKey]);
+
+	if (!initialized || !currentPublicKey) {
+		return {
+			loggedIn: false,
+			publicKey: null,
+			displayName: '',
+			profilePictureURL: '',
+		};
 	}
 
-	return user;
+	return {
+		loggedIn: true,
+		publicKey: currentPublicKey,
+		displayName,
+		profilePictureURL: `${DESO_NODE}/get-single-profile-picture/${currentPublicKey}`,
+	};
 }
 
 export function UserProvider({ children }: React.PropsWithChildren) {
-	const user: User = {
-		loggedIn: false,
-		publicKey: 'BC1YLgYj5Zs8n9h7vV2z5X9m8n6f4e3d2c1b0a9',
-		displayName: 'Ratzifutzi',
-		profilePictureURL: '/assets/images/profile-picture.webp',
-	};
-
-	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+	return <>{children}</>;
 }
