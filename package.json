@@ -10,8 +10,7 @@
 		"format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\""
 	},
 	"dependencies": {
-		"mongoose": "^9.2.4",
-		"next": "^16.1.6",
+		"next": "16.1.7",
 		"react": "19.2.3",
 		"react-dom": "19.2.3",
 		"winston": "^3.19.0",
