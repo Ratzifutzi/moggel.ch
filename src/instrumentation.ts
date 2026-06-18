@@ -12,7 +12,7 @@ export async function register() {
 
 		//////////////////////////////////////////////////////
 		// Verify environment variables
-		const requiredEnvVars = ['MONGODB_URI', 'OWNER_PUBLIC_KEY'];
+		const requiredEnvVars = ['MONGODB_URI'];
 		for (const envVar of requiredEnvVars) {
 			if (!process.env[envVar]) {
 				errors.push(`Environment variable ${envVar} is not set`);

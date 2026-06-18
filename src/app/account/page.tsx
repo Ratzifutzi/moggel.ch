@@ -1,19 +1,20 @@
 import Button from '@/components/base/button';
+import { GetServerFlags, ServerFlags, ToggleFlag } from '@/models/Flags';
 
-export default function Home() {
+export default async function Home() {
+	const FLAGS: ServerFlags[] = await GetServerFlags();
+	const SIGNUP_ALLOWED = FLAGS.includes('signup_allowed');
+
 	return (
 		<>
 			<h1 className='mb-4 text-center text-3xl'>Account Management</h1>
 			<div className='flex h-45 w-full flex-row'>
 				{/* Sign Up */}
 				<div className='relative flex flex-1 flex-col items-center justify-center'>
-					<Button disabled={!process.env.NEXT_PUBLIC_SIGNUP_ENABLED}>
-						Create Account
-					</Button>
-					{!process.env.NEXT_PUBLIC_SIGNUP_ENABLED && (
-						<p className='absolute translate-y-8 text-sm'>
-							Account creation is disabled.
-						</p>
+					<div className='mb-5 aspect-square h-20 bg-black'></div>
+					<Button disabled={!SIGNUP_ALLOWED}>Create Account</Button>
+					{!SIGNUP_ALLOWED && (
+						<p className='text-sm'>Account creation is disabled.</p>
 					)}
 				</div>
 
@@ -21,7 +22,11 @@ export default function Home() {
 
 				{/* Log In */}
 				<div className='flex flex-1 flex-col items-center justify-center'>
-					<Button>Log In</Button>
+					<div className='mb-5 aspect-square h-20 bg-black'></div>
+					<a href='/login'>
+						<Button>Log In</Button>
+					</a>
+					{!SIGNUP_ALLOWED && <div className='h-5' />}
 				</div>
 			</div>
 		</>
