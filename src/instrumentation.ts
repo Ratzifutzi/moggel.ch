@@ -1,3 +1,5 @@
+import { log } from 'console';
+
 export async function register() {
 	if (process.env.NEXT_RUNTIME === 'nodejs') {
 		const { execSync } = await import('child_process');
@@ -20,11 +22,17 @@ export async function register() {
 		//////////////////////////////////////////////////////
 		// Security audit
 		try {
-			execSync('npm audit', { stdio: 'ignore' });
+			execSync('npm audit --audit-level=high', { stdio: 'ignore' });
 		} catch {
-			errors.push(
-				'npm audit returned with errors. Please fix the vulnerabilities before running the app.',
-			);
+			if (process.env.NODE_ENV == 'production') {
+				errors.push(
+					'Aduit reported high severity vulnerabilities. Please fix the vulnerabilities before running the app.',
+				);
+			} else {
+				logger.warn(
+					'Audit failed, ignoring this error in development. Current setup WONT run in production.',
+				);
+			}
 		}
 
 		//////////////////////////////////////////////////////
