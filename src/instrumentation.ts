@@ -38,9 +38,7 @@ export async function register() {
 		//////////////////////////////////////////////////////
 		// Database
 		try {
-			await mongoose.connect(process.env.MONGODB_URI, {
-				dbName: process.env.MONGODB_NAME,
-			});
+			await mongoose.connect(process.env.MONGODB_URI);
 		} catch {
 			errors.push(
 				'Failed to connect to MongoDB. Please check the .env and if the database is reachable.',
