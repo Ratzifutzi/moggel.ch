@@ -1,9 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from '@/components/base/button';
 import RequiredIndicator from '@/components/form/RequiredIndicator';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+
+declare global {
+	interface Window {
+		privateCaptcha?: {
+			setup: (opts?: { autoWidget?: boolean }) => Promise<void> | void;
+		};
+	}
+}
 
 interface LoginFormValues {
 	username: string;
@@ -12,12 +20,32 @@ interface LoginFormValues {
 
 export default function Login() {
 	const [isMounted, setIsMounted] = useState(false);
+	const captchaRef = useRef<HTMLDivElement | null>(null);
 	const initialValues: LoginFormValues = { username: '', password: '' };
 
 	useEffect(() => {
-		console.log('Mounted');
 		setIsMounted(true);
 	}, []);
+
+	useEffect(() => {
+		if (!isMounted || !captchaRef.current) return;
+
+		let cancelled = false;
+		const trySetup = () => {
+			if (cancelled) return;
+			if (window.privateCaptcha?.setup) {
+				window.privateCaptcha.setup();
+			} else {
+				// Script not loaded yet, retry shortly
+				setTimeout(trySetup, 50);
+			}
+		};
+		trySetup();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [isMounted]);
 
 	const inputClass =
 		'w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50';
@@ -96,12 +124,15 @@ export default function Login() {
 							/>
 						</div>
 
-						{isMounted && (
-							<div
-								className='private-captcha'
-								data-sitekey='81551d8e59144070b02190624bbf6d26'
-							></div>
-						)}
+						<div className='min-h-25 font-normal'>
+							{isMounted && (
+								<div
+									ref={captchaRef}
+									className='private-captcha'
+									data-sitekey='81551d8e59144070b02190624bbf6d26'
+								></div>
+							)}
+						</div>
 
 						<div className='flex w-full flex-col items-center'>
 							<Button type='submit' disabled={isSubmitting}>
