@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/base/button';
 import RequiredIndicator from '@/components/form/RequiredIndicator';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import PrivateCaptcha from '@private-captcha/private-captcha-react';
 
 declare global {
 	interface Window {
@@ -16,36 +17,20 @@ declare global {
 interface LoginFormValues {
 	username: string;
 	password: string;
+	captcha: string;
 }
 
 export default function Login() {
-	const [isMounted, setIsMounted] = useState(false);
-	const captchaRef = useRef<HTMLDivElement | null>(null);
-	const initialValues: LoginFormValues = { username: '', password: '' };
-
+	const [mounted, setMounted] = useState(false);
 	useEffect(() => {
-		setIsMounted(true);
+		setMounted(true);
 	}, []);
 
-	useEffect(() => {
-		if (!isMounted || !captchaRef.current) return;
-
-		let cancelled = false;
-		const trySetup = () => {
-			if (cancelled) return;
-			if (window.privateCaptcha?.setup) {
-				window.privateCaptcha.setup();
-			} else {
-				// Script not loaded yet, retry shortly
-				setTimeout(trySetup, 50);
-			}
-		};
-		trySetup();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [isMounted]);
+	const initialValues: LoginFormValues = {
+		username: '',
+		password: '',
+		captcha: '',
+	};
 
 	const inputClass =
 		'w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50';
@@ -67,6 +52,9 @@ export default function Login() {
 					if (!values.password) {
 						errors.password = 'Required';
 					}
+					if (!values.captcha) {
+						errors.password = 'Please complete the captcha.';
+					}
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting, setErrors }) => {
@@ -83,10 +71,10 @@ export default function Login() {
 					}, 1000);
 				}}
 			>
-				{({ isSubmitting }) => (
+				{({ isSubmitting, setFieldValue }) => (
 					<Form
 						method='POST'
-						action='https://captcha.hyper-tech.ch/form/0d8d516ee9f44d26a2777f535232574b'
+						action='https://captcha.hyper-tech.ch/form/d9dbc07371cc45ffa1de68311319b789'
 					>
 						<div className={groupClass}>
 							<label>
@@ -124,15 +112,16 @@ export default function Login() {
 							/>
 						</div>
 
-						<div className='min-h-25 font-normal'>
-							{isMounted && (
-								<div
-									ref={captchaRef}
-									className='private-captcha'
-									data-sitekey='81551d8e59144070b02190624bbf6d26'
-								></div>
-							)}
-						</div>
+						{mounted && (
+							<PrivateCaptcha
+								siteKey='2401f0d3593642eb9347568afc1c3211'
+								theme='light'
+								puzzleEndpoint='https://captcha.hyper-tech.ch/puzzle'
+								onFinish={(detail) => {
+									setFieldValue('captcha', 'TBD');
+								}}
+							/>
+						)}
 
 						<div className='flex w-full flex-col items-center'>
 							<Button type='submit' disabled={isSubmitting}>

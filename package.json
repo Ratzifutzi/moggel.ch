@@ -10,6 +10,7 @@
 		"format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\""
 	},
 	"dependencies": {
+		"@private-captcha/private-captcha-react": "^0.0.8",
 		"formik": "^2.4.9",
 		"mongoose": "^9.3.3",
 		"next": "^16.2.4",
@@ -29,5 +30,11 @@
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"tailwindcss": "^4",
 		"typescript": "^5"
+	},
+	"overrides": {
+		"@private-captcha/private-captcha-react": {
+			"react": "$react",
+			"react-dom": "$react-dom"
+		}
 	}
 }
