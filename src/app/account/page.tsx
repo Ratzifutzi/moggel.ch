@@ -2,7 +2,9 @@ import Button from '@/components/base/button';
 import { GetServerFlags, ServerFlags, ToggleFlag } from '@/models/Flags';
 import Link from 'next/link';
 
-export default async function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Account() {
 	const FLAGS: ServerFlags[] = await GetServerFlags();
 	const SIGNUP_ALLOWED = FLAGS.includes('signup_allowed');
 
