@@ -1,5 +1,6 @@
 import Button from '@/components/base/button';
 import { GetServerFlags, ServerFlags, ToggleFlag } from '@/models/Flags';
+import Link from 'next/link';
 
 export default async function Home() {
 	const FLAGS: ServerFlags[] = await GetServerFlags();
@@ -23,9 +24,9 @@ export default async function Home() {
 				{/* Log In */}
 				<div className='flex flex-1 flex-col items-center justify-center'>
 					<div className='mb-5 aspect-square h-20 bg-black'></div>
-					<a href='/login'>
+					<Link href='/account/login'>
 						<Button>Log In</Button>
-					</a>
+					</Link>
 					{!SIGNUP_ALLOWED && <div className='h-5' />}
 				</div>
 			</div>
