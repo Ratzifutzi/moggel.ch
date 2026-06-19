@@ -1,17 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from '@/components/base/button';
 import RequiredIndicator from '@/components/form/RequiredIndicator';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import PrivateCaptcha from '@private-captcha/private-captcha-react';
+import Image from 'next/image';
 
-declare global {
-	interface Window {
-		privateCaptcha?: {
-			setup: (opts?: { autoWidget?: boolean }) => Promise<void> | void;
-		};
-	}
+import WarnIcon from '@public/assets/images/icons/warn.png';
+
+interface CaptchaWidgetInstance {
+	reset: () => void;
+	solution: () => string;
 }
 
 interface LoginFormValues {
@@ -22,6 +22,10 @@ interface LoginFormValues {
 
 export default function Login() {
 	const [mounted, setMounted] = useState(false);
+	const [submitError, setSubmitError] = useState<string | undefined>(undefined);
+
+	const widgetRef = useRef<CaptchaWidgetInstance | null>(null);
+
 	useEffect(() => {
 		setMounted(true);
 	}, []);
@@ -42,6 +46,13 @@ export default function Login() {
 			<h1 className='text-center text-3xl'>Account Management</h1>
 			<h2 className='text-center'>Log in</h2>
 
+			{submitError && (
+				<div className='mt-3 flex flex-row justify-center gap-2'>
+					<Image src={WarnIcon} alt='Warning Triangle' className='size-5' />
+					<span>{submitError}</span>
+				</div>
+			)}
+
 			<Formik
 				initialValues={initialValues}
 				validate={(values: LoginFormValues) => {
@@ -53,20 +64,20 @@ export default function Login() {
 						errors.password = 'Required';
 					}
 					if (!values.captcha) {
-						errors.password = 'Please complete the captcha.';
+						errors.captcha = 'Please complete the captcha.';
 					}
 					return errors;
 				}}
-				onSubmit={(values, { setSubmitting, setErrors }) => {
+				onSubmit={(values, { setSubmitting, resetForm }) => {
 					setTimeout(() => {
 						try {
 							// Simulated failure for testing
-							setErrors({
-								username: 'Invalid username or password',
-								password: 'Invalid username or password',
-							});
+							setSubmitError('Invalid Username or password.');
 						} finally {
 							setSubmitting(false);
+
+							widgetRef.current?.reset();
+							resetForm();
 						}
 					}, 1000);
 				}}
@@ -112,16 +123,29 @@ export default function Login() {
 							/>
 						</div>
 
-						{mounted && (
-							<PrivateCaptcha
-								siteKey='2401f0d3593642eb9347568afc1c3211'
-								theme='light'
-								puzzleEndpoint='https://captcha.hyper-tech.ch/puzzle'
-								onFinish={(detail) => {
-									setFieldValue('captcha', 'TBD');
-								}}
+						<div
+							className={`${groupClass} flex min-h-25 flex-col items-center`}
+						>
+							{mounted && (
+								<PrivateCaptcha
+									siteKey='2401f0d3593642eb9347568afc1c3211'
+									theme='light'
+									puzzleEndpoint='https://captcha.hyper-tech.ch/puzzle'
+									onInit={(detail) => {
+										widgetRef.current = detail.widget as CaptchaWidgetInstance;
+									}}
+									onFinish={(detail) => {
+										widgetRef.current = detail.widget as CaptchaWidgetInstance;
+										setFieldValue('captcha', detail.widget.solution());
+									}}
+								/>
+							)}
+							<ErrorMessage
+								name='captcha'
+								component='div'
+								className={errorTextClass}
 							/>
-						)}
+						</div>
 
 						<div className='flex w-full flex-col items-center'>
 							<Button type='submit' disabled={isSubmitting}>
