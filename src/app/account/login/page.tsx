@@ -133,10 +133,16 @@ export default function Login() {
 									puzzleEndpoint='https://captcha.hyper-tech.ch/puzzle'
 									onInit={(detail) => {
 										widgetRef.current = detail.widget as CaptchaWidgetInstance;
+										setSubmitError(undefined);
 									}}
 									onFinish={(detail) => {
 										widgetRef.current = detail.widget as CaptchaWidgetInstance;
 										setFieldValue('captcha', detail.widget.solution());
+									}}
+									onError={() => {
+										setSubmitError(
+											'Could not load Captcha. Please verify your Adblock & Privacy Settings, and allow the domain captcha.hyper-tech.ch',
+										);
 									}}
 								/>
 							)}
