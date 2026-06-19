@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Button from '@/components/base/button';
 import RequiredIndicator from '@/components/form/RequiredIndicator';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
@@ -10,7 +11,13 @@ interface LoginFormValues {
 }
 
 export default function Login() {
+	const [isMounted, setIsMounted] = useState(false);
 	const initialValues: LoginFormValues = { username: '', password: '' };
+
+	useEffect(() => {
+		console.log('Mounted');
+		setIsMounted(true);
+	}, []);
 
 	const inputClass =
 		'w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50';
@@ -21,6 +28,7 @@ export default function Login() {
 		<>
 			<h1 className='text-center text-3xl'>Account Management</h1>
 			<h2 className='text-center'>Log in</h2>
+
 			<Formik
 				initialValues={initialValues}
 				validate={(values: LoginFormValues) => {
@@ -36,6 +44,7 @@ export default function Login() {
 				onSubmit={(values, { setSubmitting, setErrors }) => {
 					setTimeout(() => {
 						try {
+							// Simulated failure for testing
 							setErrors({
 								username: 'Invalid username or password',
 								password: 'Invalid username or password',
@@ -47,7 +56,10 @@ export default function Login() {
 				}}
 			>
 				{({ isSubmitting }) => (
-					<Form>
+					<Form
+						method='POST'
+						action='https://captcha.hyper-tech.ch/form/0d8d516ee9f44d26a2777f535232574b'
+					>
 						<div className={groupClass}>
 							<label>
 								Username <RequiredIndicator />
@@ -65,6 +77,7 @@ export default function Login() {
 								className={errorTextClass}
 							/>
 						</div>
+
 						<div className={groupClass}>
 							<label>
 								Password <RequiredIndicator />
@@ -82,6 +95,14 @@ export default function Login() {
 								className={errorTextClass}
 							/>
 						</div>
+
+						{isMounted && (
+							<div
+								className='private-captcha'
+								data-sitekey='81551d8e59144070b02190624bbf6d26'
+							></div>
+						)}
+
 						<div className='flex w-full flex-col items-center'>
 							<Button type='submit' disabled={isSubmitting}>
 								Sign In
