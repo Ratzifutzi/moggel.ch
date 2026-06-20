@@ -1,6 +1,22 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, models, type Model } from 'mongoose';
 
-const LoginAttemptSchema = new Schema({
+export type LoginFailureReason =
+	| 'invalid_password'
+	| 'unknown_user'
+	| 'account_locked'
+	| 'rate_limited'
+	| 'captcha_failed'
+	| 'malformed_form';
+
+export interface ILoginAttempt {
+	ip: string;
+	username: string;
+	timestamp: Date;
+	successful: boolean;
+	failureReason: LoginFailureReason | null;
+}
+
+const LoginAttemptSchema = new Schema<ILoginAttempt>({
 	ip: { type: String, required: true, index: true },
 	username: { type: String, required: true, index: true },
 
@@ -31,4 +47,6 @@ LoginAttemptSchema.index(
 	{ expireAfterSeconds: 60 * 60 * 24 * 90 },
 );
 
-export const LoginAttempt = model('LoginAttempt', LoginAttemptSchema);
+export const LoginAttempt: Model<ILoginAttempt> =
+	(models.LoginAttempt as Model<ILoginAttempt>) ||
+	model<ILoginAttempt>('LoginAttempt', LoginAttemptSchema);

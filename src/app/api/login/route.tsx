@@ -5,12 +5,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as bcrypt from 'bcrypt';
 import { LoginAttempt } from '@/models/LoginAttempt';
 import GetIpAddress from '@/helper/GetIpAddress';
+import { checkLoginRateLimit } from '@/lib/loginRateLimit';
 
 class LoginError extends Error {
 	constructor(
 		public message: string,
 		public userMessage: string,
 		public status: number = 403,
+		public retryAfterSeconds?: number,
 	) {
 		super(message);
 		this.name = 'LoginError';
@@ -19,6 +21,7 @@ class LoginError extends Error {
 
 export async function POST(req: NextRequest) {
 	const body = (await req.json()) as LoginFormValues;
+	const ip = GetIpAddress(req);
 
 	try {
 		// Validate body
@@ -28,6 +31,17 @@ export async function POST(req: NextRequest) {
 				'malformed_form',
 				'Malformed body, try turning extensions off.',
 				400,
+			);
+		}
+
+		// Rate limit: run before any expensive work
+		const rl = await checkLoginRateLimit(ip, body.username);
+		if (rl.limited) {
+			throw new LoginError(
+				'rate_limited',
+				'Too many login attempts. Please try again later.',
+				429,
+				rl.retryAfterSeconds,
 			);
 		}
 
@@ -65,7 +79,7 @@ export async function POST(req: NextRequest) {
 
 		// Log In
 		await LoginAttempt.insertOne({
-			ip: GetIpAddress(req),
+			ip,
 			username: body.username,
 			successful: true,
 		});
@@ -74,15 +88,20 @@ export async function POST(req: NextRequest) {
 	} catch (err) {
 		if (err instanceof LoginError) {
 			await LoginAttempt.insertOne({
-				ip: GetIpAddress(req),
+				ip,
 				username: body.username,
 				successful: false,
 				failureReason: err.message,
 			});
 
+			const headers: Record<string, string> = {};
+			if (err.retryAfterSeconds !== undefined) {
+				headers['Retry-After'] = String(err.retryAfterSeconds);
+			}
+
 			return NextResponse.json(
 				{ ok: false, error: err.userMessage },
-				{ status: err.status },
+				{ status: err.status, headers },
 			);
 		}
 
