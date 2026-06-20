@@ -9,6 +9,7 @@ import GetIpAddress from '@/helper/GetIpAddress';
 class LoginError extends Error {
 	constructor(
 		public message: string,
+		public userMessage: string,
 		public status: number = 403,
 	) {
 		super(message);
@@ -23,7 +24,11 @@ export async function POST(req: NextRequest) {
 		// Validate body
 		const bodyValidation = loginSchema.safeParse(body);
 		if (!bodyValidation.success) {
-			throw new LoginError('malformed_form', 400);
+			throw new LoginError(
+				'malformed_form',
+				'Malformed body, try turning extensions off.',
+				400,
+			);
 		}
 
 		// Validate Captcha
@@ -32,7 +37,11 @@ export async function POST(req: NextRequest) {
 			sitekey: process.env.NEXT_PUBLIC_PC_SITEKEY,
 		});
 		if (!captchaResult.ok()) {
-			throw new LoginError('captcha_failed', 400);
+			throw new LoginError(
+				'captcha_failed',
+				'Session expired, please sign in again',
+				400,
+			);
 		}
 
 		const userInDb = await User.findOne({
@@ -41,17 +50,17 @@ export async function POST(req: NextRequest) {
 
 		// User not found
 		if (!userInDb) {
-			throw new LoginError('unknown_user');
+			throw new LoginError('unknown_user', 'Invalid username or password.');
 		}
 
 		// User locked
 		if (userInDb.locked) {
-			throw new LoginError('account_locked');
+			throw new LoginError('account_locked', 'Your account has been locked.');
 		}
 
 		// Incorrect password
 		if (!(await bcrypt.compare(body.password, userInDb.password))) {
-			throw new LoginError('invalid_password');
+			throw new LoginError('invalid_password', 'Invalid username or password.');
 		}
 
 		// Log In
@@ -72,7 +81,7 @@ export async function POST(req: NextRequest) {
 			});
 
 			return NextResponse.json(
-				{ ok: false, error: 'Invalid username or password' },
+				{ ok: false, error: err.userMessage },
 				{ status: err.status },
 			);
 		}
