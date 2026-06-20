@@ -98,12 +98,14 @@ export default function Login() {
 				{({ isSubmitting, setFieldValue }) => (
 					<Form>
 						<div className={groupClass}>
-							<label>
+							<label htmlFor='username'>
 								Username <RequiredIndicator />
 							</label>
 							<Field
-								type='username'
+								id='username'
+								type='text'
 								name='username'
+								autoComplete='username'
 								className={inputClass}
 								disabled={isSubmitting}
 								required
@@ -116,12 +118,14 @@ export default function Login() {
 						</div>
 
 						<div className={groupClass}>
-							<label>
+							<label htmlFor='password'>
 								Password <RequiredIndicator />
 							</label>
 							<Field
+								id='password'
 								type='password'
 								name='password'
+								autoComplete='current-password'
 								className={`${inputClass} font-mono`}
 								disabled={isSubmitting}
 								required
