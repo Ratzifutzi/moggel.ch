@@ -13,6 +13,8 @@
 		"@private-captcha/private-captcha-js": "^0.0.12",
 		"@private-captcha/private-captcha-react": "^0.0.8",
 		"@tanstack/react-query": "^5.101.0",
+		"@types/bcrypt": "^6.0.0",
+		"bcrypt": "^6.0.0",
 		"formik": "^2.4.9",
 		"mongoose": "^9.3.3",
 		"next": "^16.2.6",

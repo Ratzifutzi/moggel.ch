@@ -3,7 +3,6 @@ import { Schema, model } from 'mongoose';
 const LoginAttemptSchema = new Schema({
 	ip: { type: String, required: true, index: true },
 	username: { type: String, required: true, index: true },
-	userAgent: { type: String },
 
 	timestamp: { type: Date, default: Date.now, index: true },
 
@@ -15,6 +14,8 @@ const LoginAttemptSchema = new Schema({
 			'unknown_user',
 			'account_locked',
 			'rate_limited',
+			'captcha_failed',
+			'malformed_form',
 			null,
 		],
 		default: null,

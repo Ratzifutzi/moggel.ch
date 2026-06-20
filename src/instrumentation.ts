@@ -1,5 +1,6 @@
 import { log } from 'console';
 import { captcha } from './lib/captcha';
+import * as bcrypt from 'bcrypt';
 
 export async function register() {
 	if (process.env.NEXT_RUNTIME === 'nodejs') {
@@ -49,6 +50,34 @@ export async function register() {
 		} catch {
 			errors.push(
 				'Failed to connect to MongoDB. Please check the .env and if the database is reachable.',
+			);
+		}
+
+		// Creating Admin
+		try {
+			const hashedPassword = await bcrypt.hash(
+				process.env.ADMIN_USER_PASSWORD,
+				12,
+			);
+
+			await User.updateOne(
+				{
+					username: 'admin',
+				},
+				{
+					$setOnInsert: {
+						username: 'admin',
+						password: hashedPassword,
+						admin: true,
+					},
+				},
+				{
+					upsert: true,
+				},
+			);
+		} catch {
+			errors.push(
+				'Failed to create/update the admin user. Please check the database',
 			);
 		}
 
