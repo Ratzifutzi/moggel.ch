@@ -173,11 +173,11 @@ export default function Login() {
 								Sign In
 							</Button>
 							<span className='text-sm'>
-								By logging in, you agree to the{' '}
+								By clicking &quot;Sign In&quot; in, you agree to the{' '}
 								<Link
 									target='_blank'
 									className='underline'
-									href='http://localhost:3000/legal/privacy-policy'
+									href='/legal/privacy-policy'
 								>
 									Privacy Policy
 								</Link>
