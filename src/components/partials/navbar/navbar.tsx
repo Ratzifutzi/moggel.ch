@@ -1,5 +1,5 @@
-'use client';
-
+import GetUser from '@/helper/GetUser';
+import { IUser } from '@/models/User';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,7 +9,9 @@ type SidebarTab = {
 	TargetPath: string;
 };
 
-const Navbar = ({}: React.PropsWithChildren) => {
+const Navbar = async ({}: React.PropsWithChildren) => {
+	const user = await GetUser();
+
 	const tabs: SidebarTab[] = [
 		{
 			IconPath: '/assets/images/navbar/Menu_Home_Icon.jpeg',
@@ -44,40 +46,64 @@ const Navbar = ({}: React.PropsWithChildren) => {
 	];
 
 	return (
-		<div className="flex h-full w-full flex-row justify-center gap-2 overflow-auto lg:flex-col lg:justify-between">
-			<div className="flex flex-row gap-2 lg:flex-col">
+		<div className='flex h-full w-full flex-row justify-center gap-2 overflow-auto lg:flex-col lg:justify-between'>
+			<div className='flex flex-row gap-2 lg:flex-col'>
 				{tabs.map((tab) => (
 					<Item key={tab.TargetPath} tab={tab} />
 				))}
 			</div>
+			{user && <Item user={user} />}
 		</div>
 	);
 };
 
-const Item = ({ tab }: { tab: SidebarTab }) => {
-	return (
-		<Link
-			href={tab.TargetPath}
-			className={'flex w-10 items-center gap-4 p-0 lg:w-full lg:p-2'}
-		>
-			<>
-				<Image
-					src={tab.IconPath}
-					alt="icon"
-					width={40}
-					height={40}
-					className="h-10 w-10 object-contain"
-				/>
-				<Image
-					src={tab.TextPath}
-					alt="label"
-					width={96}
-					height={24}
-					className="hidden h-6 object-contain object-left lg:block"
-				/>
-			</>
-		</Link>
-	);
+const Item = ({ tab, user }: { tab?: SidebarTab; user?: IUser }) => {
+	if (tab) {
+		return (
+			<Link
+				href={tab.TargetPath}
+				className={'flex w-10 items-center gap-4 p-0 lg:w-full lg:p-2'}
+			>
+				<>
+					<Image
+						src={tab.IconPath}
+						alt='icon'
+						width={40}
+						height={40}
+						className='h-10 w-10 object-contain'
+					/>
+					<Image
+						src={tab.TextPath}
+						alt='label'
+						width={96}
+						height={24}
+						className='hidden h-6 object-contain object-left lg:block'
+					/>
+				</>
+			</Link>
+		);
+	} else if (user) {
+		return (
+			<Link
+				href={'/account'}
+				className={'flex w-10 items-center gap-4 p-0 lg:w-full lg:p-2'}
+			>
+				<>
+					<Image
+						src={'/assets/images/navbar/Menu_Home_Icon.jpeg'}
+						alt='icon'
+						width={40}
+						height={40}
+						className='h-10 w-10 object-contain'
+					/>
+					<div className='hidden w-24 flex-col gap-0 leading-tight lg:flex'>
+						<span>@{user.username}</span>
+						<span>{user.admin ? 'Administrator' : 'Fan'}</span>
+					</div>
+				</>
+			</Link>
+		);
+	}
 };
 
 Navbar.Item = Item;

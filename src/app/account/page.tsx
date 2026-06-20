@@ -13,9 +13,9 @@ export default async function Account() {
 
 	return (
 		<>
-			<h1 className='mb-4 text-center text-3xl'>Account Management</h1>
+			<h1 className='text-center text-3xl'>Account Management</h1>
 			{!user ? (
-				<div className='flex h-45 w-full flex-row'>
+				<div className='mt-4 flex h-45 w-full flex-row'>
 					{/* Sign Up */}
 					<div className='relative flex flex-1 flex-col items-center justify-center'>
 						<div className='mb-5 aspect-square h-20 bg-black'></div>
@@ -37,7 +37,7 @@ export default async function Account() {
 					</div>
 				</div>
 			) : (
-				<p>{user.username}</p>
+				<h2 className='text-center text-xl'>Hi there, {user.username}</h2>
 			)}
 		</>
 	);

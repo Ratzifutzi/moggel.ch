@@ -9,13 +9,11 @@ import { LoginAttempt } from '@/models/LoginAttempt';
  *  - Per-username failures:  protects a single account from distributed attacks.
  *  - Per-IP long window:     catches slow/low attacks that creep under the short window.
  *
- * Numbers chosen to be friendly to humans with typos (5 failures / 15 min per
- * account is well above a forgetful user) but to choke automated tooling.
  */
 export const LOGIN_RATE_LIMITS = {
 	IP_FAILED_PER_15_MIN: 10,
 	IP_TOTAL_PER_15_MIN: 30,
-	USERNAME_FAILED_PER_15_MIN: 5,
+	USERNAME_FAILED_PER_15_MIN: 60,
 	IP_TOTAL_PER_HOUR: 100,
 } as const;
 
@@ -87,12 +85,7 @@ export async function checkLoginRateLimit(
 		.lean();
 
 	const retryAfterSeconds = oldest
-		? Math.max(
-				1,
-				Math.ceil(
-					(oldest.timestamp.getTime() + window - now) / 1000,
-				),
-			)
+		? Math.max(1, Math.ceil((oldest.timestamp.getTime() + window - now) / 1000))
 		: Math.ceil(window / 1000);
 
 	return { limited: true, retryAfterSeconds };
