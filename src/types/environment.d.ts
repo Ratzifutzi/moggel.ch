@@ -8,6 +8,8 @@ declare global {
 			PC_API_KEY: string;
 
 			ADMIN_USER_PASSWORD: string;
+
+			PROXY_IP_HEADER: string;
 		}
 	}
 }

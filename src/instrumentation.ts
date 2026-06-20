@@ -18,6 +18,7 @@ export async function register() {
 			'NEXT_PUBLIC_PC_SITEKEY',
 			'PC_API_KEY',
 			'ADMIN_USER_PASSWORD',
+			'PROXY_IP_HEADER',
 		];
 		for (const envVar of requiredEnvVars) {
 			if (!process.env[envVar]) {
