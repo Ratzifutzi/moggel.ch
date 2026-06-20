@@ -3,7 +3,11 @@ declare global {
 		interface ProcessEnv {
 			// Database
 			MONGODB_URI: string;
-			MONGODB_NAME: string;
+
+			NEXT_PUBLIC_PC_SITEKEY: string;
+			PC_API_KEY: string;
+
+			ADMIN_USER_PASSWORD: string;
 		}
 	}
 }

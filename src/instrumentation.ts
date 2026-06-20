@@ -1,4 +1,5 @@
 import { log } from 'console';
+import { captcha } from './lib/captcha';
 
 export async function register() {
 	if (process.env.NEXT_RUNTIME === 'nodejs') {
@@ -12,7 +13,12 @@ export async function register() {
 
 		//////////////////////////////////////////////////////
 		// Verify environment variables
-		const requiredEnvVars = ['MONGODB_URI'];
+		const requiredEnvVars = [
+			'MONGODB_URI',
+			'NEXT_PUBLIC_PC_SITEKEY',
+			'PC_API_KEY',
+			'ADMIN_USER_PASSWORD',
+		];
 		for (const envVar of requiredEnvVars) {
 			if (!process.env[envVar]) {
 				errors.push(`Environment variable ${envVar} is not set`);

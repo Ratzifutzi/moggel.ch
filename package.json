@@ -10,13 +10,16 @@
 		"format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\""
 	},
 	"dependencies": {
+		"@private-captcha/private-captcha-js": "^0.0.12",
 		"@private-captcha/private-captcha-react": "^0.0.8",
+		"@tanstack/react-query": "^5.101.0",
 		"formik": "^2.4.9",
 		"mongoose": "^9.3.3",
 		"next": "^16.2.6",
 		"react": "19.2.3",
 		"react-dom": "19.2.3",
 		"winston": "^3.19.0",
+		"zod": "^4.4.3",
 		"zustand": "^5.0.11"
 	},
 	"devDependencies": {

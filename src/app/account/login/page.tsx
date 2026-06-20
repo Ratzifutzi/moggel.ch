@@ -8,23 +8,39 @@ import PrivateCaptcha from '@private-captcha/private-captcha-react';
 import Image from 'next/image';
 
 import WarnIcon from '@public/assets/images/icons/warn.png';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { LoginFormValues } from '@/Schemas/LoginForm';
 
 interface CaptchaWidgetInstance {
 	reset: () => void;
 	solution: () => string;
 }
 
-interface LoginFormValues {
-	username: string;
-	password: string;
-	captcha: string;
-}
-
 export default function Login() {
 	const [mounted, setMounted] = useState(false);
 	const [submitError, setSubmitError] = useState<string | undefined>(undefined);
 
+	const router = useRouter();
 	const widgetRef = useRef<CaptchaWidgetInstance | null>(null);
+
+	const loginMutation = useMutation({
+		mutationFn: async (values: LoginFormValues) => {
+			const res = await fetch('/api/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(values),
+			});
+			if (!res.ok) {
+				const body = await res.json().catch(() => null);
+				throw new Error(body?.error ?? 'Internal Server Error');
+			}
+
+			return res.json();
+		},
+		onError: (err) => setSubmitError(err.message),
+		onSuccess: () => router.push('/account'),
+	});
 
 	useEffect(() => {
 		setMounted(true);
@@ -68,25 +84,19 @@ export default function Login() {
 					}
 					return errors;
 				}}
-				onSubmit={(values, { setSubmitting, resetForm }) => {
-					setTimeout(() => {
-						try {
-							// Simulated failure for testing
-							setSubmitError('Invalid Username or password.');
-						} finally {
-							setSubmitting(false);
+				onSubmit={async (values, { setSubmitting, resetForm }) => {
+					try {
+						await loginMutation.mutateAsync(values);
+					} finally {
+						setSubmitting(false);
 
-							widgetRef.current?.reset();
-							resetForm();
-						}
-					}, 1000);
+						widgetRef.current?.reset();
+						resetForm();
+					}
 				}}
 			>
 				{({ isSubmitting, setFieldValue }) => (
-					<Form
-						method='POST'
-						action='https://captcha.hyper-tech.ch/form/d9dbc07371cc45ffa1de68311319b789'
-					>
+					<Form>
 						<div className={groupClass}>
 							<label>
 								Username <RequiredIndicator />
@@ -124,11 +134,11 @@ export default function Login() {
 						</div>
 
 						<div
-							className={`${groupClass} flex min-h-25 flex-col items-center`}
+							className={`${groupClass} flex min-h-25 flex-col items-center font-[Open_Sans]`}
 						>
 							{mounted && (
 								<PrivateCaptcha
-									siteKey='2401f0d3593642eb9347568afc1c3211'
+									siteKey={process.env.NEXT_PUBLIC_PC_SITEKEY}
 									theme='light'
 									puzzleEndpoint='https://captcha.hyper-tech.ch/puzzle'
 									onInit={(detail) => {
