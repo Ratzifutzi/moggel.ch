@@ -11,6 +11,7 @@ import WarnIcon from '@public/assets/images/icons/warn.png';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { LoginFormValues } from '@/Schemas/LoginForm';
+import Link from 'next/link';
 
 interface CaptchaWidgetInstance {
 	reset: () => void;
@@ -171,6 +172,16 @@ export default function Login() {
 							<Button type='submit' disabled={isSubmitting}>
 								Sign In
 							</Button>
+							<span className='text-sm'>
+								By logging in, you agree to the{' '}
+								<Link
+									target='_blank'
+									className='underline'
+									href='http://localhost:3000/legal/privacy-policy'
+								>
+									Privacy Policy
+								</Link>
+							</span>
 						</div>
 					</Form>
 				)}

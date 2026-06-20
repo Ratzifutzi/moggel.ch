@@ -30,7 +30,7 @@ export default function RootLayout({
 							<div className='mt-5 lg:mt-0 lg:flex lg:w-65' id='navbar'>
 								<Navbar />
 							</div>
-							<div className='mr-2 ml-2 w-full' id='content'>
+							<div className='mr-2 ml-2 w-full overflow-y-auto' id='content'>
 								{children}
 							</div>
 						</div>
