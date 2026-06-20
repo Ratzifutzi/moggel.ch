@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginAttempt } from '@/models/LoginAttempt';
 import GetIpAddress from '@/helper/GetIpAddress';
 import { checkLoginRateLimit } from '@/lib/loginRateLimit';
+import { createSession } from '@/lib/session';
 
 class LoginError extends Error {
 	constructor(
@@ -84,7 +85,12 @@ export async function POST(req: NextRequest) {
 			successful: true,
 		});
 
-		return NextResponse.json({ ok: true });
+		const res = NextResponse.json({ ok: true });
+		await createSession(res, userInDb._id, {
+			ip,
+			userAgent: req.headers.get('user-agent') ?? undefined,
+		});
+		return res;
 	} catch (err) {
 		if (err instanceof LoginError) {
 			await LoginAttempt.insertOne({
