@@ -26,7 +26,7 @@ export default async function Archive({
 	const currentPage = Math.min(page, totalPages);
 
 	const docs = await Comic.find()
-		.select('title description permalink slide1 views createdAt')
+		.select('title description permalink titleImage slide1 views createdAt')
 		.sort({ createdAt: -1 })
 		.skip((currentPage - 1) * PAGE_SIZE)
 		.limit(PAGE_SIZE)
@@ -37,7 +37,7 @@ export default async function Archive({
 		title: c.title,
 		description: c.description,
 		permalink: c.permalink,
-		slide1: c.slide1,
+		listImageUrl: c.titleImage || c.slide1.url,
 		viewCount: c.views?.length ?? 0,
 	}));
 
@@ -60,8 +60,8 @@ export default async function Archive({
 								<div className='aspect-square h-24 w-24 flex-shrink-0 overflow-hidden bg-gray-100'>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
 									<img
-										src={c.slide1.url}
-										alt={c.slide1.alt}
+										src={c.listImageUrl}
+										alt={c.title}
 										className='h-full w-full object-cover'
 									/>
 								</div>
@@ -95,8 +95,8 @@ export default async function Archive({
 								<div className='aspect-square w-full overflow-hidden bg-gray-100'>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
 									<img
-										src={c.slide1.url}
-										alt={c.slide1.alt}
+										src={c.listImageUrl}
+										alt={c.title}
 										className='h-full w-full object-cover transition-transform group-hover:scale-105'
 									/>
 								</div>

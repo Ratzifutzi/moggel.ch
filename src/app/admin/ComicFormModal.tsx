@@ -10,6 +10,7 @@ export type ComicFormValues = {
 	desoLink: string;
 	faviconUrl: string;
 	permalink: string;
+	titleImage: string;
 	slide1: { url: string; alt: string };
 	slide2: { url: string; alt: string };
 	meta: string;
@@ -30,6 +31,7 @@ const EMPTY: ComicFormValues = {
 	desoLink: '',
 	faviconUrl: '',
 	permalink: '',
+	titleImage: '',
 	slide1: { url: '', alt: '' },
 	slide2: { url: '', alt: '' },
 	meta: '',
@@ -164,6 +166,23 @@ export default function ComicFormModal({
 						/>
 						<span className='text-sm text-gray-500'>
 							Lowercase letters, numbers and dashes only.
+						</span>
+					</div>
+
+					<div>
+						<label htmlFor='titleImage'>Title Image URL</label>
+						<input
+							id='titleImage'
+							type='url'
+							value={values.titleImage}
+							onChange={(e) =>
+								setValues((v) => ({ ...v, titleImage: e.target.value }))
+							}
+							className={inputClass}
+							disabled={submitting}
+						/>
+						<span className='text-sm text-gray-500'>
+							Shown on the archive list. Falls back to slide 1 if empty.
 						</span>
 					</div>
 

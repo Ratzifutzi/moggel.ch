@@ -17,6 +17,7 @@ export interface IComic {
 	desoLink: string;
 	faviconUrl: string;
 	permalink: string;
+	titleImage: string;
 	slide1: ISlide;
 	slide2: ISlide;
 	meta: string;
@@ -55,6 +56,7 @@ const ComicSchema = new Schema<IComic>(
 			unique: true,
 			index: true,
 		},
+		titleImage: { type: String, default: '' },
 		slide1: { type: SlideSchema, required: true },
 		slide2: { type: SlideSchema, required: true },
 		meta: { type: String, default: '' },

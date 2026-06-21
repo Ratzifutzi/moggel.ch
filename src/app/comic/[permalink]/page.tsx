@@ -14,14 +14,54 @@ export async function generateMetadata({
 }): Promise<Metadata> {
 	const { permalink } = await params;
 	const doc = await Comic.findOne({ permalink })
-		.select('title description meta')
+		.select('title description meta titleImage slide1 faviconUrl')
 		.lean();
 
 	if (!doc) return { title: 'Comic not found' };
 
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://moggel.ch';
+	const pageUrl = `${siteUrl}/comic/${doc.permalink ?? permalink}`;
+
+	const rawImage = doc.titleImage || doc.slide1?.url || '';
+	const imageUrl = rawImage
+		? rawImage.startsWith('http')
+			? rawImage
+			: `${siteUrl}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+		: undefined;
+
+	const description = doc.meta || doc.description.slice(0, 160);
+
 	return {
+		metadataBase: new URL(siteUrl),
 		title: doc.title,
-		description: doc.meta || doc.description.slice(0, 160),
+		description,
+		alternates: { canonical: pageUrl },
+		openGraph: {
+			type: 'article',
+			siteName: 'Moggel',
+			title: doc.title,
+			description,
+			url: pageUrl,
+			images: imageUrl
+				? [
+						{
+							url: imageUrl,
+							alt: doc.slide1?.alt || doc.title,
+						},
+					]
+				: undefined,
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: doc.title,
+			description,
+			images: imageUrl ? [imageUrl] : undefined,
+		},
+		icons: doc.faviconUrl ? { icon: doc.faviconUrl } : undefined,
+		other: {
+			// Generic image meta consumed by some embeds (e.g. DeSocialWorld)
+			...(imageUrl ? { image: imageUrl } : {}),
+		},
 	};
 }
 

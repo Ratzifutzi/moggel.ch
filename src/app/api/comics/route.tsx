@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
 	const isLoggedIn = !!user;
 
 	const docs = await Comic.find()
-		.select('title permalink slide1 views createdAt')
+		.select('title permalink titleImage slide1 views createdAt')
 		.sort({ createdAt: -1 })
 		.lean();
 
@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
 		_id: String(c._id),
 		title: c.title,
 		permalink: c.permalink,
+		titleImage: c.titleImage || c.slide1.url,
 		slide1: c.slide1,
 		createdAt: c.createdAt,
 		...(isLoggedIn ? { viewCount: c.views?.length ?? 0 } : {}),

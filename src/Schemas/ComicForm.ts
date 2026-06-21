@@ -19,6 +19,11 @@ export const comicCreateSchema = z.object({
 		.min(1, 'Required')
 		.max(200)
 		.regex(/^[a-z0-9-]+$/, 'Only lowercase letters, numbers and dashes'),
+	titleImage: z
+		.string()
+		.url('Must be a valid URL')
+		.or(z.literal(''))
+		.default(''),
 	slide1: slideSchema,
 	slide2: slideSchema,
 	meta: z.string().default(''),

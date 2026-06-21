@@ -13,7 +13,7 @@ export async function GET(
 
 	const doc = await Comic.findOne({ permalink })
 		.select(
-			'title description desoLink faviconUrl permalink slide1 slide2 meta views desoClicks createdAt',
+			'title description desoLink faviconUrl permalink titleImage slide1 slide2 meta views desoClicks createdAt',
 		)
 		.lean();
 
@@ -33,6 +33,7 @@ export async function GET(
 			desoLink: doc.desoLink,
 			faviconUrl: doc.faviconUrl,
 			permalink: doc.permalink,
+			titleImage: doc.titleImage || doc.slide1.url,
 			slide1: doc.slide1,
 			slide2: doc.slide2,
 			meta: doc.meta,
