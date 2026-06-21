@@ -1,8 +1,7 @@
 import GetUser from '@/helper/GetUser';
-import User from '@/models/User';
-import { userCreateSchema } from '@/Schemas/UserForm';
+import Comic from '@/models/Comic';
+import { comicCreateSchema } from '@/Schemas/ComicForm';
 import { NextRequest, NextResponse } from 'next/server';
-import * as bcrypt from 'bcrypt';
 
 const PAGE_SIZE = 25;
 
@@ -19,13 +18,23 @@ export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
 	const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1);
 
-	const total = await User.countDocuments();
-	const users = await User.find()
-		.select('username locked admin')
-		.sort({ admin: -1, username: 1 })
+	const total = await Comic.countDocuments();
+	const docs = await Comic.find()
+		.select('title permalink desoLink desoClicks views createdAt')
+		.sort({ createdAt: -1 })
 		.skip((page - 1) * PAGE_SIZE)
 		.limit(PAGE_SIZE)
 		.lean();
+
+	const comics = docs.map((c) => ({
+		_id: c._id,
+		title: c.title,
+		permalink: c.permalink,
+		desoLink: c.desoLink,
+		desoClicks: c.desoClicks,
+		viewCount: c.views?.length ?? 0,
+		createdAt: c.createdAt,
+	}));
 
 	return NextResponse.json({
 		ok: true,
@@ -33,7 +42,7 @@ export async function GET(req: NextRequest) {
 		pageSize: PAGE_SIZE,
 		total,
 		totalPages: Math.max(1, Math.ceil(total / PAGE_SIZE)),
-		users,
+		comics,
 	});
 }
 
@@ -48,7 +57,7 @@ export async function POST(req: NextRequest) {
 	}
 
 	const body = await req.json().catch(() => null);
-	const parsed = userCreateSchema.safeParse(body);
+	const parsed = comicCreateSchema.safeParse(body);
 	if (!parsed.success) {
 		return NextResponse.json(
 			{ ok: false, error: 'Invalid request body' },
@@ -56,29 +65,19 @@ export async function POST(req: NextRequest) {
 		);
 	}
 
-	const existing = await User.findOne({ username: parsed.data.username });
+	const existing = await Comic.findOne({ permalink: parsed.data.permalink });
 	if (existing) {
 		return NextResponse.json(
-			{ ok: false, error: 'Username already taken' },
+			{ ok: false, error: 'Permalink already taken' },
 			{ status: 409 },
 		);
 	}
 
-	const hashed = await bcrypt.hash(parsed.data.password, 12);
-	const created = await User.create({
-		username: parsed.data.username,
-		password: hashed,
-		admin: parsed.data.admin,
-		locked: parsed.data.locked,
+	const created = await Comic.create({
+		...parsed.data,
+		views: [],
+		desoClicks: 0,
 	});
 
-	return NextResponse.json({
-		ok: true,
-		user: {
-			_id: created._id,
-			username: created.username,
-			admin: created.admin,
-			locked: created.locked,
-		},
-	});
+	return NextResponse.json({ ok: true, comic: { _id: created._id } });
 }
