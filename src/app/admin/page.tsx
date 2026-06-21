@@ -4,6 +4,7 @@ import Users from './Users';
 import Button from '@/components/base/button';
 import TabContent, { Tab } from './TabContent';
 import Comics from './Comics';
+import Flags from './Flags';
 
 const TABS: Tab[] = [
 	{
@@ -15,6 +16,11 @@ const TABS: Tab[] = [
 		hash: 'comics',
 		title: 'Comics',
 		component: <Comics />,
+	},
+	{
+		hash: 'flags',
+		title: 'Flags',
+		component: <Flags />,
 	},
 ];
 

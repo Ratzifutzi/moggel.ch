@@ -1,7 +1,8 @@
 import { model, models, Schema } from 'mongoose';
 
 // Define the possible flag values as a String Enum/Union logic in TS
-export type ServerFlags = 'signup_allowed' | 'maintenance';
+export const VALID_SERVER_FLAGS = ['signup_allowed', 'maintenance'] as const;
+export type ServerFlags = (typeof VALID_SERVER_FLAGS)[number];
 
 const ServerConfigSchema = new Schema(
 	{
@@ -17,8 +18,9 @@ const ServerConfigSchema = new Schema(
 			default: [],
 			validate: {
 				validator: function (flags: string[]) {
-					const validFlags: ServerFlags[] = ['signup_allowed', 'maintenance'];
-					return flags.every((f) => validFlags.includes(f as ServerFlags));
+					return flags.every((f) =>
+						VALID_SERVER_FLAGS.includes(f as ServerFlags),
+					);
 				},
 				message: 'Invalid flag provided.',
 			},
