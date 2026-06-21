@@ -32,22 +32,19 @@ export default function ComicView({ comic }: { comic: ComicViewData }) {
 				className='relative w-full overflow-hidden rounded'
 				style={{
 					maskImage:
-						'linear-gradient(to bottom, black 0%, black 50%, transparent 75%)',
+						'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
 					WebkitMaskImage:
-						'linear-gradient(to bottom, black 0%, black 50%, transparent 75%)',
+						'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
 				}}
 			>
 				{/* eslint-disable-next-line @next/next/no-img-element */}
-				<img
-					src={comic.slide2.url}
-					alt={comic.slide2.alt}
-					className='w-full'
-				/>
+				<img src={comic.slide2.url} alt={comic.slide2.alt} className='w-full' />
 			</div>
 
-			<div className='flex flex-col items-center pb-6'>
+			<div className='-mt-5 flex flex-col items-center pb-6'>
 				<Link
 					href={`/redirect?permalink=${encodeURIComponent(comic.permalink)}`}
+					target='_blank'
 				>
 					<Button>
 						<Image src={DesoImage} alt='Deso Logo' />
