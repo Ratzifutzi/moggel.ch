@@ -85,14 +85,34 @@ export default function PrivacyPolicy() {
 					<strong>Retention:</strong> 90 days, then automatically deleted.
 				</p>
 
-				<h3 className='mt-4 font-semibold'>d) Session cookies</h3>
+				<h3 className='mt-4 font-semibold'>d) Cookies</h3>
 				<p>
-					We use a strictly necessary session cookie to keep you logged in. No
-					tracking, advertising or analytics cookies are set.
+					We use two strictly necessary first-party cookies. No advertising or
+					third-party tracking cookies are set.
 				</p>
+				<ul className='mt-2 list-disc space-y-1 pl-6'>
+					<li>
+						<strong>session</strong> &mdash; keeps you logged in after
+						authentication. Contains an opaque session token. HTTP-only,
+						SameSite=Lax. Expires after up to 365 days or on logout.
+					</li>
+					<li>
+						<strong>visitor</strong> &mdash; a random, opaque identifier used
+						solely to deduplicate view counts per comic (so reloading a page
+						does not inflate its view counter). It is not linked to your
+						account, is not shared with any third party, and is not used for
+						advertising or cross-site tracking. HTTP-only, SameSite=Lax. Expires
+						after 365 days.
+					</li>
+				</ul>
 				<p className='mt-2'>
+					<strong>Purpose:</strong> authentication and basic, aggregate view
+					counting on comic pages.
+					<br />
 					<strong>Legal basis:</strong> legitimate interest / contract
-					performance. No consent is required for strictly necessary cookies.
+					performance (Art. 31(1) and 31(2)(a) FADP / Art. 6(1)(b) and 6(1)(f)
+					GDPR). No consent banner is shown because no non-essential or
+					third-party tracking cookies are set.
 				</p>
 			</section>
 
