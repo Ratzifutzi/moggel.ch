@@ -54,9 +54,9 @@ export default async function ComicPage({ params }: { params: Params }) {
 				className='relative w-full overflow-hidden rounded'
 				style={{
 					maskImage:
-						'linear-gradient(to bottom, black 0%, black 75%, transparent 100%)',
+						'linear-gradient(to bottom, black 0%, black 50%, transparent 75%)',
 					WebkitMaskImage:
-						'linear-gradient(to bottom, black 0%, black 75%, transparent 100%)',
+						'linear-gradient(to bottom, black 0%, black 50%, transparent 75%)',
 				}}
 			>
 				{/* eslint-disable-next-line @next/next/no-img-element */}
