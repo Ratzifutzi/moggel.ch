@@ -92,11 +92,13 @@ export async function PATCH(
 		target.desoLink = parsed.data.desoLink;
 	if (parsed.data.faviconUrl !== undefined)
 		target.faviconUrl = parsed.data.faviconUrl;
+	if (parsed.data.titleImage !== undefined)
+		target.titleImage = parsed.data.titleImage;
 	if (parsed.data.slide1 !== undefined) target.slide1 = parsed.data.slide1;
 	if (parsed.data.slide2 !== undefined) target.slide2 = parsed.data.slide2;
 	if (parsed.data.meta !== undefined) target.meta = parsed.data.meta;
 
-	await target.save();
+	await target.save({ validateModifiedOnly: true });
 
 	return NextResponse.json({ ok: true, comic: { _id: target._id } });
 }

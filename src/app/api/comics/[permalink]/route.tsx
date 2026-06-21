@@ -1,15 +1,19 @@
 import Comic from '@/models/Comic';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import GetUser from '@/helper/GetUser';
 
 export async function GET(
-	_req: Request,
+	req: NextRequest,
 	{ params }: { params: Promise<{ permalink: string }> },
 ) {
 	const { permalink } = await params;
 
+	const user = await GetUser(req);
+	const isLoggedIn = !!user;
+
 	const doc = await Comic.findOne({ permalink })
 		.select(
-			'title description desoLink faviconUrl permalink slide1 slide2 meta views desoClicks createdAt',
+			'title description desoLink faviconUrl permalink titleImage slide1 slide2 meta views desoClicks createdAt',
 		)
 		.lean();
 
@@ -29,12 +33,17 @@ export async function GET(
 			desoLink: doc.desoLink,
 			faviconUrl: doc.faviconUrl,
 			permalink: doc.permalink,
+			titleImage: doc.titleImage || doc.slide1.url,
 			slide1: doc.slide1,
 			slide2: doc.slide2,
 			meta: doc.meta,
-			viewCount: doc.views?.length ?? 0,
-			desoClicks: doc.desoClicks,
 			createdAt: doc.createdAt,
+			...(isLoggedIn
+				? {
+						viewCount: doc.views?.length ?? 0,
+						desoClicks: doc.desoClicks,
+					}
+				: {}),
 		},
 	});
 }

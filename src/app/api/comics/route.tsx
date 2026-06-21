@@ -1,9 +1,13 @@
 import Comic from '@/models/Comic';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import GetUser from '@/helper/GetUser';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+	const user = await GetUser(req);
+	const isLoggedIn = !!user;
+
 	const docs = await Comic.find()
-		.select('title permalink slide1 views createdAt')
+		.select('title permalink titleImage slide1 views createdAt')
 		.sort({ createdAt: -1 })
 		.lean();
 
@@ -11,9 +15,10 @@ export async function GET() {
 		_id: String(c._id),
 		title: c.title,
 		permalink: c.permalink,
+		titleImage: c.titleImage || c.slide1.url,
 		slide1: c.slide1,
-		viewCount: c.views?.length ?? 0,
 		createdAt: c.createdAt,
+		...(isLoggedIn ? { viewCount: c.views?.length ?? 0 } : {}),
 	}));
 
 	return NextResponse.json({ ok: true, comics });
