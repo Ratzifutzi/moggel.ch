@@ -40,7 +40,10 @@ export default function Login() {
 			return res.json();
 		},
 		onError: (err) => setSubmitError(err.message),
-		onSuccess: () => router.push('/account'),
+		onSuccess: () => {
+			router.push('/account');
+			router.refresh();
+		},
 	});
 
 	useEffect(() => {

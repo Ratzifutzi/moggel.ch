@@ -90,7 +90,7 @@ const Item = ({ tab, user }: { tab?: SidebarTab; user?: IUser }) => {
 			>
 				<>
 					<Image
-						src={'/assets/images/navbar/Menu_Home_Icon.jpeg'}
+						src={'/assets/images/icons/NoProfilePicture.png'}
 						alt='icon'
 						width={40}
 						height={40}

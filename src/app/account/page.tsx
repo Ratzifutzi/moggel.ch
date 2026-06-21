@@ -1,7 +1,12 @@
 import Button from '@/components/base/button';
 import GetUser from '@/helper/GetUser';
-import { GetServerFlags, ServerFlags, ToggleFlag } from '@/models/Flags';
+import { GetServerFlags, ServerFlags } from '@/models/Flags';
 import Link from 'next/link';
+import AccountPageClient from './client';
+import Image from 'next/image';
+
+import CreateAccountIcon from '@public/assets/images/icons/CreateAccount.png';
+import LoginIcon from '@public/assets/images/icons/Login.png';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +23,11 @@ export default async function Account() {
 				<div className='mt-4 flex h-45 w-full flex-row'>
 					{/* Sign Up */}
 					<div className='relative flex flex-1 flex-col items-center justify-center'>
-						<div className='mb-5 aspect-square h-20 bg-black'></div>
+						<Image
+							src={CreateAccountIcon}
+							alt='Create Account Icon'
+							className='mb-5 size-20 object-contain'
+						/>
 						<Button disabled={!SIGNUP_ALLOWED}>Create Account</Button>
 						{!SIGNUP_ALLOWED && (
 							<p className='text-sm'>Account creation is disabled.</p>
@@ -29,7 +38,11 @@ export default async function Account() {
 
 					{/* Log In */}
 					<div className='flex flex-1 flex-col items-center justify-center'>
-						<div className='mb-5 aspect-square h-20 bg-black'></div>
+						<Image
+							src={LoginIcon}
+							alt='Login Icon'
+							className='mb-5 size-20 object-contain'
+						/>
 						<Link href='/account/login'>
 							<Button>Log In</Button>
 						</Link>
@@ -37,7 +50,14 @@ export default async function Account() {
 					</div>
 				</div>
 			) : (
-				<h2 className='text-center text-xl'>Hi there, {user.username}</h2>
+				<AccountPageClient
+					user={{
+						username: user.username,
+						password: '',
+						locked: user.locked,
+						admin: user.admin,
+					}}
+				/>
 			)}
 		</>
 	);
