@@ -1,10 +1,19 @@
-import { model, models, Schema } from 'mongoose';
+import { model, models, Schema, type Model } from 'mongoose';
 
-const UserSchema = new Schema({
-	publicKey: { type: String, required: true, index: true },
-	authCookieCode: { type: String, required: true, unique: true },
+export interface IUser {
+	username: string;
+	password: string;
+	locked: boolean;
+	admin: boolean;
+}
+
+const UserSchema = new Schema<IUser>({
+	username: { type: String, required: true, index: true, unique: true },
+	password: { type: String, required: true },
+	locked: { type: Boolean, default: false },
+	admin: { type: Boolean, default: false },
 });
 
-const User = models.User || model('User', UserSchema);
+const User: Model<IUser> = models.User || model<IUser>('User', UserSchema);
 
 export default User;

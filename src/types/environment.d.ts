@@ -3,10 +3,13 @@ declare global {
 		interface ProcessEnv {
 			// Database
 			MONGODB_URI: string;
-			MONGODB_NAME: string;
 
-			// Authentication
-			OWNER_PUBLIC_KEY: string;
+			NEXT_PUBLIC_PC_SITEKEY: string;
+			PC_API_KEY: string;
+
+			ADMIN_USER_PASSWORD: string;
+
+			PROXY_IP_HEADER: string;
 		}
 	}
 }

@@ -1,3 +1,7 @@
+import { log } from 'console';
+import { captcha } from './lib/captcha';
+import * as bcrypt from 'bcrypt';
+
 export async function register() {
 	if (process.env.NEXT_RUNTIME === 'nodejs') {
 		const { execSync } = await import('child_process');
@@ -10,7 +14,13 @@ export async function register() {
 
 		//////////////////////////////////////////////////////
 		// Verify environment variables
-		const requiredEnvVars = ['MONGODB_URI', 'MONGODB_NAME', 'OWNER_PUBLIC_KEY'];
+		const requiredEnvVars = [
+			'MONGODB_URI',
+			'NEXT_PUBLIC_PC_SITEKEY',
+			'PC_API_KEY',
+			'ADMIN_USER_PASSWORD',
+			'PROXY_IP_HEADER',
+		];
 		for (const envVar of requiredEnvVars) {
 			if (!process.env[envVar]) {
 				errors.push(`Environment variable ${envVar} is not set`);
@@ -20,22 +30,54 @@ export async function register() {
 		//////////////////////////////////////////////////////
 		// Security audit
 		try {
-			execSync('npm audit', { stdio: 'ignore' });
+			execSync('npm audit --audit-level=high', { stdio: 'ignore' });
 		} catch {
-			errors.push(
-				'npm audit returned with errors. Please fix the vulnerabilities before running the app.',
-			);
+			if (process.env.NODE_ENV == 'production') {
+				errors.push(
+					'Aduit reported high severity vulnerabilities. Please fix the vulnerabilities before running the app.',
+				);
+			} else {
+				logger.warn(
+					'Audit failed, ignoring this error in development. Current setup WONT run in production.',
+				);
+			}
 		}
 
 		//////////////////////////////////////////////////////
 		// Database
 		try {
-			await mongoose.connect(process.env.MONGODB_URI, {
-				dbName: process.env.MONGODB_NAME,
-			});
+			await mongoose.connect(process.env.MONGODB_URI);
 		} catch {
 			errors.push(
 				'Failed to connect to MongoDB. Please check the .env and if the database is reachable.',
+			);
+		}
+
+		// Creating Admin
+		try {
+			const hashedPassword = await bcrypt.hash(
+				process.env.ADMIN_USER_PASSWORD,
+				12,
+			);
+
+			await User.updateOne(
+				{
+					username: 'admin',
+				},
+				{
+					$setOnInsert: {
+						username: 'admin',
+						password: hashedPassword,
+						admin: true,
+					},
+				},
+				{
+					upsert: true,
+				},
+			);
+		} catch {
+			errors.push(
+				'Failed to create/update the admin user. Please check the database',
 			);
 		}
 
