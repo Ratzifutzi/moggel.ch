@@ -1,6 +1,7 @@
 import Comic from '@/models/Comic';
 import Link from 'next/link';
 import Button from '@/components/base/button';
+import GetUser from '@/helper/GetUser';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,12 +18,15 @@ export default async function Archive({
 	const pageParam = Array.isArray(rawPage) ? rawPage[0] : rawPage;
 	const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1);
 
+	const user = await GetUser();
+	const isLoggedIn = !!user;
+
 	const total = await Comic.countDocuments();
 	const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 	const currentPage = Math.min(page, totalPages);
 
 	const docs = await Comic.find()
-		.select('title permalink slide1 views createdAt')
+		.select('title description permalink slide1 views createdAt')
 		.sort({ createdAt: -1 })
 		.skip((currentPage - 1) * PAGE_SIZE)
 		.limit(PAGE_SIZE)
@@ -31,6 +35,7 @@ export default async function Archive({
 	const comics = docs.map((c) => ({
 		_id: String(c._id),
 		title: c.title,
+		description: c.description,
 		permalink: c.permalink,
 		slide1: c.slide1,
 		viewCount: c.views?.length ?? 0,
@@ -64,9 +69,16 @@ export default async function Archive({
 									<span className='line-clamp-2 text-base leading-tight'>
 										{c.title}
 									</span>
-									<span className='text-xs text-gray-600'>
-										{c.viewCount} {c.viewCount === 1 ? 'view' : 'views'}
-									</span>
+									{isLoggedIn ? (
+										<span className='text-xs text-gray-600'>
+											{c.description} - {c.viewCount}{' '}
+											{c.viewCount === 1 ? 'view' : 'views'}
+										</span>
+									) : (
+										<span className='line-clamp-2 text-xs text-gray-600'>
+											{c.description}
+										</span>
+									)}
 								</div>
 							</Link>
 						))}
@@ -92,9 +104,16 @@ export default async function Archive({
 									<span className='line-clamp-2 text-lg leading-tight'>
 										{c.title}
 									</span>
-									<span className='text-sm text-gray-600'>
-										{c.viewCount} {c.viewCount === 1 ? 'view' : 'views'}
-									</span>
+									{isLoggedIn ? (
+										<span className='text-sm text-gray-600'>
+											{c.description} - {c.viewCount}{' '}
+											{c.viewCount === 1 ? 'view' : 'views'}
+										</span>
+									) : (
+										<span className='line-clamp-3 text-sm text-gray-600'>
+											{c.description}
+										</span>
+									)}
 								</div>
 							</Link>
 						))}

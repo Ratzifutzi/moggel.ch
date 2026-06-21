@@ -1,11 +1,15 @@
 import Comic from '@/models/Comic';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import GetUser from '@/helper/GetUser';
 
 export async function GET(
-	_req: Request,
+	req: NextRequest,
 	{ params }: { params: Promise<{ permalink: string }> },
 ) {
 	const { permalink } = await params;
+
+	const user = await GetUser(req);
+	const isLoggedIn = !!user;
 
 	const doc = await Comic.findOne({ permalink })
 		.select(
@@ -32,9 +36,13 @@ export async function GET(
 			slide1: doc.slide1,
 			slide2: doc.slide2,
 			meta: doc.meta,
-			viewCount: doc.views?.length ?? 0,
-			desoClicks: doc.desoClicks,
 			createdAt: doc.createdAt,
+			...(isLoggedIn
+				? {
+						viewCount: doc.views?.length ?? 0,
+						desoClicks: doc.desoClicks,
+					}
+				: {}),
 		},
 	});
 }
