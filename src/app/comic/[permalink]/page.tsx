@@ -40,8 +40,8 @@ export default async function ComicPage({ params }: { params: Params }) {
 		<div className='flex flex-col gap-4'>
 			<ViewTracker permalink={doc.permalink} />
 
-			<h1 className='text-3xl'>{doc.title}</h1>
-			<p className='whitespace-pre-line'>{doc.description}</p>
+			<h1 className='text-center text-3xl'>{doc.title}</h1>
+			<p className='text-center whitespace-pre-line'>{doc.description}</p>
 
 			{/* eslint-disable-next-line @next/next/no-img-element */}
 			<img

@@ -27,7 +27,10 @@ export default function RootLayout({
 				<Providers>
 					<div className='fixed inset-0 flex items-start justify-center lg:items-center'>
 						<div className='flex h-full min-h-0 w-full flex-col gap-5 md:max-h-[80svh] md:w-[85%] lg:aspect-3/4 lg:h-auto lg:w-[55%] lg:max-w-225 lg:flex-row'>
-							<div className='mt-5 lg:mt-0 lg:flex lg:w-65' id='navbar'>
+							<div
+								className='mt-5 h-auto flex-none lg:mt-0 lg:flex lg:h-full lg:w-44'
+								id='navbar'
+							>
 								<Navbar />
 							</div>
 							<div

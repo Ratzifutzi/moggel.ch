@@ -1,4 +1,5 @@
 import Comic from '@/models/Comic';
+import ALLOWED_UTMS from '@/config/AllowedUTM';
 import {
 	generateVisitorToken,
 	getVisitorToken,
@@ -13,7 +14,8 @@ export async function POST(
 	const { permalink } = await params;
 
 	const { searchParams } = new URL(req.url);
-	const utm = searchParams.get('utm') ?? '';
+	const rawUtm = searchParams.get('utm') ?? '';
+	const utm = ALLOWED_UTMS.includes(rawUtm) ? rawUtm : '';
 
 	const existingToken = getVisitorToken(req);
 	const token = existingToken ?? generateVisitorToken();
