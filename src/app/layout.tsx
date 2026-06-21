@@ -34,7 +34,7 @@ export default function RootLayout({
 								<Navbar />
 							</div>
 							<div
-								className='min-h-0 w-full flex-1 overflow-y-auto px-2 lg:flex-none'
+								className='min-h-0 w-full flex-1 overflow-y-auto px-2 lg:w-[calc(100%-12rem)]'
 								id='content'
 							>
 								{children}

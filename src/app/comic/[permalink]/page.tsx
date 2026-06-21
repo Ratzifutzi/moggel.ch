@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ViewTracker from './ViewTracker';
 import type { Metadata } from 'next';
+import DesoImage from '@public/assets/images/deso-logo.svg';
+import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,19 +56,23 @@ export default async function ComicPage({ params }: { params: Params }) {
 				className='relative w-full overflow-hidden rounded'
 				style={{
 					maskImage:
-						'linear-gradient(to bottom, black 0%, black 75%, transparent 100%)',
+						'linear-gradient(to bottom, black 0%, black 50%, transparent 75%)',
 					WebkitMaskImage:
-						'linear-gradient(to bottom, black 0%, black 75%, transparent 100%)',
+						'linear-gradient(to bottom, black 0%, black 50%, transparent 75%)',
 				}}
 			>
 				{/* eslint-disable-next-line @next/next/no-img-element */}
 				<img src={doc.slide2.url} alt={doc.slide2.alt} className='w-full' />
 			</div>
 
-			<div className='flex justify-center pb-6'>
+			<div className='flex flex-col items-center pb-6'>
 				<Link href={`/redirect?permalink=${encodeURIComponent(doc.permalink)}`}>
-					<Button>Continue reading on DeSo</Button>
+					<Button>
+						<Image src={DesoImage} alt='Deso Logo' />
+						Continue reading on DeSo
+					</Button>
 				</Link>
+				<span>No ads, no account required</span>
 			</div>
 		</div>
 	);
