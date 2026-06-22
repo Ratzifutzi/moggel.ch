@@ -2,6 +2,8 @@ import Comic from '@/models/Comic';
 import Link from 'next/link';
 import Pagination from '@/components/base/pagination';
 import GetUser from '@/helper/GetUser';
+import { GetServerFlags } from '@/models/Flags';
+import PageUnavailable from '@/components/pages/page-unavailable';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,6 +16,10 @@ export default async function Archive({
 }: {
 	searchParams: SearchParams;
 }) {
+	const enabled = (await GetServerFlags()).includes('page_archive');
+
+	if (!enabled) return <PageUnavailable />;
+
 	const { page: rawPage } = await searchParams;
 	const pageParam = Array.isArray(rawPage) ? rawPage[0] : rawPage;
 	const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1);

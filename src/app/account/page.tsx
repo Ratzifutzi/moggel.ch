@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 import CreateAccountIcon from '@public/assets/images/icons/CreateAccount.png';
 import LoginIcon from '@public/assets/images/icons/Login.png';
+import PageUnavailable from '@/components/pages/page-unavailable';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,10 @@ export default async function Account() {
 	const SIGNUP_ALLOWED = FLAGS.includes('signup_allowed');
 
 	const user = await GetUser();
+
+	const enabled = (await GetServerFlags()).includes('page_account');
+
+	if (!enabled) return <PageUnavailable />;
 
 	return (
 		<>

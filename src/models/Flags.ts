@@ -1,7 +1,15 @@
 import { model, models, Schema } from 'mongoose';
 
 // Define the possible flag values as a String Enum/Union logic in TS
-export const VALID_SERVER_FLAGS = ['signup_allowed', 'maintenance'] as const;
+export const VALID_SERVER_FLAGS = [
+	'signup_allowed',
+	'maintenance',
+	'page_applesauce',
+	'page_archive',
+	'page_about',
+	'page_deso',
+	'page_account',
+] as const;
 export type ServerFlags = (typeof VALID_SERVER_FLAGS)[number];
 
 const ServerConfigSchema = new Schema(
