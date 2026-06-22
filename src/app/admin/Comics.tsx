@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '@/components/base/button';
+import Pagination from '@/components/base/pagination';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import ComicFormModal, { type ComicFormValues } from './ComicFormModal';
@@ -197,23 +198,14 @@ export default function Comics() {
 				</tbody>
 			</table>
 
-			<div className='flex flex-row items-center gap-2'>
-				<Button
-					onClick={() => setPage((p) => Math.max(1, p - 1))}
-					disabled={page <= 1}
-				>
-					Previous
-				</Button>
-				<span>
-					Page {data.page} of {totalPages} ({data.total} comics)
-				</span>
-				<Button
-					onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-					disabled={page >= totalPages}
-				>
-					Next
-				</Button>
-			</div>
+			<Pagination
+				currentPage={data.page}
+				totalPages={totalPages}
+				summary={`(${data.total} comics)`}
+				onPageChange={setPage}
+				className='flex flex-row items-center gap-2'
+				hideOnSinglePage={false}
+			/>
 
 			{modal && (
 				<ComicFormModal

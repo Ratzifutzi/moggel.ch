@@ -1,6 +1,6 @@
 import Comic from '@/models/Comic';
 import Link from 'next/link';
-import Button from '@/components/base/button';
+import Pagination from '@/components/base/pagination';
 import GetUser from '@/helper/GetUser';
 
 export const dynamic = 'force-dynamic';
@@ -92,7 +92,7 @@ export default async function Archive({
 								href={`/comic/${c.permalink}`}
 								className='group flex flex-col overflow-hidden rounded-lg border-2 border-dotted bg-white text-black transition-all md:hover:-translate-y-0.5'
 							>
-								<div className='aspect-square w-full overflow-hidden bg-gray-100'>
+								<div className='aspect-2/1 w-full overflow-hidden bg-gray-100'>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
 									<img
 										src={c.listImageUrl}
@@ -119,27 +119,13 @@ export default async function Archive({
 						))}
 					</div>
 
-					{totalPages > 1 && (
-						<div className='flex flex-row items-center justify-between gap-3 pb-4 sm:justify-center'>
-							{currentPage > 1 ? (
-								<Link href={`/archive?page=${currentPage - 1}`}>
-									<Button>Previous</Button>
-								</Link>
-							) : (
-								<Button disabled>Previous</Button>
-							)}
-							<span className='text-center text-sm sm:text-base'>
-								Page {currentPage} of {totalPages}
-							</span>
-							{currentPage < totalPages ? (
-								<Link href={`/archive?page=${currentPage + 1}`}>
-									<Button>Next</Button>
-								</Link>
-							) : (
-								<Button disabled>Next</Button>
-							)}
-						</div>
-					)}
+					<Pagination
+						currentPage={currentPage}
+						totalPages={totalPages}
+						getHref={(p) => `/archive?page=${p}`}
+						summary={`(${total} comics)`}
+						hideOnSinglePage={false}
+					/>
 				</>
 			)}
 		</div>
