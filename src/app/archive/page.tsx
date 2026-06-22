@@ -92,7 +92,7 @@ export default async function Archive({
 								href={`/comic/${c.permalink}`}
 								className='group flex flex-col overflow-hidden rounded-lg border-2 border-dotted bg-white text-black transition-all md:hover:-translate-y-0.5'
 							>
-								<div className='aspect-square w-full overflow-hidden bg-gray-100'>
+								<div className='aspect-2/1 w-full overflow-hidden bg-gray-100'>
 									{/* eslint-disable-next-line @next/next/no-img-element */}
 									<img
 										src={c.listImageUrl}
