@@ -2,15 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
+import { usePending } from './PendingContext';
 
 export default function SearchForm({ initialQuery }: { initialQuery: string }) {
 	const router = useRouter();
+	const { setPending } = usePending();
 	const [value, setValue] = useState(initialQuery);
 	const [isPending, startTransition] = useTransition();
 
 	useEffect(() => {
 		setValue(initialQuery);
 	}, [initialQuery]);
+
+	useEffect(() => {
+		setPending(isPending);
+	}, [isPending, setPending]);
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
