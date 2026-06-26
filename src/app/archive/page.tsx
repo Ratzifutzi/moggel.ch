@@ -167,6 +167,8 @@ export default async function Archive({
 								))}
 							</div>
 
+							<div className='mt-4' />
+
 							<PaginationClient
 								currentPage={currentPage}
 								totalPages={totalPages}
