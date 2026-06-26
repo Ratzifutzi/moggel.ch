@@ -1,7 +1,6 @@
 import { Schema, model, models, type Model, Types } from 'mongoose';
 
 export interface ISession {
-	/** SHA-256 hash of the raw token. The raw token is never stored. */
 	tokenHash: string;
 	user: Types.ObjectId;
 	createdAt: Date;
@@ -26,7 +25,6 @@ const SessionSchema = new Schema<ISession>({
 	userAgent: { type: String },
 });
 
-// TTL index
 SessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export const Session: Model<ISession> =
