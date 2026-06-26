@@ -20,6 +20,10 @@ export default function ClearSearchLink({
 		setPending(isPending);
 	}, [isPending, setPending]);
 
+	useEffect(() => {
+		return () => setPending(false);
+	}, [setPending]);
+
 	const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.preventDefault();
 		startTransition(() => {
