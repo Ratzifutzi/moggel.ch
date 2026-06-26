@@ -4,12 +4,20 @@ import Pagination from '@/components/base/pagination';
 import GetUser from '@/helper/GetUser';
 import { GetServerFlags } from '@/models/Flags';
 import PageUnavailable from '@/components/pages/page-unavailable';
+import SearchForm from './SearchForm';
 
 export const dynamic = 'force-dynamic';
 
 const PAGE_SIZE = 10;
 
-type SearchParams = Promise<{ page?: string | string[] }>;
+type SearchParams = Promise<{
+	page?: string | string[];
+	q?: string | string[];
+}>;
+
+function escapeRegex(input: string): string {
+	return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 export default async function Archive({
 	searchParams,
@@ -20,18 +28,34 @@ export default async function Archive({
 
 	if (!enabled) return <PageUnavailable />;
 
-	const { page: rawPage } = await searchParams;
+	const { page: rawPage, q: rawQ } = await searchParams;
 	const pageParam = Array.isArray(rawPage) ? rawPage[0] : rawPage;
 	const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1);
+	const qParam = Array.isArray(rawQ) ? rawQ[0] : rawQ;
+	const query = (qParam ?? '').trim();
 
 	const user = await GetUser();
 	const isLoggedIn = !!user;
 
-	const total = await Comic.countDocuments();
+	const filter = query
+		? (() => {
+				const regex = new RegExp(escapeRegex(query), 'i');
+				return {
+					$or: [
+						{ title: regex },
+						{ description: regex },
+						{ permalink: regex },
+						{ meta: regex },
+					],
+				};
+			})()
+		: {};
+
+	const total = await Comic.countDocuments(filter);
 	const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 	const currentPage = Math.min(page, totalPages);
 
-	const docs = await Comic.find()
+	const docs = await Comic.find(filter)
 		.select('title description permalink titleImage slide1 views createdAt')
 		.sort({ createdAt: -1 })
 		.skip((currentPage - 1) * PAGE_SIZE)
@@ -49,10 +73,22 @@ export default async function Archive({
 
 	return (
 		<div className='flex flex-col gap-5'>
-			<h1 className='text-3xl'>Archive</h1>
+			<div className='flex flex-col gap-1'>
+				<h1 className='text-3xl'>Archive</h1>
+			</div>
+
+			<SearchForm initialQuery={query} />
+			{query && (
+				<p className='-mt-4 text-sm text-gray-600'>
+					Showing results for: {query}.{' '}
+					<Link href='/archive' className='underline'>
+						Show all comics
+					</Link>
+				</p>
+			)}
 
 			{comics.length === 0 ? (
-				<p>No comics yet.</p>
+				<p>{query ? `No comics found for "${query}".` : 'No comics yet.'}</p>
 			) : (
 				<>
 					{/* Mobile: compact list layout */}
@@ -128,7 +164,11 @@ export default async function Archive({
 					<Pagination
 						currentPage={currentPage}
 						totalPages={totalPages}
-						getHref={(p) => `/archive?page=${p}`}
+						getHref={(p) =>
+							query
+								? `/archive?q=${encodeURIComponent(query)}&page=${p}`
+								: `/archive?page=${p}`
+						}
 						summary={`(${total} comics)`}
 						hideOnSinglePage={false}
 					/>
