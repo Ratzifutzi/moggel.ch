@@ -13,11 +13,13 @@ export default async function Applesauce() {
 	if (!enabled) return <PageUnavailable />;
 
 	return (
-		<div className='flex flex-col gap-4'>
-			<Image src={Slide1} alt='S1' />
-			<Image src={Slide2} alt='S2' />
-			<Image src={Slide3} alt='S3' />
-			<Image src={Slide4} alt='S4' />
+		<div>
+			<div className='flex flex-col gap-25'>
+				<Image src={Slide1} alt='S1' />
+				<Image src={Slide2} alt='S2' />
+				<Image src={Slide3} alt='S3' />
+				<Image src={Slide4} alt='S4' />
+			</div>
 		</div>
 	);
 }
