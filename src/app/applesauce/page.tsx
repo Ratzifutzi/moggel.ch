@@ -22,10 +22,10 @@ export default async function Applesauce() {
 			</div>
 
 			<div className='flex flex-col gap-25'>
-				<Image src={Slide1} alt='S1' />
-				<Image src={Slide2} alt='S2' />
-				<Image src={Slide3} alt='S3' />
-				<Image src={Slide4} alt='S4' />
+				<Image src={Slide1} alt='This is my favorite applesauce brand.' />
+				<Image src={Slide2} alt='Its brand name originates from the ancient word APFELMUS in a foreign language...' />
+				<Image src={Slide3} alt='It is pronounced like UP-FELL-MOOSE. So, MUS is spoken MOOSE.' />
+				<Image src={Slide4} alt='Now you know.' />
 			</div>
 		</div>
 	);
