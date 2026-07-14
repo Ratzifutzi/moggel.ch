@@ -24,14 +24,14 @@ export default async function About() {
 				<div className='mt-2 mb-2 w-full border-t-2 border-dotted' />
 			</div>
 			<div className='flex flex-col gap-25'>
-				<Image src={Slide1} alt='S1' />
-				<Image src={Slide2} alt='S2' />
-				<Image src={Slide3} alt='S3' />
-				<Image src={Slide4} alt='S4' />
-				<Image src={Slide5} alt='S5' />
-				<Image src={Slide6} alt='S6' />
-				<Image src={Slide7} alt='S7' />
-				<Image src={Slide8} alt='S8' />
+				<Image src={Slide1} alt='About Moggel, and moggel.ch' />
+				<Image src={Slide2} alt='You have found Moggels world. A realm of hand-drawn cartoons, absurd stories, and heaps of applesauce!' />
+				<Image src={Slide3} alt='About me…: I have been drawing Moggel cartoons (on paper) for decades already.. especially during boring school lessons..' />
+				<Image src={Slide4} alt='In 2022, I decided to tell Moggels stories to the public.' />
+				<Image src={Slide5} alt='Searching for an independent, decentralized platform that gives me control over my content, I found DeSo, and thought that it would be a good place.' />
+				<Image src={Slide6} alt='By now, I do not draw on paper anymore, and am using a tablet with a digital pencil.' />
+				<Image src={Slide7} alt='But even with the tablet, I draw like on paper: minimalistic, without any helping apps, tools or effects.' />
+				<Image src={Slide8} alt='... and without AI!' />
 			</div>
 
 			<div className='mt-5 flex w-full flex-row justify-center'>
