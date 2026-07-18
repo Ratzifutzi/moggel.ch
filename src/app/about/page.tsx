@@ -25,17 +25,65 @@ export default async function About() {
 			</div>
 			<div className='flex flex-col gap-25'>
 				<Image src={Slide1} alt='About Moggel, and moggel.ch' />
-				<Image src={Slide2} alt='You have found Moggels world. A realm of hand-drawn cartoons, absurd stories, and heaps of applesauce!' />
-				<Image src={Slide3} alt='About me…: I have been drawing Moggel cartoons (on paper) for decades already.. especially during boring school lessons..' />
-				<Image src={Slide4} alt='In 2022, I decided to tell Moggels stories to the public.' />
-				<Image src={Slide5} alt='Searching for an independent, decentralized platform that gives me control over my content, I found DeSo, and thought that it would be a good place.' />
-				<Image src={Slide6} alt='By now, I do not draw on paper anymore, and am using a tablet with a digital pencil.' />
-				<Image src={Slide7} alt='But even with the tablet, I draw like on paper: minimalistic, without any helping apps, tools or effects.' />
+				<Image
+					src={Slide2}
+					alt='You have found Moggels world. A realm of hand-drawn cartoons, absurd stories, and heaps of applesauce!'
+				/>
+				<Image
+					src={Slide3}
+					alt='About me…: I have been drawing Moggel cartoons (on paper) for decades already.. especially during boring school lessons..'
+				/>
+				<Image
+					src={Slide4}
+					alt='In 2022, I decided to tell Moggels stories to the public.'
+				/>
+				<Image
+					src={Slide5}
+					alt='Searching for an independent, decentralized platform that gives me control over my content, I found DeSo, and thought that it would be a good place.'
+				/>
+				<Image
+					src={Slide6}
+					alt='By now, I do not draw on paper anymore, and am using a tablet with a digital pencil.'
+				/>
+				<Image
+					src={Slide7}
+					alt='But even with the tablet, I draw like on paper: minimalistic, without any helping apps, tools or effects.'
+				/>
 				<Image src={Slide8} alt='... and without AI!' />
+			</div>
+
+			<div className='flex flex-col gap-5 text-center'>
+				<div>
+					<p>All Moggel cartoons are licensed under a Creative Commons</p>
+					<p>Attribution-NonCommercial-ShareAlike 4.0 International</p>
+					<p>License.https://creativecommons.org/licenses/by-nc-sa/4.0/</p>
+				</div>
+
+				<div>
+					<p>
+						The beforementioned license means that you are free to copy and
+						reuse any of my drawings (noncommercially) as long as you tell
+						people where the comics are from - give clear attribution and link
+						to https://moggel.ch There‘s one restriction:{' '}
+						<span className='text-red-600'>
+							NO image of any Moggel cartoon shall be used for AI training - it
+							is forbidden to use Moggel cartoons for AI training!
+						</span>{' '}
+						If you‘re unsure about the „noncommercial“ part of the license,
+						write en email, and we‘ll sort it out.
+					</p>
+				</div>
+
+				<div>
+					<p>Alexander Schmidt</p>
+					<p>Switzerland</p>
+					<a href='mailto:contact@moggel.ch'>contact@moggel.ch</a>
+				</div>
 			</div>
 
 			<div className='mt-5 flex w-full flex-row justify-center'>
 				<a
+					target='_blank'
 					href='https://www.abuseipdb.com/user/193290'
 					title='AbuseIPDB is an IP address blacklist for webmasters and sysadmins to report IP addresses engaging in abusive behavior on their networks'
 				>
