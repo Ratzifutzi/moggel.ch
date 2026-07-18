@@ -70,7 +70,7 @@ export default async function About() {
 							is forbidden to use Moggel cartoons for AI training!
 						</span>{' '}
 						If you‘re unsure about the „noncommercial“ part of the license,
-						write en email, and we‘ll sort it out.
+						write an email, and we‘ll sort it out.
 					</p>
 				</div>
 
