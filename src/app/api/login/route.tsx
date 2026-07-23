@@ -3,19 +3,19 @@ import User from '@/models/User';
 import { LoginFormValues, loginSchema } from '@/Schemas/LoginForm';
 import { NextRequest, NextResponse } from 'next/server';
 import * as bcrypt from 'bcrypt';
-import { LoginAttempt } from '@/models/LoginAttempt';
+import { LoginAttempt, LoginFailureReason } from '@/models/LoginAttempt';
 import GetIpAddress from '@/helper/GetIpAddress';
 import { checkLoginRateLimit } from '@/lib/loginRateLimit';
 import { createSession } from '@/lib/session';
 
 class LoginError extends Error {
 	constructor(
-		public message: string,
+		public reason: LoginFailureReason,
 		public userMessage: string,
 		public status: number = 403,
 		public retryAfterSeconds?: number,
 	) {
-		super(message);
+		super(reason);
 		this.name = 'LoginError';
 	}
 }
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
 				ip,
 				username: body.username,
 				successful: false,
-				failureReason: err.message,
+				failureReason: err.reason,
 			});
 
 			const headers: Record<string, string> = {};

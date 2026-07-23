@@ -7,6 +7,9 @@ declare global {
 			NEXT_PUBLIC_PC_SITEKEY: string;
 			PC_API_KEY: string;
 
+			// Mail
+			SENDGRID_API_KEY: string;
+
 			ADMIN_USER_PASSWORD: string;
 
 			PROXY_IP_HEADER: string;
