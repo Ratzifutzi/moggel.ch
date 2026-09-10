@@ -1,5 +1,3 @@
-import { log } from 'console';
-import { captcha } from './lib/captcha';
 import * as bcrypt from 'bcrypt';
 
 export async function register() {
