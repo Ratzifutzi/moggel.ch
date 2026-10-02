@@ -3,21 +3,15 @@ import { notFound } from 'next/navigation';
 import ComicView from '@/components/pages/comic-view';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { GeneratePresetMetadata } from '@/helper/GenerateMetadata';
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-	const doc = await Comic.findOne({})
-		.sort({ createdAt: -1 })
-		.select('title description meta')
-		.lean();
-
-	if (!doc) return { title: 'No comics yet' };
-
-	return {
-		title: doc.title,
-		description: doc.meta || doc.description.slice(0, 160),
-	};
+	return await GeneratePresetMetadata({
+		PageName: 'Home',
+		Description: 'Official Website for the Moggel Comics',
+	});
 }
 
 export default async function Home() {
