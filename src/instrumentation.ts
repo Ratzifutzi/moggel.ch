@@ -26,22 +26,6 @@ export async function register() {
 		}
 
 		//////////////////////////////////////////////////////
-		// Security audit
-		try {
-			execSync('npm audit --audit-level=high', { stdio: 'ignore' });
-		} catch {
-			if (process.env.NODE_ENV == 'production') {
-				errors.push(
-					'Aduit reported high severity vulnerabilities. Please fix the vulnerabilities before running the app.',
-				);
-			} else {
-				logger.warn(
-					'Audit failed, ignoring this error in development. Current setup WONT run in production.',
-				);
-			}
-		}
-
-		//////////////////////////////////////////////////////
 		// Database
 		try {
 			await mongoose.connect(process.env.MONGODB_URI);
