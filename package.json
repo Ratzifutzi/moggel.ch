@@ -18,7 +18,7 @@
 		"bcrypt": "^6.0.0",
 		"formik": "^2.4.9",
 		"mongoose": "^9.3.3",
-		"next": "^16.2.11",
+		"next": "^16.4.2",
 		"react": "19.2.3",
 		"react-dom": "19.2.3",
 		"react-spinners": "^0.17.0",
@@ -32,7 +32,7 @@
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"eslint": "^9",
-		"eslint-config-next": "16.1.1",
+		"eslint-config-next": "^16.4.2",
 		"prettier": "^3.7.4",
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"tailwindcss": "^4",
@@ -46,6 +46,9 @@
 		"sharp": "^0.35.3",
 		"next": {
 			"postcss": "^8.5.22"
+		},
+		"@next/eslint-plugin-next": {
+			"fast-glob": "npm:tinyglobby@^0.2.17"
 		}
 	}
 }
