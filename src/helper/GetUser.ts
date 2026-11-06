@@ -1,28 +1,54 @@
+import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
-import User, { type IUser } from '@/models/User';
+import { AuthUnavailableError, getAuth, type AuthUser } from '@/lib/auth';
 import {
-	findSessionByToken,
-	getSessionTokenFromCookies,
-	getSessionTokenFromRequest,
-} from '@/lib/session';
-import type { HydratedDocument } from 'mongoose';
+	findUserForLegacySessionToken,
+	getLegacySessionTokenFromCookies,
+	getLegacySessionTokenFromRequest,
+} from '@/lib/auth/legacy';
+
+let reportedUnavailable = false;
 
 export default async function GetUser(
 	req?: NextRequest,
-): Promise<HydratedDocument<IUser> | undefined> {
-	const token = req
-		? getSessionTokenFromRequest(req)
-		: await getSessionTokenFromCookies();
-	if (!token) return undefined;
+): Promise<AuthUser | undefined> {
+	try {
+		const result = await getAuth().api.getSession({
+			headers: req ? req.headers : await headers(),
+		});
 
-	const session = await findSessionByToken(token);
-	if (!session) return undefined;
+		if (result) {
+			// A better-auth session always wins; never fall through to an older
+			// legacy cookie, even when this user is locked.
+			const { user } = result;
+			if (user.locked) return undefined;
 
-	const user = await User.findById(session.user);
-	if (!user) return undefined;
+			return {
+				id: user.id,
+				username: user.username ?? '',
+				admin: user.admin === true,
+				locked: false,
+			};
+		}
+	} catch (err) {
+		if (!(err instanceof AuthUnavailableError)) {
+			console.error('[auth] Could not read the session:', err);
+		} else if (!reportedUnavailable) {
+			reportedUnavailable = true;
+			console.error(`[auth] ${err.message}`);
+		}
+	}
+
+	// LEGACY-COMPAT: session cookies issued before the better-auth switch.
+	const legacyToken = req
+		? getLegacySessionTokenFromRequest(req)
+		: await getLegacySessionTokenFromCookies();
+	if (!legacyToken) return undefined;
+
+	const user = await findUserForLegacySessionToken(legacyToken);
 
 	// Refuse to authenticate locked accounts even if they still hold a session.
-	if (user.locked) return undefined;
+	if (!user || user.locked) return undefined;
 
 	return user;
 }

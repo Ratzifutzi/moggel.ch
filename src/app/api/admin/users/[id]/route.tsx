@@ -1,8 +1,14 @@
 import GetUser from '@/helper/GetUser';
-import User from '@/models/User';
+import {
+	deleteAccountUser,
+	findUserById,
+	findUserByUsername,
+	revokeAllSessions,
+	setAccountPassword,
+	updateAccountUser,
+} from '@/lib/auth/users';
 import { userUpdateSchema } from '@/Schemas/UserForm';
 import { NextRequest, NextResponse } from 'next/server';
-import * as bcrypt from 'bcrypt';
 import { isValidObjectId } from 'mongoose';
 
 export async function PATCH(
@@ -35,7 +41,7 @@ export async function PATCH(
 		);
 	}
 
-	const target = await User.findById(id);
+	const target = await findUserById(id);
 	if (!target) {
 		return NextResponse.json(
 			{ ok: false, error: 'User not found' },
@@ -43,48 +49,56 @@ export async function PATCH(
 		);
 	}
 
-	if (
-		String(target._id) === String(admin._id) &&
-		parsed.data.admin === false
-	) {
+	if (target.id === admin.id && parsed.data.admin === false) {
 		return NextResponse.json(
 			{ ok: false, error: 'You cannot revoke your own admin rights' },
 			{ status: 400 },
 		);
 	}
 
+	const update: { username?: string; admin?: boolean; locked?: boolean } = {};
+
 	if (parsed.data.username && parsed.data.username !== target.username) {
-		const clash = await User.findOne({ username: parsed.data.username });
+		const clash = await findUserByUsername(parsed.data.username);
 		if (clash) {
 			return NextResponse.json(
 				{ ok: false, error: 'Username already taken' },
 				{ status: 409 },
 			);
 		}
-		target.username = parsed.data.username;
-	}
-
-	if (parsed.data.password) {
-		target.password = await bcrypt.hash(parsed.data.password, 12);
+		update.username = parsed.data.username;
 	}
 
 	if (parsed.data.admin !== undefined) {
-		target.admin = parsed.data.admin;
+		update.admin = parsed.data.admin;
 	}
 
 	if (parsed.data.locked !== undefined) {
-		target.locked = parsed.data.locked;
+		update.locked = parsed.data.locked;
 	}
 
-	await target.save();
+	if (Object.keys(update).length > 0) {
+		await updateAccountUser(target.id, update);
+	}
+
+	if (parsed.data.password) {
+		await setAccountPassword(target.id, parsed.data.password);
+	}
+
+	// A locked user can't sign in or use a session; end the ones they have.
+	if (update.locked === true) {
+		await revokeAllSessions(target.id);
+	}
+
+	const saved = (await findUserById(target.id)) ?? target;
 
 	return NextResponse.json({
 		ok: true,
 		user: {
-			_id: target._id,
-			username: target.username,
-			admin: target.admin,
-			locked: target.locked,
+			_id: saved.id,
+			username: saved.username,
+			admin: saved.admin,
+			locked: saved.locked,
 		},
 	});
 }
@@ -110,20 +124,22 @@ export async function DELETE(
 		);
 	}
 
-	if (String(admin._id) === id) {
+	if (admin.id === id) {
 		return NextResponse.json(
 			{ ok: false, error: 'You cannot delete yourself' },
 			{ status: 400 },
 		);
 	}
 
-	const result = await User.findByIdAndDelete(id);
-	if (!result) {
+	const target = await findUserById(id);
+	if (!target) {
 		return NextResponse.json(
 			{ ok: false, error: 'User not found' },
 			{ status: 404 },
 		);
 	}
+
+	await deleteAccountUser(target.id);
 
 	return NextResponse.json({ ok: true });
 }

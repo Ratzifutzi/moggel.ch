@@ -1,11 +1,8 @@
-import * as bcrypt from 'bcrypt';
-
 export async function register() {
 	if (process.env.NEXT_RUNTIME === 'nodejs') {
 		const { execSync } = await import('child_process');
 		const { logger } = await import('./lib/logger');
 		const mongoose = (await import('mongoose')).default;
-		const User = (await import('./models/User')).default;
 
 		logger.info('Preparing app...');
 		const errors: string[] = [];
@@ -35,32 +32,25 @@ export async function register() {
 			);
 		}
 
-		// Creating Admin
-		try {
-			const hashedPassword = await bcrypt.hash(
-				process.env.ADMIN_USER_PASSWORD,
-				12,
-			);
-
-			await User.updateOne(
-				{
-					username: 'admin',
-				},
-				{
-					$setOnInsert: {
-						username: 'admin',
-						password: hashedPassword,
-						admin: true,
-					},
-				},
-				{
-					upsert: true,
-				},
-			);
-		} catch {
-			errors.push(
-				'Failed to create/update the admin user. Please check the database',
-			);
+		//////////////////////////////////////////////////////
+		// Accounts (better-auth): copies legacy users, creates the admin user.
+		// Never fatal: if it can't start, the site keeps serving and only
+		// login and account management are unavailable.
+		if (errors.length === 0) {
+			if (!process.env.BETTER_AUTH_SECRET) {
+				logger.error(
+					'BETTER_AUTH_SECRET is not set. The site will run, but login and account management are disabled until it is set (see .env.example).',
+				);
+			} else {
+				try {
+					const { prepareAuth } = await import('./lib/auth/boot');
+					await prepareAuth(logger);
+				} catch (err) {
+					logger.error(
+						`Accounts: better-auth could not start (${err instanceof Error ? err.message : String(err)}). The site will run, but login and account management are unavailable.`,
+					);
+				}
+			}
 		}
 
 		//////////////////////////////////////////////////////

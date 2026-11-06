@@ -1,8 +1,8 @@
 import GetUser from '@/helper/GetUser';
-import User from '@/models/User';
+import { AUTH_USER_COLLECTION, getDb } from '@/lib/auth';
+import { createAccountUser, findUserByUsername } from '@/lib/auth/users';
 import { userCreateSchema } from '@/Schemas/UserForm';
 import { NextRequest, NextResponse } from 'next/server';
-import * as bcrypt from 'bcrypt';
 
 const PAGE_SIZE = 25;
 
@@ -19,13 +19,14 @@ export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
 	const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1);
 
-	const total = await User.countDocuments();
-	const users = await User.find()
-		.select('username locked admin')
+	const collection = getDb().collection(AUTH_USER_COLLECTION);
+	const total = await collection.countDocuments();
+	const users = await collection
+		.find({}, { projection: { username: 1, locked: 1, admin: 1 } })
 		.sort({ admin: -1, username: 1 })
 		.skip((page - 1) * PAGE_SIZE)
 		.limit(PAGE_SIZE)
-		.lean();
+		.toArray();
 
 	return NextResponse.json({
 		ok: true,
@@ -56,7 +57,7 @@ export async function POST(req: NextRequest) {
 		);
 	}
 
-	const existing = await User.findOne({ username: parsed.data.username });
+	const existing = await findUserByUsername(parsed.data.username);
 	if (existing) {
 		return NextResponse.json(
 			{ ok: false, error: 'Username already taken' },
@@ -64,10 +65,9 @@ export async function POST(req: NextRequest) {
 		);
 	}
 
-	const hashed = await bcrypt.hash(parsed.data.password, 12);
-	const created = await User.create({
+	const created = await createAccountUser({
 		username: parsed.data.username,
-		password: hashed,
+		password: parsed.data.password,
 		admin: parsed.data.admin,
 		locked: parsed.data.locked,
 	});
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
 	return NextResponse.json({
 		ok: true,
 		user: {
-			_id: created._id,
+			_id: created.id,
 			username: created.username,
 			admin: created.admin,
 			locked: created.locked,
