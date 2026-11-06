@@ -1,4 +1,4 @@
-import { mail } from './sendgridClient';
+import { sendgridRequest } from './sendgridClient';
 
 export interface CartoonEmailData {
 	cartoon_name: string;
@@ -18,13 +18,17 @@ export async function sendEmail(
 	const recipients = typeof to === 'string' ? [{ email: to }] : to;
 
 	return;
-	await mail.send({
-		to: recipients,
-		from,
-		templateId,
-		dynamicTemplateData: data,
+	await sendgridRequest('POST', '/v3/mail/send', {
+		from: { email: from },
+		personalizations: [
+			{
+				to: recipients,
+				dynamic_template_data: data,
+			},
+		],
 		asm: {
-			groupId: unsubscribeGroupId,
+			group_id: unsubscribeGroupId,
 		},
+		template_id: templateId,
 	});
 }

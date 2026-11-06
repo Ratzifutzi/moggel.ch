@@ -12,7 +12,6 @@
 	"dependencies": {
 		"@private-captcha/private-captcha-js": "^0.0.12",
 		"@private-captcha/private-captcha-react": "^0.0.8",
-		"@sendgrid/mail": "^8.1.6",
 		"@tanstack/react-query": "^5.101.0",
 		"@types/bcrypt": "^6.0.0",
 		"bcrypt": "^6.0.0",
@@ -49,6 +48,9 @@
 		},
 		"@next/eslint-plugin-next": {
 			"fast-glob": "npm:tinyglobby@^0.2.17"
+		},
+		"@typescript-eslint/typescript-estree": {
+			"minimatch": "^11.0.1"
 		}
 	}
 }

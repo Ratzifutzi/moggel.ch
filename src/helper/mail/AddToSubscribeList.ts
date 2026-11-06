@@ -1,19 +1,13 @@
-import { client } from './sendgridClient';
+import { sendgridRequest } from './sendgridClient';
 
 export async function addToList(
 	listIds: string[],
 	contacts: Array<{
 		email: string;
 	}>,
-): Promise<string> {
-	const [response, body] = await client.request({
-		method: 'PUT',
-		url: '/v3/marketing/contacts',
-		body: {
-			list_ids: listIds,
-			contacts,
-		},
+): Promise<{ job_id: string }> {
+	return sendgridRequest<{ job_id: string }>('PUT', '/v3/marketing/contacts', {
+		list_ids: listIds,
+		contacts,
 	});
-
-	return body;
 }
