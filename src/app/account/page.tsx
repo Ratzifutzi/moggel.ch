@@ -58,8 +58,6 @@ export default async function Account() {
 				<AccountPageClient
 					user={{
 						username: user.username,
-						password: '',
-						locked: user.locked,
 						admin: user.admin,
 					}}
 				/>

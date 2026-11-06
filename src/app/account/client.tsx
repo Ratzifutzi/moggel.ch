@@ -1,13 +1,17 @@
 'use client';
 
 import Button from '@/components/base/button';
-import { IUser } from '@/models/User';
+import type { AuthUser } from '@/lib/auth';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function AccountPageClient({ user }: { user: IUser }) {
+export default function AccountPageClient({
+	user,
+}: {
+	user: Pick<AuthUser, 'username' | 'admin'>;
+}) {
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const router = useRouter();

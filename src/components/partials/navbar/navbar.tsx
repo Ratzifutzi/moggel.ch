@@ -1,5 +1,5 @@
 import GetUser from '@/helper/GetUser';
-import { IUser } from '@/models/User';
+import type { AuthUser } from '@/lib/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -57,7 +57,7 @@ const Navbar = async ({}: React.PropsWithChildren) => {
 	);
 };
 
-const Item = ({ tab, user }: { tab?: SidebarTab; user?: IUser }) => {
+const Item = ({ tab, user }: { tab?: SidebarTab; user?: AuthUser }) => {
 	if (tab) {
 		return (
 			<Link

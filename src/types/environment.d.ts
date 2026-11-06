@@ -12,6 +12,10 @@ declare global {
 
 			ADMIN_USER_PASSWORD: string;
 
+			// Accounts (better-auth)
+			BETTER_AUTH_SECRET?: string;
+			BETTER_AUTH_URL?: string;
+
 			PROXY_IP_HEADER: string;
 		}
 	}

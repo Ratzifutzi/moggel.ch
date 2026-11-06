@@ -1,12 +1,13 @@
 import { captcha } from '@/lib/captcha';
-import User from '@/models/User';
 import { LoginFormValues, loginSchema } from '@/Schemas/LoginForm';
 import { NextRequest, NextResponse } from 'next/server';
-import * as bcrypt from 'bcrypt';
+import { isAPIError } from 'better-auth/api';
 import { LoginAttempt, LoginFailureReason } from '@/models/LoginAttempt';
 import GetIpAddress from '@/helper/GetIpAddress';
 import { checkLoginRateLimit } from '@/lib/loginRateLimit';
-import { createSession } from '@/lib/session';
+import { AuthUnavailableError, getAuth } from '@/lib/auth';
+import { destroyLegacySession } from '@/lib/auth/legacy';
+import { findUserByUsername } from '@/lib/auth/users';
 
 class LoginError extends Error {
 	constructor(
@@ -59,23 +60,41 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		const userInDb = await User.findOne({
-			username: body.username,
-		});
+		const auth = getAuth();
 
-		// User not found
-		if (!userInDb) {
-			throw new LoginError('unknown_user', 'Invalid username or password.');
-		}
+		// Only used to tell unknown users from wrong passwords in the login log.
+		const existingUser = await findUserByUsername(body.username);
 
-		// User locked
-		if (userInDb.locked) {
-			throw new LoginError('account_locked', 'Your account has been locked.');
-		}
-
-		// Incorrect password
-		if (!(await bcrypt.compare(body.password, userInDb.password))) {
-			throw new LoginError('invalid_password', 'Invalid username or password.');
+		// better-auth verifies the password, refuses locked accounts (see the
+		// session hook in lib/auth) and issues the session cookie.
+		let sessionCookies: string[];
+		try {
+			const { headers } = await auth.api.signInUsername({
+				body: {
+					username: body.username,
+					password: body.password,
+					rememberMe: true,
+				},
+				headers: req.headers,
+				returnHeaders: true,
+			});
+			sessionCookies = headers.getSetCookie();
+		} catch (err) {
+			if (isAPIError(err)) {
+				if (err.body?.code === 'ACCOUNT_LOCKED') {
+					throw new LoginError(
+						'account_locked',
+						'Your account has been locked.',
+					);
+				}
+				if ([400, 401, 422].includes(err.statusCode)) {
+					throw new LoginError(
+						existingUser ? 'invalid_password' : 'unknown_user',
+						'Invalid username or password.',
+					);
+				}
+			}
+			throw err;
 		}
 
 		// Log In
@@ -86,10 +105,13 @@ export async function POST(req: NextRequest) {
 		});
 
 		const res = NextResponse.json({ ok: true });
-		await createSession(res, userInDb._id, {
-			ip,
-			userAgent: req.headers.get('user-agent') ?? undefined,
-		});
+		// LEGACY-COMPAT: retire a pre-better-auth session cookie so it can't
+		// outlive this login. This must run before the better-auth cookies are
+		// appended, because res.cookies rewrites Set-Cookie from its snapshot.
+		await destroyLegacySession(req, res);
+		for (const cookie of sessionCookies) {
+			res.headers.append('set-cookie', cookie);
+		}
 		return res;
 	} catch (err) {
 		if (err instanceof LoginError) {
@@ -108,6 +130,14 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json(
 				{ ok: false, error: err.userMessage },
 				{ status: err.status, headers },
+			);
+		}
+
+		if (err instanceof AuthUnavailableError) {
+			console.error(`[auth] ${err.message}`);
+			return NextResponse.json(
+				{ ok: false, error: 'Login is temporarily unavailable.' },
+				{ status: 503 },
 			);
 		}
 
