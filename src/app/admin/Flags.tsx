@@ -39,7 +39,6 @@ export default function Flags() {
 		onSuccess: (data) => {
 			queryClient.setQueryData(['admin', 'flags'], data);
 		},
-		onError: (err: Error) => alert(err.message),
 	});
 
 	if (isLoading) return <p>Loading...</p>;
@@ -47,6 +46,12 @@ export default function Flags() {
 
 	return (
 		<div className='flex flex-col gap-3'>
+			{toggleMutation.isError && (
+				<p role='alert' className='text-red-500'>
+					{toggleMutation.error.message}
+				</p>
+			)}
+
 			<table className='w-full border-collapse'>
 				<thead>
 					<tr className='border-b-2 border-dotted text-left'>

@@ -84,6 +84,7 @@ export default async function About() {
 			<div className='mt-5 flex w-full flex-row justify-center'>
 				<a
 					target='_blank'
+					rel='noopener noreferrer'
 					href='https://www.abuseipdb.com/user/193290'
 					title='AbuseIPDB is an IP address blacklist for webmasters and sysadmins to report IP addresses engaging in abusive behavior on their networks'
 				>

@@ -5,6 +5,7 @@ import Pagination from '@/components/base/pagination';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import ComicFormModal, { type ComicFormValues } from './ComicFormModal';
+import ConfirmModal from './ConfirmModal';
 
 type ComicRow = {
 	_id: string;
@@ -42,6 +43,8 @@ export default function Comics() {
 	const [modal, setModal] = useState<ModalState>(null);
 	const [modalError, setModalError] = useState<string | undefined>();
 	const [loadingEditId, setLoadingEditId] = useState<string | undefined>();
+	const [actionError, setActionError] = useState<string | undefined>();
+	const [pendingDelete, setPendingDelete] = useState<ComicRow | null>(null);
 
 	const queryClient = useQueryClient();
 
@@ -107,11 +110,12 @@ export default function Comics() {
 			return res.json();
 		},
 		onSuccess: () => invalidate(),
-		onError: (err: Error) => alert(err.message),
+		onError: (err: Error) => setActionError(err.message),
 	});
 
 	const openEdit = async (id: string) => {
 		setLoadingEditId(id);
+		setActionError(undefined);
 		try {
 			const res = await fetch(`/api/admin/comics/${id}`);
 			if (!res.ok) throw new Error(await parseError(res));
@@ -119,7 +123,9 @@ export default function Comics() {
 			setModalError(undefined);
 			setModal({ mode: 'edit', comic: body.comic });
 		} catch (err) {
-			alert(err instanceof Error ? err.message : 'Failed to load comic');
+			setActionError(
+				err instanceof Error ? err.message : 'Failed to load comic',
+			);
 		} finally {
 			setLoadingEditId(undefined);
 		}
@@ -154,6 +160,12 @@ export default function Comics() {
 				</Button>
 			</div>
 
+			{actionError && (
+				<p role='alert' className='text-red-500'>
+					{actionError}
+				</p>
+			)}
+
 			<table className='w-full border-collapse'>
 				<thead>
 					<tr className='border-b-2 border-dotted text-left'>
@@ -179,15 +191,7 @@ export default function Comics() {
 									Edit
 								</Button>
 								<Button
-									onClick={() => {
-										if (
-											confirm(
-												`Delete comic "${c.title}"? This cannot be undone.`,
-											)
-										) {
-											deleteMutation.mutate(c._id);
-										}
-									}}
+									onClick={() => setPendingDelete(c)}
 									disabled={deleteMutation.isPending}
 								>
 									Delete
@@ -218,6 +222,20 @@ export default function Comics() {
 						setModalError(undefined);
 					}}
 					onSubmit={handleSubmit}
+				/>
+			)}
+
+			{pendingDelete && (
+				<ConfirmModal
+					heading='Delete Comic'
+					message={`Delete comic "${pendingDelete.title}"? This cannot be undone.`}
+					confirmLabel='Delete'
+					onCancel={() => setPendingDelete(null)}
+					onConfirm={() => {
+						setActionError(undefined);
+						deleteMutation.mutate(pendingDelete._id);
+						setPendingDelete(null);
+					}}
 				/>
 			)}
 		</div>

@@ -45,6 +45,7 @@ export default function ComicView({ comic }: { comic: ComicViewData }) {
 				<Link
 					href={`/redirect?permalink=${encodeURIComponent(comic.permalink)}`}
 					target='_blank'
+					rel='noopener'
 				>
 					<Button>
 						<Image src={DesoImage} alt='Deso Logo' />

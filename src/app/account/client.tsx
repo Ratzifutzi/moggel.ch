@@ -27,7 +27,6 @@ export default function AccountPageClient({
 
 			return res.json();
 		},
-		onError: (err) => alert(err.message),
 		onSuccess: () => {
 			router.push('/account');
 			router.refresh();
@@ -50,6 +49,11 @@ export default function AccountPageClient({
 					</Link>
 				)}
 			</div>
+			{logoutMutation.isError && (
+				<p role='alert' className='mt-3 text-center text-red-500'>
+					{logoutMutation.error.message}
+				</p>
+			)}
 		</>
 	);
 }

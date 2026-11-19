@@ -5,6 +5,7 @@ import Pagination from '@/components/base/pagination';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import UserFormModal, { type UserFormValues } from './UserFormModal';
+import ConfirmModal from './ConfirmModal';
 
 type UserRow = {
 	_id: string;
@@ -33,6 +34,7 @@ export default function Users() {
 	const [page, setPage] = useState(1);
 	const [modal, setModal] = useState<ModalState>(null);
 	const [modalError, setModalError] = useState<string | undefined>();
+	const [pendingDelete, setPendingDelete] = useState<UserRow | null>(null);
 
 	const queryClient = useQueryClient();
 
@@ -98,7 +100,6 @@ export default function Users() {
 			return res.json();
 		},
 		onSuccess: () => invalidate(),
-		onError: (err: Error) => alert(err.message),
 	});
 
 	if (isLoading) return <p>Loading...</p>;
@@ -136,6 +137,12 @@ export default function Users() {
 				</Button>
 			</div>
 
+			{deleteMutation.isError && (
+				<p role='alert' className='text-red-500'>
+					{deleteMutation.error.message}
+				</p>
+			)}
+
 			<table className='w-full border-collapse'>
 				<thead>
 					<tr className='border-b-2 border-dotted text-left'>
@@ -161,15 +168,7 @@ export default function Users() {
 									Edit
 								</Button>
 								<Button
-									onClick={() => {
-										if (
-											confirm(
-												`Delete user "${u.username}"? This cannot be undone.`,
-											)
-										) {
-											deleteMutation.mutate(u._id);
-										}
-									}}
+									onClick={() => setPendingDelete(u)}
 									disabled={deleteMutation.isPending}
 								>
 									Delete
@@ -201,6 +200,19 @@ export default function Users() {
 						setModalError(undefined);
 					}}
 					onSubmit={handleSubmit}
+				/>
+			)}
+
+			{pendingDelete && (
+				<ConfirmModal
+					heading='Delete User'
+					message={`Delete user "${pendingDelete.username}"? This cannot be undone.`}
+					confirmLabel='Delete'
+					onCancel={() => setPendingDelete(null)}
+					onConfirm={() => {
+						deleteMutation.mutate(pendingDelete._id);
+						setPendingDelete(null);
+					}}
 				/>
 			)}
 		</div>

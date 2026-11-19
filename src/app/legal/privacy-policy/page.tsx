@@ -3,7 +3,7 @@ export const metadata = {
 	description: 'How moggel.ch handles your personal data.',
 };
 
-const LAST_UPDATED = '20/06/2027';
+const LAST_UPDATED = '20/06/2026';
 const CONTACT_EMAIL = 'privacy@hyper-tech.ch';
 const OPERATOR_NAME = 'Joshua Schmidt';
 const OPERATOR_ADDRESS = 'Switzerland';
